@@ -725,6 +725,23 @@ body.light .card-dim {
             <hr class="games-divider" aria-hidden="true">
         </div>
 
+        <div class="survey-cta-wrap">
+            <div class="survey-cta-inner">
+                <div class="survey-cta" role="region" aria-labelledby="surveyCtaHeading">
+                    <div class="survey-cta__copy">
+                        <h2 class="survey-cta__headline" id="surveyCtaHeading">What game should we add next?</h2>
+                        <p class="survey-cta__sub">One quick answer is all it takes—we use your ideas to grow TubZi’s lineup.</p>
+                    </div>
+                    <a
+                        class="survey-cta__btn"
+                        href="https://docs.google.com/forms/d/1rbhbtZX5yNy_lnOonpgdB0SbixqSrHszwLzjV0XEgWw/viewform"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >Suggest a game →</a>
+                </div>
+            </div>
+        </div>
+
         <section class="home-browse-wrap" aria-labelledby="browseHeading">
             <div class="home-browse-inner">
                 <h2 class="home-browse-heading" id="browseHeading">Browse by category</h2>
@@ -998,13 +1015,8 @@ const games = [
     ["speed boat challenge racing", "driving"],
     ["escape road", "driving"],
     ["escape road 2", "driving"],
-    ["obby highest jump ever", "casual"],
     ["sniper 3d", "action"],
-    ["gas station stick simulator", "casual"],
-    ["m5 city driver", "driving"],
-    ["fish eat fish", "casual"],
-    ["poppy office nightmare", "action"],
-    ["cool supercars stunts pvp", "driving"]
+    ["poppy office nightmare", "action"]
 ].map(([name, genre]) => {
     const slug = fileSlugFromGameName(name);
     const imgSlug = imageSlugFromGameName(name);

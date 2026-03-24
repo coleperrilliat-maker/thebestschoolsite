@@ -668,7 +668,11 @@ function fileSlugFromGameName(name) {
 }
 
 function imageSlugFromGameName(name) {
-    return name.replace(/ /g, "").toLowerCase();
+    const base = name.replace(/ /g, "").toLowerCase();
+    const IMAGE_SLUG_OVERRIDES = {
+        noobrushvspromonster: "noobrushvsproMonster"
+    };
+    return IMAGE_SLUG_OVERRIDES[base] || base;
 }
 
 function imageLayersFromSlug(slug) {

@@ -4,10 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TubZi</title>
-<<<<<<< HEAD
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 28'%3E%3Cellipse cx='17' cy='14' rx='13' ry='10' fill='%23ff6a00'/%3E%3Cpolygon points='29,14 39,8 39,20' fill='%23ff6a00'/%3E%3Ccircle cx='13' cy='13' r='2.2' fill='%23ffffff'/%3E%3C/svg%3E">
-=======
->>>>>>> 5d9a22e5639410532666bc562e8a9ee0e0991f8c
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
@@ -652,7 +649,17 @@ const RAIL_ITEMS = [
 const GAME_FILE_SLUG = {
     johnytrigger: "johhnytrigger",
     yohio: "yohoio",
-    "0v0game": "OvOgame"
+    "0v0game": "OvOgame",
+    brickrush3d: "brickrush3d",
+    carmovegame: "carmovegame",
+    dutycallmodernwarfate2: "dutycallmodernwarfate2",
+    fallrushfun3d: "fallrushfun3d",
+    fisheatgettingbig: "fisheatgettingbig",
+    golfbattle: "golfbattle",
+    grandhotelmania: "grandhotelmania",
+    hungrysharkevolution2: "hungrysharkevolution2",
+    noobrushvspromonster: "noobrushvsproMonster",
+    speedboatchallengeracing: "speedboatchallengeracing"
 };
 
 function fileSlugFromGameName(name) {
@@ -662,6 +669,17 @@ function fileSlugFromGameName(name) {
 
 function imageSlugFromGameName(name) {
     return name.replace(/ /g, "").toLowerCase();
+}
+
+function imageLayersFromSlug(slug) {
+    const safe = String(slug || "").replace(/"/g, "");
+    return [
+        `url("images/${safe}.png")`,
+        `url("images/${safe}.jpg")`,
+        `url("images/${safe}.jpeg")`,
+        `url("images/${safe}.webp")`,
+        "linear-gradient(135deg, rgba(255,106,0,0.95), rgba(229,95,0,0.8))"
+    ].join(", ");
 }
 
 const games = [
@@ -694,11 +712,21 @@ const games = [
     ["subway surfers", "action"],
     ["cookie clicker", "casual"],
     ["tank war simulator", "action"],
-    ["house of hazards", "casual"]
+    ["house of hazards", "casual"],
+    ["brick rush 3d", "puzzle"],
+    ["car move game", "driving"],
+    ["duty call modern warfate 2", "action"],
+    ["fall rush fun 3d", "casual"],
+    ["fish eat getting big", "casual"],
+    ["golf battle", "sports"],
+    ["grand hotel mania", "casual"],
+    ["hungry shark evolution 2", "action"],
+    ["noob rush vs pro monster", "action"],
+    ["speed boat challenge racing", "driving"]
 ].map(([name, genre]) => {
     const slug = fileSlugFromGameName(name);
     const imgSlug = imageSlugFromGameName(name);
-    return { name, genre, image: `images/${imgSlug}.png`, file: `games/${slug}.html` };
+    return { name, genre, imageSlug: imgSlug, file: `games/${slug}.html` };
 });
 
 let activeGenre = "all";
@@ -804,7 +832,7 @@ function render(filter = "") {
             const div = document.createElement("div");
             div.className = "card";
 
-            div.style.backgroundImage = `url(${game.image})`;
+            div.style.backgroundImage = imageLayersFromSlug(game.imageSlug);
 
             div.onclick = () => {
                 window.location.href =

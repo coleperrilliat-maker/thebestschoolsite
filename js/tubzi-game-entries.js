@@ -2,6 +2,7 @@ window.TUBZI_GAME_ENTRIES = [
 ["minecraft", "casual"],
     ["geometry dash", "puzzle"],
     ["among us", "io"],
+    ["shell shockers", "io"],
     ["subway surfers", "action"],
     ["cookie clicker", "casual"],
     ["slope", "casual"],

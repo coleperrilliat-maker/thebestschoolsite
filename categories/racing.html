@@ -6,10 +6,54 @@
 <title>Racing &amp; driving — TubZi</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 28'%3E%3Cellipse cx='17' cy='14' rx='13' ry='10' fill='%23ff6a00'/%3E%3Cpolygon points='29,14 39,8 39,20' fill='%23ff6a00'/%3E%3Ccircle cx='13' cy='13' r='2.2' fill='%23ffffff'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="../css/category-hub.css">
+<link rel="stylesheet" href="../css/tubzi-shell.css">
+<link rel="stylesheet" href="../css/tubzi-hub-shell.css">
 </head>
-<body>
+<body class="tubzi-with-shell" data-tubzi-page="category" data-tubzi-base="../" data-tubzi-active-rail="cat-racing">
+
+<div class="app-shell">
+<header class="site-header">
+    <div class="header-inner">
+        <a class="logo-brand" href="../index.html" aria-label="TubZi home">
+            <svg class="logo-icon" viewBox="0 0 40 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <ellipse cx="17" cy="14" rx="13" ry="10" fill="currentColor"/>
+                <polygon points="29,14 39,8 39,20" fill="currentColor"/>
+                <circle cx="13" cy="13" r="2.2" fill="var(--header-bg)"/>
+            </svg>
+            <span class="logo-text">TubZi</span>
+        </a>
+        <form class="header-search-form" action="../index.html" method="get" role="search">
+            <div class="header-search-slot">
+                <div class="search-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input id="search" name="q" type="search" placeholder="Search all games on home…" autocomplete="off">
+                </div>
+            </div>
+        </form>
+        <button type="button" class="theme-icon-btn" id="themeBtn" aria-label="Toggle light and dark mode">
+            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+            <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+            </svg>
+        </button>
+    </div>
+</header>
+
+<aside class="game-rail" aria-label="Navigation">
+    <div class="game-rail-inner">
+        <div class="game-rail-top">TubZi</div>
+        <nav class="game-rail-scroll" id="gameRailNav"></nav>
+    </div>
+</aside>
+
+<div class="app-content">
+<div class="app-scroll">
+<main class="site-main tubzi-hub-main">
 <div class="hub-shell">
-    <a class="hub-back" href="../index.html">← All games</a>
     <h1>Racing &amp; driving</h1>
     <p class="hub-lead">Rubber, ramps, and ridiculous speed—no license required.</p>
         <label class="visually-hidden" for="hubCategorySearch">Search games in this category</label>
@@ -22,8 +66,33 @@
         <a class="hub-game" href="../play.html?game=games/escaperoad2.html&amp;name=Escape%20Road%202"><div class="hub-game-thumb" style="background-image:url(../images/escaperoad2.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Escape Road 2</span></a>
         <a class="hub-game" href="../play.html?game=games/speedboatchallengeracing.html&amp;name=Speed%20Boat%20Challenge%20Racing"><div class="hub-game-thumb" style="background-image:url(../images/speedboatchallengeracing.jpg),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Speed Boat Challenge Racing</span></a>
         <a class="hub-game" href="../play.html?game=games/carmovegame.html&amp;name=Car%20Move%20Game"><div class="hub-game-thumb" style="background-image:url(../images/carmovegame.jpg),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Car Move Game</span></a>
+        <a class="hub-game" href="../play.html?game=games/superdrive.html&amp;name=Super%20Drive"><div class="hub-game-thumb" style="background-image:url(../images/superdrive.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Super Drive</span></a>
+        <a class="hub-game" href="../play.html?game=games/vicecitymaddriving.html&amp;name=Vice%20City%20Mad%20Driving"><div class="hub-game-thumb" style="background-image:url(../images/vicecitymaddriving.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Vice City Mad Driving</span></a>
+        <a class="hub-game" href="../play.html?game=games/evocitydriving.html&amp;name=EVO%20City%20Driving"><div class="hub-game-thumb" style="background-image:url(../images/evocitydriving.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>EVO City Driving</span></a>
+        <a class="hub-game" href="../play.html?game=games/ferraritrackdriving.html&amp;name=Ferrari%20Track%20Driving"><div class="hub-game-thumb" style="background-image:url(../images/ferraritrackdriving.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Ferrari Track Driving</span></a>
+        <a class="hub-game" href="../play.html?game=games/cityofvicedriving.html&amp;name=City%20of%20Vice%20Driving"><div class="hub-game-thumb" style="background-image:url(../images/cityofvicedriving.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>City of Vice Driving</span></a>
+        <a class="hub-game" href="../play.html?game=games/supercarszombiedriving.html&amp;name=Supercars%20Zombie%20Driving"><div class="hub-game-thumb" style="background-image:url(../images/supercarszombiedriving.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Supercars Zombie Driving</span></a>
+        <a class="hub-game" href="../play.html?game=games/supersuvdriving.html&amp;name=Super%20SUV%20Driving"><div class="hub-game-thumb" style="background-image:url(../images/supersuvdriving.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Super SUV Driving</span></a>
+        <a class="hub-game" href="../play.html?game=games/realcitydriving2.html&amp;name=Real%20City%20Driving%202"><div class="hub-game-thumb" style="background-image:url(../images/realcitydriving2.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Real City Driving 2</span></a>
+        <a class="hub-game" href="../play.html?game=games/russiantazdriving3.html&amp;name=Russian%20Taz%20Driving%203"><div class="hub-game-thumb" style="background-image:url(../images/russiantazdriving3.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Russian Taz Driving 3</span></a>
+        <a class="hub-game" href="../play.html?game=games/russiantazdriving2.html&amp;name=Russian%20Taz%20Driving%202"><div class="hub-game-thumb" style="background-image:url(../images/russiantazdriving2.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Russian Taz Driving 2</span></a>
+        <a class="hub-game" href="../play.html?game=games/grandcitycarthief.html&amp;name=Grand%20City%20Car%20Thief"><div class="hub-game-thumb" style="background-image:url(../images/grandcitycarthief.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Grand City Car Thief</span></a>
+        <a class="hub-game" href="../play.html?game=games/grandcitydriving2.html&amp;name=Grand%20City%20Driving%202"><div class="hub-game-thumb" style="background-image:url(../images/grandcitydriving2.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Grand City Driving 2</span></a>
+        <a class="hub-game" href="../play.html?game=games/speedcarracemadness.html&amp;name=Speed%20Car%20Race%20Madness"><div class="hub-game-thumb" style="background-image:url(../images/speedcarracemadness.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Speed Car Race Madness</span></a>
+        <a class="hub-game" href="../play.html?game=games/dualcontrolracingstunt3d.html&amp;name=Dual%20Control%20Racing%20Stunt%203D"><div class="hub-game-thumb" style="background-image:url(../images/dualcontrolracingstunt3d.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Dual Control Racing Stunt 3D</span></a>
+        <a class="hub-game" href="../play.html?game=games/mountaintrucksimulator3d.html&amp;name=Mountain%20Truck%20Simulator%203D"><div class="hub-game-thumb" style="background-image:url(../images/mountaintrucksimulator3d.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Mountain Truck Simulator 3D</span></a>
+        <a class="hub-game" href="../play.html?game=games/carparkingpro.html&amp;name=Car%20Parking%20Pro"><div class="hub-game-thumb" style="background-image:url(../images/carparkingpro.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Car Parking Pro</span></a>
+        <a class="hub-game" href="../play.html?game=games/extremetoyrace.html&amp;name=Extreme%20Toy%20Race"><div class="hub-game-thumb" style="background-image:url(../images/extremetoyrace.png),linear-gradient(135deg,rgba(255,106,0,.85),rgba(229,95,0,.8))"></div><span>Extreme Toy Race</span></a>
     </div>
 </div>
-    <script src="../js/category-search.js" defer></script>
+</main>
+</div>
+</div>
+</div>
+
+<script src="../js/tubzi-rail-data.js"></script>
+<script src="../js/tubzi-rail-static.js"></script>
+<script src="../js/tubzi-hub-chrome.js"></script>
+<script src="../js/category-search.js" defer></script>
 </body>
 </html>

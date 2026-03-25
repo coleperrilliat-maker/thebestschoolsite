@@ -98,6 +98,97 @@ body.light .survey-cta__btn {
     box-shadow: 0 4px 14px rgba(255, 106, 0, 0.28);
 }
 
+/* Brand / ads promo — below category browse (compact strip) */
+.home-promo-wrap {
+    width: 100%;
+    padding: 0 24px 24px;
+    box-sizing: border-box;
+}
+
+.home-promo-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 14px 18px 16px;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 16px;
+    background: linear-gradient(165deg, #2a1f18 0%, #1a1512 100%);
+    border: 1px solid rgba(255, 106, 0, 0.55);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 180, 120, 0.06);
+}
+
+.home-promo__headline {
+    font-family: "Fredoka", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    letter-spacing: 0.02em;
+    margin: 0 0 6px;
+    color: #fff7ed;
+    line-height: 1.25;
+}
+
+.home-promo__sub {
+    margin: 0 auto 12px;
+    max-width: 42ch;
+    font-size: 13px;
+    line-height: 1.45;
+    color: #d4a574;
+}
+
+.home-promo__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-family: "Fredoka", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: #fff;
+    background: linear-gradient(180deg, #ff6a00 0%, #e55f00 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow:
+        0 4px 16px rgba(255, 106, 0, 0.45),
+        0 0 24px rgba(255, 106, 0, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.home-promo__btn:hover {
+    transform: translateY(-1px);
+    box-shadow:
+        0 6px 22px rgba(255, 106, 0, 0.55),
+        0 0 32px rgba(255, 106, 0, 0.45);
+    filter: brightness(1.06);
+}
+
+.home-promo__btn:focus-visible {
+    outline: 2px solid #fdba74;
+    outline-offset: 3px;
+}
+
+body.light .home-promo-inner {
+    background: linear-gradient(165deg, #fff7ed 0%, #ffedd5 100%);
+    border-color: rgba(255, 106, 0, 0.45);
+    box-shadow: 0 6px 22px rgba(255, 106, 0, 0.12);
+}
+
+body.light .home-promo__headline {
+    color: #7c2d12;
+}
+
+body.light .home-promo__sub {
+    color: #9a3412;
+}
+
+body.light .home-promo__btn {
+    color: #fff;
+    box-shadow:
+        0 4px 14px rgba(255, 106, 0, 0.35),
+        0 0 20px rgba(255, 106, 0, 0.25);
+}
+
 .home-browse-wrap {
     width: 100%;
     padding: 8px 0 32px;
@@ -191,6 +282,20 @@ body.light .home-browse-card {
 @media (max-width: 520px) {
     .home-browse-inner {
         padding: 0 16px;
+    }
+
+    .home-promo-wrap {
+        padding: 0 16px 20px;
+    }
+
+    .home-promo-inner {
+        margin: 0;
+        padding: 12px 14px 14px;
+    }
+
+    .home-promo__btn {
+        width: auto;
+        box-sizing: border-box;
     }
 
     .survey-cta-inner {

@@ -1,0 +1,35 @@
+TubZi — edge security headers (reverse proxy / CDN)
+====================================================
+
+Your repo includes _headers for hosts that honor it (Cloudflare Pages, Netlify).
+GitHub Pages ignores _headers. If tubzi.io is GitHub Pages + Cloudflare DNS, add
+the same values at Cloudflare so visitors get them from the edge.
+
+1) Cloudflare dashboard
+   - SSL/TLS → Overview: use Full (not Flexible) when origin is GitHub Pages.
+   - SSL/TLS → Edge Certificates: enable "Always Use HTTPS".
+
+2) HTTP response headers (Transform Rules)
+   - Rules → Transform Rules → Modify Response Header → Create rule.
+   - Name: TubZi security headers
+   - When: (http.host eq "tubzi.io" or http.host eq "www.tubzi.io")  [adjust if needed]
+   - Then → Set static:
+       X-Frame-Options: SAMEORIGIN
+       X-Content-Type-Options: nosniff
+       Referrer-Policy: strict-origin-when-cross-origin
+       Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
+       Strict-Transport-Security: max-age=31536000
+
+   Or use one rule per header if your plan UI prefers that.
+
+3) Optional later
+   - Move the site to Cloudflare Pages (connect this Git repo): then _headers in
+     the project root is applied automatically and you can drop duplicate rules.
+   - WAF / Bot Fight Mode: under Security as needed (may need paid plan for fine control).
+
+Notes
+-----
+- SAMEORIGIN stops other sites from embedding your portal in an iframe; your own
+  pages can still embed external game iframes as they do today.
+- No Content-Security-Policy here: your pages load many third-party scripts and
+  game domains; a tight CSP would break play until you map every source.

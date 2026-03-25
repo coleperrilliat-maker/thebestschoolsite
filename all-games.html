@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MSRCFHRBDK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MSRCFHRBDK');
+</script>
+<title>All games — TubZi</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 28'%3E%3Cellipse cx='17' cy='14' rx='13' ry='10' fill='%23ff6a00'/%3E%3Cpolygon points='29,14 39,8 39,20' fill='%23ff6a00'/%3E%3Ccircle cx='13' cy='13' r='2.2' fill='%23ffffff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/footer.css">
+<link rel="stylesheet" href="css/tubzi-shell.css">
+<link rel="stylesheet" href="css/home-browse.css">
+
+<style>
+.container {
+    padding: 28px 24px 48px;
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 20px;
+}
+
+.all-games-page-title {
+    font-family: "Fredoka", system-ui, sans-serif;
+    font-size: clamp(1.45rem, 4vw, 2rem);
+    font-weight: 700;
+    margin: 0 0 16px;
+    color: var(--text);
+    letter-spacing: 0.02em;
+}
+
+.show-all-games-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0 4px;
+}
+
+.show-all-games-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-family: "Fredoka", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: #fff;
+    background: linear-gradient(180deg, #ff6a00 0%, #e55f00 100%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 6px 20px rgba(255, 106, 0, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.show-all-games-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(255, 106, 0, 0.45);
+    filter: brightness(1.05);
+}
+
+.show-all-games-btn:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
+}
+
+body.light .show-all-games-btn {
+    box-shadow: 0 6px 18px rgba(255, 106, 0, 0.28);
+}
+
+.games-divider {
+    border: none;
+    height: 2px;
+    margin: 32px 0 28px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--header-border) 15%,
+        rgba(255, 106, 0, 0.35) 50%,
+        var(--header-border) 85%,
+        transparent
+    );
+    opacity: 0.95;
+}
+
+body.light .games-divider {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--header-border) 15%,
+        rgba(255, 106, 0, 0.28) 50%,
+        var(--header-border) 85%,
+        transparent
+    );
+}
+
+.card {
+    position: relative;
+    overflow: hidden;
+    container-type: inline-size;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--card-radius);
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+body.light .card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
+}
+
+.card:hover {
+    transform: scale(1.06);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(255, 106, 0, 0.35);
+}
+
+body.light .card:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+</style>
+</head>
+
+<body class="page-all-games" data-tubzi-page="all-games" data-tubzi-base="">
+
+<div class="app-shell">
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="logo-brand" href="index.html" aria-label="TubZi home">
+                <svg class="logo-icon" viewBox="0 0 40 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <ellipse cx="17" cy="14" rx="13" ry="10" fill="currentColor"/>
+                    <polygon points="29,14 39,8 39,20" fill="currentColor"/>
+                    <circle cx="13" cy="13" r="2.2" fill="var(--header-bg)"/>
+                </svg>
+                <span class="logo-text">TubZi</span>
+            </a>
+            <div class="header-search-slot">
+                <div class="search-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input id="search" type="search" placeholder="What do you want to play?" autocomplete="off">
+                </div>
+            </div>
+            <button type="button" class="hdr-btn hdr-btn-random" id="btnRandom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+                Random
+            </button>
+            <button type="button" class="theme-icon-btn" id="themeBtn" aria-label="Toggle light and dark mode">
+                <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <aside class="game-rail" aria-label="Navigation">
+        <div class="game-rail-inner">
+            <div class="game-rail-top">TubZi</div>
+            <nav class="game-rail-scroll" id="gameRailNav"></nav>
+        </div>
+    </aside>
+
+    <div class="app-content">
+        <div class="app-scroll">
+            <main class="site-main">
+        <div class="container" id="gamesSection">
+            <h1 class="all-games-page-title" id="gamesSectionHeading">All games</h1>
+            <div class="grid" id="grid"></div>
+            <hr class="games-divider" aria-hidden="true">
+        </div>
+
+        <div class="survey-cta-wrap">
+            <div class="survey-cta-inner">
+                <div class="survey-cta" role="region" aria-labelledby="surveyCtaHeading">
+                    <div class="survey-cta__copy">
+                        <h2 class="survey-cta__headline" id="surveyCtaHeading">What game should we add next?</h2>
+                        <p class="survey-cta__sub">One quick answer is all it takes—we use your ideas to grow TubZi’s lineup.</p>
+                    </div>
+                    <a
+                        class="survey-cta__btn"
+                        href="https://docs.google.com/forms/d/1rbhbtZX5yNy_lnOonpgdB0SbixqSrHszwLzjV0XEgWw/viewform"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >Suggest a game →</a>
+                </div>
+            </div>
+        </div>
+
+        <section class="home-browse-wrap" aria-labelledby="browseHeading">
+            <div class="home-browse-inner">
+                <h2 class="home-browse-heading" id="browseHeading">Browse by category</h2>
+                <p class="home-browse-sub">Open a category to see hand-picked games—each category page has its own search to filter titles.</p>
+                <div class="home-browse-grid">
+                            <a href="categories/action.html" class="home-browse-card">
+                                <div class="home-browse-card-thumb" style="background-image:url('images/timeshooter.png'),linear-gradient(135deg,rgba(255,106,0,.9),rgba(229,95,0,.85))"></div>
+                                <div>
+                                    <p class="home-browse-card-title">Action &amp; combat</p>
+                                    <p class="home-browse-card-desc">Reflex-heavy shooters, arena battles, and punchy one-more-round energy.</p>
+                                </div>
+                            </a>
+                            <a href="categories/puzzle.html" class="home-browse-card">
+                                <div class="home-browse-card-thumb" style="background-image:url('images/geometrydash.png'),linear-gradient(135deg,rgba(255,106,0,.9),rgba(229,95,0,.85))"></div>
+                                <div>
+                                    <p class="home-browse-card-title">Puzzle &amp; brain games</p>
+                                    <p class="home-browse-card-desc">Timing, patterns, and clever problems that reward focus over spam-clicking.</p>
+                                </div>
+                            </a>
+                            <a href="categories/arcade.html" class="home-browse-card">
+                                <div class="home-browse-card-thumb" style="background-image:url('images/cookieclicker.png'),linear-gradient(135deg,rgba(255,106,0,.9),rgba(229,95,0,.85))"></div>
+                                <div>
+                                    <p class="home-browse-card-title">Arcade classics</p>
+                                    <p class="home-browse-card-desc">Snackable, replayable hits—perfect for quick breaks and high-score chases.</p>
+                                </div>
+                            </a>
+                            <a href="categories/racing.html" class="home-browse-card">
+                                <div class="home-browse-card-thumb" style="background-image:url('images/drivemad.png'),linear-gradient(135deg,rgba(255,106,0,.9),rgba(229,95,0,.85))"></div>
+                                <div>
+                                    <p class="home-browse-card-title">Racing &amp; driving</p>
+                                    <p class="home-browse-card-desc">Rubber on the road, stunt lines, and courses built for speed.</p>
+                                </div>
+                            </a>
+                            <a href="categories/sports.html" class="home-browse-card">
+                                <div class="home-browse-card-thumb" style="background-image:url('images/basketballrandom.png'),linear-gradient(135deg,rgba(255,106,0,.9),rgba(229,95,0,.85))"></div>
+                                <div>
+                                    <p class="home-browse-card-title">Sports arena</p>
+                                    <p class="home-browse-card-desc">Hoops, pitches, and stadium energy—pick a side and compete.</p>
+                                </div>
+                            </a>
+                            <a href="categories/io.html" class="home-browse-card">
+                                <div class="home-browse-card-thumb" style="background-image:url('images/paperio.png'),linear-gradient(135deg,rgba(255,106,0,.9),rgba(229,95,0,.85))"></div>
+                                <div>
+                                    <p class="home-browse-card-title">.io &amp; online</p>
+                                    <p class="home-browse-card-desc">Crowded lobbies, simple rules, and chaotic wins on a shared map.</p>
+                                </div>
+                            </a>
+                            <a href="categories/casual.html" class="home-browse-card">
+                                <div class="home-browse-card-thumb" style="background-image:url('images/tinyfishing.png'),linear-gradient(135deg,rgba(255,106,0,.9),rgba(229,95,0,.85))"></div>
+                                <div>
+                                    <p class="home-browse-card-title">Casual &amp; cozy</p>
+                                    <p class="home-browse-card-desc">Low-pressure vibes—fish, manage, or vibe with something light.</p>
+                                </div>
+                            </a>
+                            <a href="categories/multiplayer.html" class="home-browse-card">
+                                <div class="home-browse-card-thumb" style="background-image:url('images/amongus.png'),linear-gradient(135deg,rgba(255,106,0,.9),rgba(229,95,0,.85))"></div>
+                                <div>
+                                    <p class="home-browse-card-title">Party &amp; multiplayer</p>
+                                    <p class="home-browse-card-desc">Games that shine when you’re laughing (or arguing) with friends.</p>
+                                </div>
+                            </a>
+                            <a href="categories/runners.html" class="home-browse-card">
+                                <div class="home-browse-card-thumb" style="background-image:url('images/subwaysurfers.png'),linear-gradient(135deg,rgba(255,106,0,.9),rgba(229,95,0,.85))"></div>
+                                <div>
+                                    <p class="home-browse-card-title">Runners &amp; endless</p>
+                                    <p class="home-browse-card-desc">Lane-swipe flow, momentum, and “just one more run” momentum.</p>
+                                </div>
+                            </a>
+                            <a href="categories/spotlight.html" class="home-browse-card">
+                                <div class="home-browse-card-thumb" style="background-image:url('images/brickrush3d.jpg'),linear-gradient(135deg,rgba(255,106,0,.9),rgba(229,95,0,.85))"></div>
+                                <div>
+                                    <p class="home-browse-card-title">Fresh on TubZi</p>
+                                    <p class="home-browse-card-desc">Recently added titles we’re trying out—check back often.</p>
+                                </div>
+                            </a>
+                            <a href="categories/school.html" class="home-browse-card">
+                                <div class="home-browse-card-thumb" style="background-image:url('images/slope.png'),linear-gradient(135deg,rgba(255,106,0,.9),rgba(229,95,0,.85))"></div>
+                                <div>
+                                    <p class="home-browse-card-title">School-friendly picks</p>
+                                    <p class="home-browse-card-desc">Lightweight browser games that play nice on a quick break.</p>
+                                </div>
+                            </a>
+                            <a href="categories/sandbox.html" class="home-browse-card">
+                                <div class="home-browse-card-thumb" style="background-image:url('images/minecraft.png'),linear-gradient(135deg,rgba(255,106,0,.9),rgba(229,95,0,.85))"></div>
+                                <div>
+                                    <p class="home-browse-card-title">Sandbox &amp; sims</p>
+                                    <p class="home-browse-card-desc">Build, explore, and toy with systems—creativity over speedruns.</p>
+                                </div>
+                            </a>
+                </div>
+            </div>
+        </section>
+            </main>
+
+            <footer class="site-footer">
+    <div class="site-footer__inner">
+        <div class="site-footer__cta-grid">
+            <a class="site-footer__cta" href="https://www.tiktok.com/@tubzi.io" target="_blank" rel="noopener noreferrer" aria-label="Follow TubZi on TikTok">
+                <img class="site-footer__cta-icon" src="images/social-tiktok.png" width="52" height="52" alt="" decoding="async">
+                <span class="site-footer__cta-text">
+                    <span class="site-footer__cta-title">Follow our TikTok</span>
+                    <span class="site-footer__cta-sub">Get notified when we add new games, watch clips, and drop suggestions for what you want to play next.</span>
+                </span>
+            </a>
+            <a class="site-footer__cta" href="https://discord.gg/nj5YYgKBap" target="_blank" rel="noopener noreferrer" aria-label="Join the TubZi Discord">
+                <img class="site-footer__cta-icon" src="images/social-discord.png" width="52" height="52" alt="" decoding="async">
+                <span class="site-footer__cta-text">
+                    <span class="site-footer__cta-title">Join our Discord</span>
+                    <span class="site-footer__cta-sub">Grab new links early, chat with the community, and catch announcements the moment they go live.</span>
+                </span>
+            </a>
+        </div>
+
+        <nav class="site-footer__columns" aria-label="Footer">
+            <div class="site-footer__col">
+                <h3>Game categories</h3>
+                <ul>
+                    <li><a href="index.html?genre=action">Action games</a></li>
+                    <li><a href="index.html?genre=puzzle">Puzzle games</a></li>
+                    <li><a href="index.html?genre=casual">Casual &amp; arcade</a></li>
+                    <li><a href="index.html?genre=sports">Sports games</a></li>
+                    <li><a href="index.html?genre=driving">Driving games</a></li>
+                </ul>
+            </div>
+            <div class="site-footer__col">
+                <h3>Popular picks</h3>
+                <ul>
+                    <li><a href="index.html">New &amp; featured</a></li>
+                    <li><a href="play.html?game=games/slope.html&amp;name=Slope">Slope</a></li>
+                    <li><a href="play.html?game=games/minecraft.html&amp;name=Minecraft">Minecraft</a></li>
+                    <li><a href="play.html?game=games/geometrydash.html&amp;name=Geometry%20Dash">Geometry Dash</a></li>
+                    <li><a href="play.html?game=games/tinyfishing.html&amp;name=Tiny%20Fishing">Tiny Fishing</a></li>
+                </ul>
+            </div>
+            <div class="site-footer__col">
+                <h3>More games</h3>
+                <ul>
+                    <li><a href="all-games.html">All games</a></li>
+                    <li><a href="index.html?genre=io">.io &amp; online</a></li>
+                    <li><a href="index.html?genre=casual">Relaxing picks</a></li>
+                    <li><a href="index.html?genre=action">Action hits</a></li>
+                </ul>
+            </div>
+            <div class="site-footer__col">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="advertise.html">Advertise with us</a></li>
+                </ul>
+            </div>
+            <div class="site-footer__col">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="about.html">About us</a></li>
+                    <li><a href="terms.html">Terms of service</a></li>
+                    <li><a href="privacy.html">Privacy policy</a></li>
+                    <li><a href="dmca.html">DMCA</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <hr class="site-footer__rule" aria-hidden="true">
+        <p class="site-footer__legal">© 2026 TubZi — Free browser games. All rights reserved.</p>
+    </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script src="js/tubzi-rail-data.js"></script>
+<script src="js/tubzi-game-entries.js"></script>
+<script>
+
+const ICONS = window.TUBZI_RAIL.icons;
+const RAIL_NAV_STRUCTURE = window.TUBZI_RAIL.structure;
+
+function railItemById(id) {
+    return window.TUBZI_RAIL.itemById(id);
+}
+
+const GAME_FILE_SLUG = {
+    johnytrigger: "johhnytrigger",
+    yohio: "yohoio",
+    "0v0game": "OvOgame",
+    brickrush3d: "brickrush3d",
+    carmovegame: "carmovegame",
+    dutycallmodernwarfate2: "dutycallmodernwarfate2",
+    fallrushfun3d: "fallrushfun3d",
+    fisheatgettingbig: "fisheatgettingbig",
+    golfbattle: "golfbattle",
+    grandhotelmania: "grandhotelmania",
+    hungrysharkevolution2: "hungrysharkevolution2",
+    noobrushvspromonster: "noobrushvsproMonster",
+    speedboatchallengeracing: "speedboatchallengeracing"
+};
+
+function fileSlugFromGameName(name) {
+    const base = name.replace(/ /g, "").toLowerCase();
+    return GAME_FILE_SLUG[base] || base;
+}
+
+function imageSlugFromGameName(name) {
+    const base = name.replace(/ /g, "").toLowerCase();
+    const IMAGE_SLUG_OVERRIDES = {
+        noobrushvspromonster: "noobrushvsproMonster"
+    };
+    return IMAGE_SLUG_OVERRIDES[base] || base;
+}
+
+function imageLayersFromSlug(slug) {
+    const safe = String(slug || "").replace(/"/g, "");
+    return [
+        `url("images/${safe}.png")`,
+        `url("images/${safe}.jpg")`,
+        `url("images/${safe}.jpeg")`,
+        `url("images/${safe}.webp")`,
+        "linear-gradient(135deg, rgba(255,106,0,0.95), rgba(229,95,0,0.8))"
+    ].join(", ");
+}
+
+/* Mixed order: popular picks interleaved with newer driving/shooter titles so the grid stays visually varied. */
+const games = TUBZI_GAME_ENTRIES.map(([name, genre]) => {
+    const slug = fileSlugFromGameName(name);
+    const imgSlug = imageSlugFromGameName(name);
+    return { name, genre, imageSlug: imgSlug, file: `games/${slug}.html` };
+});
+
+function isAllGamesPage() {
+    return document.body.dataset.tubziPage === "all-games";
+}
+
+const HOME_PREVIEW_ROWS = 6;
+
+function getHomePreviewCap() {
+    const section = document.getElementById("gamesSection");
+    if (!section) {
+        return 48;
+    }
+    const w = Math.max(0, section.clientWidth - 8);
+    const minCell = 140;
+    const gap = 20;
+    const cols = Math.max(2, Math.floor((w + gap) / (minCell + gap)));
+    return cols * HOME_PREVIEW_ROWS;
+}
+
+
+let activeGenre = "all";
+
+const grid = document.getElementById("grid");
+const search = document.getElementById("search");
+const themeBtn = document.getElementById("themeBtn");
+const THEME_KEY = "tubzi-theme";
+
+function applyTheme(mode) {
+    const isLight = mode === "light";
+    document.body.classList.toggle("light", isLight);
+    localStorage.setItem(THEME_KEY, mode);
+}
+
+const saved = localStorage.getItem(THEME_KEY);
+if (saved === "light") {
+    applyTheme("light");
+} else {
+    applyTheme("dark");
+}
+
+themeBtn.addEventListener("click", () => {
+    const next = document.body.classList.contains("light") ? "dark" : "light";
+    applyTheme(next);
+});
+
+document.getElementById("btnRandom").addEventListener("click", () => {
+    const game = games[Math.floor(Math.random() * games.length)];
+    window.location.href = `play.html?game=${game.file}&name=${encodeURIComponent(game.name)}`;
+});
+
+function buildRailNav() {
+    const nav = document.getElementById("gameRailNav");
+    nav.innerHTML = "";
+
+    RAIL_NAV_STRUCTURE.forEach(row => {
+        if (row.kind === "label") {
+            const d = document.createElement("div");
+            d.className = "rail-section-label" + (row.compact ? " rail-section-label--compact" : "");
+            d.textContent = row.text;
+            nav.appendChild(d);
+            return;
+        }
+        if (row.kind === "spacer") {
+            const d = document.createElement("div");
+            d.className = "rail-spacer";
+            d.setAttribute("aria-hidden", "true");
+            nav.appendChild(d);
+            return;
+        }
+
+        const item = row;
+        const paths = ICONS[item.icon] || ICONS.home;
+        const inner = `
+            <svg class="rail-icon" viewBox="0 0 24 24" aria-hidden="true">${paths}</svg>
+            <span class="rail-label">${item.label}</span>
+        `;
+
+        if (item.href) {
+            const a = document.createElement("a");
+            a.href = item.href;
+            a.className = "rail-nav-item" + (item.compact ? " rail-nav-item--compact" : "");
+            a.dataset.navId = item.id;
+            if (item.external) {
+                a.target = "_blank";
+                a.rel = "noopener noreferrer";
+            }
+            a.innerHTML = inner;
+            nav.appendChild(a);
+            return;
+        }
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "rail-nav-item" + (item.compact ? " rail-nav-item--compact" : "");
+        btn.dataset.navId = item.id;
+        btn.innerHTML = inner;
+
+        btn.addEventListener("click", () => {
+            if (item.id === "home") {
+                if (isAllGamesPage()) {
+                    window.location.href = "index.html";
+                    return;
+                }
+                activeGenre = "all";
+                search.value = "";
+                render("");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            } else if (item.genre) {
+                activeGenre = item.genre;
+                render(search.value);
+                document.getElementById("gamesSection")?.scrollIntoView({ behavior: "smooth" });
+            }
+            updateRailActive();
+        });
+
+        nav.appendChild(btn);
+    });
+
+    updateRailActive();
+}
+
+function updateRailActive() {
+    const searchTrimmed = search && search.value ? search.value.trim() : "";
+    document.querySelectorAll(".rail-nav-item").forEach(el => {
+        const id = el.dataset.navId;
+        const item = railItemById(id);
+        if (!item) {
+            return;
+        }
+        let on = false;
+        if (item.href) {
+            if (item.id === "allgames") {
+                on = isAllGamesPage() && activeGenre === "all" && !searchTrimmed;
+            }
+        } else if (item.id === "home") {
+            on = activeGenre === "all" && !isAllGamesPage() && !searchTrimmed;
+        } else if (item.genre) {
+            on = activeGenre === item.genre;
+        }
+        el.classList.toggle("is-active", on);
+    });
+}
+
+function gameMatches(g) {
+    if (activeGenre !== "all" && g.genre !== activeGenre) {
+        return false;
+    }
+    return true;
+}
+
+function updateGamesSectionHeading(rawFilter) {
+    const el = document.getElementById("gamesSectionHeading");
+    if (!el) {
+        return;
+    }
+    const trimmed = String(rawFilter || "").trim();
+    const hasSearch = trimmed.length > 0;
+    const genreRow = RAIL_NAV_STRUCTURE.find(r => r.kind === "item" && r.genre === activeGenre);
+
+    let heading;
+    if (activeGenre === "all") {
+        if (hasSearch) {
+            const display = trimmed.length > 48 ? `${trimmed.slice(0, 45)}…` : trimmed;
+            heading = `Search: ${display}`;
+        } else {
+            heading = "All games";
+        }
+    } else if (hasSearch) {
+        heading = `${(genreRow && genreRow.label) || "Games"} · search`;
+    } else {
+        heading = (genreRow && genreRow.label) || "Games";
+    }
+    el.textContent = heading;
+    document.title = `${heading} — TubZi`;
+}
+
+function render(filter = "") {
+    grid.innerHTML = "";
+
+    const q = filter.toLowerCase().trim();
+    const matched = games
+        .filter(gameMatches)
+        .filter(g => g.name.toLowerCase().includes(q));
+
+    const defaultExplore = activeGenre === "all" && !q;
+    const wrap = document.getElementById("showAllGamesWrap");
+    let toShow = matched;
+
+    if (wrap) {
+        if (isAllGamesPage() || !defaultExplore) {
+            wrap.hidden = true;
+        } else {
+            const cap = getHomePreviewCap();
+            const limited = matched.length > cap;
+            if (limited) {
+                toShow = matched.slice(0, cap);
+            }
+            wrap.hidden = !limited;
+        }
+    }
+
+    toShow.forEach(game => {
+
+            const div = document.createElement("div");
+            div.className = "card";
+            div.setAttribute("role", "button");
+            div.setAttribute("tabindex", "0");
+            div.setAttribute("aria-label", `Play ${game.name}`);
+            div.title = game.name;
+
+            div.style.backgroundImage = imageLayersFromSlug(game.imageSlug);
+
+            const goPlay = () => {
+                window.location.href =
+                    `play.html?game=${game.file}&name=${encodeURIComponent(game.name)}`;
+            };
+
+            div.addEventListener("click", goPlay);
+            div.addEventListener("keydown", e => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    goPlay();
+                }
+            });
+
+            grid.appendChild(div);
+        });
+
+    updateGamesSectionHeading(filter);
+    updateRailActive();
+}
+
+let homePreviewResizeTimer;
+window.addEventListener("resize", () => {
+    if (isAllGamesPage()) {
+        return;
+    }
+    clearTimeout(homePreviewResizeTimer);
+    homePreviewResizeTimer = setTimeout(() => {
+        const q = (search && search.value) || "";
+        if (activeGenre === "all" && !String(q).trim()) {
+            render(q);
+        }
+    }, 160);
+});
+
+search.addEventListener("input", e => {
+    render(e.target.value);
+});
+
+(function initGenreFromUrl() {
+    const genreParam = new URLSearchParams(window.location.search).get("genre");
+    if (genreParam && ["io", "sports", "driving", "action", "puzzle", "casual"].includes(genreParam)) {
+        activeGenre = genreParam;
+        requestAnimationFrame(() => {
+            document.getElementById("gamesSection")?.scrollIntoView({ behavior: "smooth" });
+        });
+    }
+})();
+
+(function initSearchQueryFromUrl() {
+    const qParam = new URLSearchParams(window.location.search).get("q");
+    if (qParam && search) {
+        search.value = qParam;
+    }
+})();
+
+buildRailNav();
+render();
+
+</script>
+
+</body>
+</html>

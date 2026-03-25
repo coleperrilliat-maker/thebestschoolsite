@@ -589,19 +589,22 @@ const GAME_HTML_STEM_TO_IMAGE_STEM = {
     noobrushvspromonster: "noobrushvsproMonster"
 };
 
+/* Same popularity order as index.html (random-game picker). */
 const GAMES = [
-    "1v1 lol", "among us", "crossyroad", "bitlife", "drivemad", "geometry dash",
-    "jetpackjoyride", "minecraft", "monkey mart", "retro bowl", "snow rider 3d",
-    "slope", "paper io", "basketball random", "drift boss",
-    "funny shooter", "get away shoot out", "johny trigger", "0v0game",
-    "level devil", "rag doll archers", "soccer legends", "stick man hook",
-    "time shooter", "tiny fishing", "yohio", "subway surfers",
-    "cookie clicker", "tank war simulator", "house of hazards",
-    "brick rush 3d", "car move game", "duty call modern warfate 2", "fall rush fun 3d",
-    "fish eat getting big", "golf battle", "grand hotel mania", "hungry shark evolution 2",
-    "noob rush vs pro monster", "speed boat challenge racing",
-    "escape road", "escape road 2",
-    "sniper 3d", "poppy office nightmare"
+    "minecraft", "geometry dash", "among us", "subway surfers", "cookie clicker", "slope",
+    "1v1 lol", "paper io", "retro bowl", "bitlife", "drivemad", "basketball random",
+    "crossyroad", "tiny fishing", "monkey mart", "drift boss", "0v0game", "snow rider 3d",
+    "time shooter", "funny shooter", "tank war simulator", "jetpackjoyride", "stick man hook",
+    "rag doll archers", "soccer legends", "level devil", "house of hazards", "fish eat getting big",
+    "grand hotel mania", "escape road", "escape road 2", "sniper 3d", "johny trigger",
+    "get away shoot out", "brick rush 3d", "noob rush vs pro monster", "hungry shark evolution 2",
+    "fall rush fun 3d", "golf battle", "car move game", "duty call modern warfate 2",
+    "speed boat challenge racing", "yohio", "my idle mart empire tycoon", "merge factory idle",
+    "idle restaurant tycoon", "restaurant rush", "squid survival run challenge", "hotline miami",
+    "saving digital circus", "noob vs pro but anvil rain", "tap cute animals", "flappy witch fly",
+    "pixel drift retro tetris", "solve or suffer", "hidden hero", "ayla world avatar city",
+    "police here", "breakthrough team", "asteroid dodge", "stellar assault", "riot village",
+    "samurai vs yakuza beat em up", "poppy office nightmare"
 ].map(name => {
     const slug = fileSlugFromGameName(name);
     return {

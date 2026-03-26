@@ -463,7 +463,8 @@ body.light-play .more-game-card::after {
 }
 
 .more-game-card:hover {
-    transform: scale(1.05);
+    /* Keep all tiles same size (no hover scaling). */
+    transform: none;
     border-color: var(--brand);
     box-shadow: 0 8px 24px rgba(255, 106, 0, 0.2);
 }

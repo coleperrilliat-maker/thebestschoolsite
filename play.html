@@ -618,9 +618,9 @@ function imageSlugFromGameName(name) {
 function imageLayersFromSlug(slug) {
     const safe = String(slug || "").replace(/"/g, "");
     return [
-        `url("images/${safe}.png")`,
         `url("images/${safe}.jpg")`,
         `url("images/${safe}.jpeg")`,
+        `url("images/${safe}.png")`,
         `url("images/${safe}.webp")`,
         "linear-gradient(135deg, rgba(255,106,0,0.95), rgba(229,95,0,0.8))"
     ].join(", ");
@@ -635,7 +635,23 @@ const GAME_HTML_STEM_TO_IMAGE_STEM = {
 };
 
 /* Same popularity order as index.html (random-game picker). */
-const GAMES = ["minecraft", "geometry dash", "among us", "shell shockers", "subway surfers", "cookie clicker", "slope", "1v1 lol", "paper io", "aquapark io", "basketball stars", "basket bros", "bowmasters", "block blast", "block post", "attack hole", "amaze", "bank robbery", "brawl simulator 3d", "retro bowl", "bitlife", "drivemad", "basketball random", "crossyroad", "tiny fishing", "monkey mart", "drift boss", "0v0game", "snow rider 3d", "time shooter", "funny shooter", "tank war simulator", "jetpackjoyride", "stick man hook", "rag doll archers", "soccer legends", "level devil", "house of hazards", "fish eat getting big", "grand hotel mania", "escape road", "escape road 2", "sniper 3d", "johny trigger", "get away shoot out", "brick rush 3d", "noob rush vs pro monster", "hungry shark evolution 2", "fall rush fun 3d", "golf battle", "car move game", "duty call modern warfate 2", "speed boat challenge racing", "yohio", "my idle mart empire tycoon", "merge factory idle", "idle restaurant tycoon", "restaurant rush", "squid survival run challenge", "hotline miami", "saving digital circus", "noob vs pro but anvil rain", "tap cute animals", "flappy witch fly", "pixel drift retro tetris", "solve or suffer", "hidden hero", "ayla world avatar city", "police here", "breakthrough team", "asteroid dodge", "stellar assault", "riot village", "samurai vs yakuza beat em up", "poppy office nightmare", "the gungame", "sniper master", "urban sniper 2", "lone wolf strike", "counter craft modern warfare 2", "counter craft battle royale", "super sergeant", "cartoon clash", "grand zombie swarm", "counter craft", "critical strike global ops", "counter craft 3", "wild west gun", "special strike operations", "backrooms assault 2", "special strike zombies", "dead zone sniper", "poppy strike", "super zombie shooter", "super drive", "vice city mad driving", "evo city driving", "ferrari track driving", "city of vice driving", "supercars zombie driving", "super suv driving", "real city driving 2", "russian taz driving 3", "russian taz driving 2", "grand city car thief", "grand city driving 2", "speed car race madness", "dual control racing stunt 3d", "mountain truck simulator 3d", "car parking pro", "extreme toy race", "crazy cars", "2048", "adventurecapitalist", "ahoysurvival", "asmallworldcup", "backrooms", "baldisbasics", "basketballbros", "basketrandom", "boxingrandom", "btd 1", "btd 2", "btd 3", "btd 4", "btd 5", "crazycattle 3 d", "ducklife 1", "dumbwaystodie", "fallguys", "fisquarium", "fivenightsatepsteins", "fnaf 1", "fnaf 2", "fnaf 3", "fnaf 4", "geometry dash meltdown", "geometry dash subzero", "geometry dash world", "granny", "happywheels", "helixjump", "hole io", "idlebreakout", "little alchemy 2", "melonsandbox", "moneyrush", "moto x3m", "moto x3m pool party", "moto x3m spooky land", "moto x3m winter", "papas donuteria", "papas freezeria", "papas hotdoggeria", "papas pastaria", "papas pizzeria", "plantsvszombies", "polytrack", "ragdolldrop", "redball 4", "retro bowl college", "rocket league", "run 1", "run 2", "run 3", "slicemaster", "smashyroad", "soccerrandom", "soundbuttons", "spacewaves", "survivor io", "terraria", "tombofthemask", "ultrakill", "volleyrandom", "wheelielife", "wordle", "worlds hardest game"].map(name => {
+const GAMES = [
+    "minecraft", "geometry dash", "among us", "shell shockers", "subway surfers", "cookie clicker", "slope",
+    "1v1 lol", "paper io", "8 ball pool", "aquapark io", "basketball stars", "bowmasters",
+    "block blast", "block post", "attack hole", "amaze", "bank robbery", "brawl simulator 3d", "retro bowl", "bitlife", "drivemad", "basketball random",
+    "crossyroad", "tiny fishing", "monkey mart", "drift boss", "0v0game", "snow rider 3d",
+    "time shooter", "funny shooter", "tank war simulator", "jetpackjoyride", "stick man hook",
+    "rag doll archers", "soccer legends", "level devil", "house of hazards", "fish eat getting big",
+    "grand hotel mania", "escape road", "escape road 2", "sniper 3d", "johny trigger",
+    "get away shoot out", "brick rush 3d", "noob rush vs pro monster", "hungry shark evolution 2",
+    "fall rush fun 3d", "golf battle", "car move game", "duty call modern warfate 2",
+    "speed boat challenge racing", "yohio", "my idle mart empire tycoon", "merge factory idle",
+    "idle restaurant tycoon", "restaurant rush", "squid survival run challenge", "hotline miami",
+    "saving digital circus", "noob vs pro but anvil rain", "tap cute animals", "flappy witch fly",
+    "pixel drift retro tetris", "solve or suffer", "hidden hero", "ayla world avatar city",
+    "police here", "breakthrough team", "asteroid dodge", "stellar assault", "riot village",
+    "samurai vs yakuza beat em up", "poppy office nightmare"
+].map(name => {
     const slug = fileSlugFromGameName(name);
     return {
         name,

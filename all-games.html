@@ -487,6 +487,33 @@ const games = TUBZI_GAME_ENTRIES.map(([name, genre]) => {
     return { name, genre, imageSlug: imgSlug, file: `games/${slug}.html` };
 });
 
+const POPULARITY_ORDER = [
+    "minecraft", "subway surfers", "geometry dash", "slope", "1v1 lol", "cookie clicker",
+    "drivemad", "bitlife", "paper io", "among us", "shell shockers", "monkey mart",
+    "tiny fishing", "retro bowl", "basketball random", "drift boss", "snow rider 3d",
+    "run 3", "happywheels", "motox3m", "plantsvszombies", "fnaf 1", "fnaf 2", "wordle",
+    "2048", "crossyroad", "terraria", "polytrack", "soccerrandom", "rocket league"
+];
+
+const POPULARITY_INDEX = new Map(
+    POPULARITY_ORDER.map((name, i) => [name.replace(/[^a-z0-9]+/g, ""), i])
+);
+
+function popularityRank(name) {
+    const key = String(name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+    return POPULARITY_INDEX.has(key) ? POPULARITY_INDEX.get(key) : 10_000;
+}
+
+function sortByPopularity(list) {
+    return [...list].sort((a, b) => {
+        const rankDiff = popularityRank(a.name) - popularityRank(b.name);
+        if (rankDiff !== 0) {
+            return rankDiff;
+        }
+        return a.name.localeCompare(b.name);
+    });
+}
+
 function isAllGamesPage() {
     return document.body.dataset.tubziPage === "all-games";
 }
@@ -536,90 +563,8 @@ document.getElementById("btnRandom").addEventListener("click", () => {
     window.location.href = `play.html?game=${game.file}&name=${encodeURIComponent(game.name)}`;
 });
 
-let stopRailGameLoop = null;
-
-function addLoopingAllGamesToRail(nav) {
-    const label = document.createElement("div");
-    label.className = "rail-section-label rail-section-label--compact";
-    label.textContent = "All games loop";
-    nav.appendChild(label);
-
-    const firstCopy = document.createElement("div");
-    const secondCopy = document.createElement("div");
-    firstCopy.className = "rail-game-loop-copy";
-    secondCopy.className = "rail-game-loop-copy";
-
-    const makeLink = game => {
-        const a = document.createElement("a");
-        a.href = `play.html?game=${game.file}&name=${encodeURIComponent(game.name)}`;
-        a.className = "rail-nav-item rail-nav-item--compact rail-game-loop-item";
-        a.innerHTML = `<span class="rail-label">${game.name}</span>`;
-        return a;
-    };
-
-    games.forEach(game => {
-        firstCopy.appendChild(makeLink(game));
-        secondCopy.appendChild(makeLink(game));
-    });
-
-    nav.appendChild(firstCopy);
-    nav.appendChild(secondCopy);
-
-    const loopStart = firstCopy.offsetTop;
-    const loopHeight = firstCopy.offsetHeight;
-    if (!loopHeight) {
-        return;
-    }
-
-    nav.scrollTop = loopStart;
-
-    let paused = false;
-    let rafId = 0;
-    let prevTs = performance.now();
-    const pxPerSecond = 18;
-
-    const tick = now => {
-        const dt = (now - prevTs) / 1000;
-        prevTs = now;
-
-        if (!paused) {
-            nav.scrollTop += dt * pxPerSecond;
-            if (nav.scrollTop >= loopStart + loopHeight) {
-                nav.scrollTop -= loopHeight;
-            }
-        }
-
-        rafId = requestAnimationFrame(tick);
-    };
-
-    const pause = () => {
-        paused = true;
-    };
-    const resume = () => {
-        paused = false;
-    };
-
-    nav.addEventListener("mouseenter", pause);
-    nav.addEventListener("mouseleave", resume);
-    nav.addEventListener("focusin", pause);
-    nav.addEventListener("focusout", resume);
-    nav.addEventListener("touchstart", pause, { passive: true });
-    nav.addEventListener("touchend", resume, { passive: true });
-    nav.addEventListener("wheel", pause, { passive: true });
-
-    rafId = requestAnimationFrame(tick);
-
-    stopRailGameLoop = () => {
-        cancelAnimationFrame(rafId);
-    };
-}
-
 function buildRailNav() {
     const nav = document.getElementById("gameRailNav");
-    if (typeof stopRailGameLoop === "function") {
-        stopRailGameLoop();
-        stopRailGameLoop = null;
-    }
     nav.innerHTML = "";
 
     RAIL_NAV_STRUCTURE.forEach(row => {
@@ -686,7 +631,6 @@ function buildRailNav() {
         nav.appendChild(btn);
     });
 
-    addLoopingAllGamesToRail(nav);
     updateRailActive();
 }
 
@@ -749,9 +693,10 @@ function render(filter = "") {
     grid.innerHTML = "";
 
     const q = filter.toLowerCase().trim();
-    const matched = games
+    const matchedBase = games
         .filter(gameMatches)
         .filter(g => g.name.toLowerCase().includes(q));
+    const matched = activeGenre === "all" ? sortByPopularity(matchedBase) : matchedBase;
 
     const defaultExplore = activeGenre === "all" && !q;
     const wrap = document.getElementById("showAllGamesWrap");

@@ -11,7 +11,6 @@ OUT = ROOT / "images"
 
 # (image stem, lines to draw — short lines read better at card size)
 GAMES: list[tuple[str, list[str]]] = [
-    ("8ballpool", ["8 Ball Pool"]),
     ("aquaparkio", ["Aquapark", ".io"]),
     ("basketballstars", ["Basketball", "Stars"]),
     ("bowmasters", ["Bowmasters"]),

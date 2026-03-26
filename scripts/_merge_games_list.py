@@ -10,7 +10,6 @@ base = [
     ("slope", "casual"),
     ("1v1 lol", "io"),
     ("paper io", "io"),
-    ("8 ball pool", "sports"),
     ("aquapark io", "io"),
     ("basketball stars", "sports"),
     ("bowmasters", "action"),

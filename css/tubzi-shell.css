@@ -180,6 +180,20 @@ body.light .game-rail {
     height: 17px;
 }
 
+.rail-game-loop-item--thumb {
+    height: 44px;
+    padding: 0;
+    margin: 2px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.rail-game-loop-item--thumb .rail-label {
+    display: none;
+}
+
 .rail-spacer {
     flex: 1 1 24px;
     min-height: 16px;

@@ -536,8 +536,90 @@ document.getElementById("btnRandom").addEventListener("click", () => {
     window.location.href = `play.html?game=${game.file}&name=${encodeURIComponent(game.name)}`;
 });
 
+let stopRailGameLoop = null;
+
+function addLoopingAllGamesToRail(nav) {
+    const label = document.createElement("div");
+    label.className = "rail-section-label rail-section-label--compact";
+    label.textContent = "All games loop";
+    nav.appendChild(label);
+
+    const firstCopy = document.createElement("div");
+    const secondCopy = document.createElement("div");
+    firstCopy.className = "rail-game-loop-copy";
+    secondCopy.className = "rail-game-loop-copy";
+
+    const makeLink = game => {
+        const a = document.createElement("a");
+        a.href = `play.html?game=${game.file}&name=${encodeURIComponent(game.name)}`;
+        a.className = "rail-nav-item rail-nav-item--compact rail-game-loop-item";
+        a.innerHTML = `<span class="rail-label">${game.name}</span>`;
+        return a;
+    };
+
+    games.forEach(game => {
+        firstCopy.appendChild(makeLink(game));
+        secondCopy.appendChild(makeLink(game));
+    });
+
+    nav.appendChild(firstCopy);
+    nav.appendChild(secondCopy);
+
+    const loopStart = firstCopy.offsetTop;
+    const loopHeight = firstCopy.offsetHeight;
+    if (!loopHeight) {
+        return;
+    }
+
+    nav.scrollTop = loopStart;
+
+    let paused = false;
+    let rafId = 0;
+    let prevTs = performance.now();
+    const pxPerSecond = 18;
+
+    const tick = now => {
+        const dt = (now - prevTs) / 1000;
+        prevTs = now;
+
+        if (!paused) {
+            nav.scrollTop += dt * pxPerSecond;
+            if (nav.scrollTop >= loopStart + loopHeight) {
+                nav.scrollTop -= loopHeight;
+            }
+        }
+
+        rafId = requestAnimationFrame(tick);
+    };
+
+    const pause = () => {
+        paused = true;
+    };
+    const resume = () => {
+        paused = false;
+    };
+
+    nav.addEventListener("mouseenter", pause);
+    nav.addEventListener("mouseleave", resume);
+    nav.addEventListener("focusin", pause);
+    nav.addEventListener("focusout", resume);
+    nav.addEventListener("touchstart", pause, { passive: true });
+    nav.addEventListener("touchend", resume, { passive: true });
+    nav.addEventListener("wheel", pause, { passive: true });
+
+    rafId = requestAnimationFrame(tick);
+
+    stopRailGameLoop = () => {
+        cancelAnimationFrame(rafId);
+    };
+}
+
 function buildRailNav() {
     const nav = document.getElementById("gameRailNav");
+    if (typeof stopRailGameLoop === "function") {
+        stopRailGameLoop();
+        stopRailGameLoop = null;
+    }
     nav.innerHTML = "";
 
     RAIL_NAV_STRUCTURE.forEach(row => {
@@ -604,6 +686,7 @@ function buildRailNav() {
         nav.appendChild(btn);
     });
 
+    addLoopingAllGamesToRail(nav);
     updateRailActive();
 }
 

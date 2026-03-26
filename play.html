@@ -405,6 +405,8 @@ body.light-play .play-action-bar {
 }
 
 .more-game-card {
+    position: relative;
+    overflow: hidden;
     flex: 0 0 108px;
     width: 108px;
     aspect-ratio: 1;
@@ -415,6 +417,42 @@ body.light-play .play-action-bar {
     border: 2px solid transparent;
     transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.more-game-card::after {
+    content: attr(data-game-title);
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 10px 4px 5px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 600;
+    line-height: 1.15;
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.more-game-card:hover::after {
+    opacity: 1;
+}
+
+body.light-play .more-game-card::after {
+    background: linear-gradient(transparent, rgba(255, 255, 255, 0.95));
+    color: #1a1a1a;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .more-game-card::after {
+        transition: none;
+    }
 }
 
 .more-game-card:hover {
@@ -773,6 +811,7 @@ function makeMoreGameCard(g, duplicate) {
     div.className = "more-game-card";
     div.style.backgroundImage = imageLayersFromSlug(g.imageSlug);
     div.title = g.name;
+    div.dataset.gameTitle = g.name;
     if (duplicate) {
         div.setAttribute("aria-hidden", "true");
         div.tabIndex = -1;

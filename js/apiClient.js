@@ -1,5 +1,5 @@
 /**
- * API client for TubZi: dev uses same-origin /api-proxy (Express); production uses your real API host.
+ * API client for TubZi that targets your configured production API host.
  *
  * Optional: before loading this script, set window.__TUBZI_PRODUCTION_API__ = "https://api.yourdomain.com"
  * to override the default production base URL.
@@ -17,27 +17,7 @@
         return DEFAULT_PRODUCTION_API_ORIGIN;
     }
 
-    /**
-     * In the browser, `global` is `window` — so this reads window.location.hostname
-     * (localhost / 127.0.0.1 / [::1] / *.local => dev => /api-proxy; else production API).
-     */
-    function isDevelopmentUrl() {
-        if (typeof global.location === "undefined") {
-            return true;
-        }
-        var host = global.location.hostname || "";
-        if (!host) {
-            return true;
-        }
-        return (
-            host === "localhost" ||
-            host === "127.0.0.1" ||
-            host === "[::1]" ||
-            host.endsWith(".local")
-        );
-    }
-
-    var BASE_URL = isDevelopmentUrl() ? "/api-proxy" : getProductionApiOrigin();
+    var BASE_URL = getProductionApiOrigin();
 
     /**
      * @param {string} path - Path after the base (e.g. "users" or "/v1/status")
@@ -53,7 +33,7 @@
 
     global.apiClient = {
         BASE_URL: BASE_URL,
-        isDevelopment: isDevelopmentUrl(),
+        isDevelopment: false,
         fetch: apiFetch,
         request: apiFetch
     };

@@ -16,14 +16,13 @@ CATEGORY_FILES = {
     "racing": CATS_DIR / "racing.html",
 }
 
-POPULARITY_ORDER = [
-    "minecraft", "subway surfers", "geometry dash", "slope", "1v1 lol", "cookie clicker",
-    "drivemad", "bitlife", "paper io", "among us", "shell shockers", "monkey mart",
-    "tiny fishing", "retro bowl", "basketball random", "drift boss", "snow rider 3d",
-    "run 3", "happywheels", "moto x3m", "plantsvszombies", "fnaf 1", "fnaf 2", "wordle",
-    "2048", "crossyroad", "terraria", "polytrack", "soccerrandom", "rocket league",
-]
-POPULARITY_INDEX = {re.sub(r"[^a-z0-9]+", "", n.lower()): i for i, n in enumerate(POPULARITY_ORDER)}
+def _popularity_index_from_entries() -> dict[str, int]:
+    text = ENTRIES_PATH.read_text(encoding="utf-8", errors="ignore")
+    names = [m[0] for m in re.findall(r'\["([^"]+)",\s*"([^"]+)"\]', text)]
+    return {re.sub(r"[^a-z0-9]+", "", n.lower()): i for i, n in enumerate(names)}
+
+
+POPULARITY_INDEX = _popularity_index_from_entries()
 
 FILE_SLUG_OVERRIDES = {
     "johnytrigger": "johhnytrigger",

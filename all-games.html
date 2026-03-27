@@ -378,20 +378,14 @@ function imageLayersFromSlug(slug) {
     ].join(", ");
 }
 
-/* Mixed order: popular picks interleaved with newer driving/shooter titles so the grid stays visually varied. */
+/* Popularity order matches js/tubzi-game-entries.js (first = most popular). */
 const games = TUBZI_GAME_ENTRIES.map(([name, genre]) => {
     const slug = fileSlugFromGameName(name);
     const imgSlug = imageSlugFromGameName(name);
     return { name, genre, imageSlug: imgSlug, file: `games/${slug}.html` };
 });
 
-const POPULARITY_ORDER = [
-    "minecraft", "subway surfers", "geometry dash", "slope", "1v1 lol", "cookie clicker",
-    "drivemad", "bitlife", "paper io", "among us", "shell shockers", "monkey mart",
-    "tiny fishing", "retro bowl", "basketball random", "drift boss", "snow rider 3d",
-    "run 3", "happywheels", "motox3m", "plantsvszombies", "fnaf 1", "fnaf 2", "wordle",
-    "2048", "crossyroad", "terraria", "polytrack", "soccerrandom", "rocket league"
-];
+const POPULARITY_ORDER = TUBZI_GAME_ENTRIES.map(([name]) => name);
 
 const POPULARITY_INDEX = new Map(
     POPULARITY_ORDER.map((name, i) => [name.replace(/[^a-z0-9]+/g, ""), i])

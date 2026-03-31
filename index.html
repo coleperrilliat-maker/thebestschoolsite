@@ -697,8 +697,19 @@ function render(filter = "") {
         useVisualLayout && TUBZI_LAYOUT.computeMaxTileRow
             ? TUBZI_LAYOUT.computeMaxTileRow(LAYOUT_TILES)
             : 0;
+    const useFeaturedPokiPattern =
+        !useVisualLayout &&
+        activeGenre === "all" &&
+        !q &&
+        typeof TUBZI_LAYOUT !== "undefined" &&
+        TUBZI_LAYOUT.applyTileLevelToCard;
+    // Staggered "featured" cadence similar to Poki-style hero tiles.
+    // Includes a safety guard so two large cards are never consecutive.
+    const FEATURED_STEPS = [0, 4, 9, 14, 20, 27];
+    const featuredIndexSet = new Set(FEATURED_STEPS);
+    let previousWasLarge = false;
 
-    toShow.forEach(game => {
+    toShow.forEach((game, idx) => {
 
             const div = document.createElement("div");
             div.className = "card";
@@ -730,10 +741,18 @@ function render(filter = "") {
                 }
             } else {
                 const rawLevel = LAYOUT_SIZES[layoutKey];
-                const level =
+                let level =
                     rawLevel != null && rawLevel !== ""
                         ? rawLevel
                         : (typeof TUBZI_LAYOUT !== "undefined" ? TUBZI_LAYOUT.TILE_LEVEL_DEFAULT : 8);
+                if (useFeaturedPokiPattern) {
+                    const canBeFeatured = featuredIndexSet.has(idx) && !previousWasLarge;
+                    if (canBeFeatured) {
+                        // 2x2 full tile for featured picks.
+                        level = 12;
+                    }
+                    previousWasLarge = canBeFeatured;
+                }
                 if (typeof TUBZI_LAYOUT !== "undefined" && TUBZI_LAYOUT.applyTileLevelToCard) {
                     TUBZI_LAYOUT.applyTileLevelToCard(div, level);
                 }

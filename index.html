@@ -707,6 +707,13 @@ function render(filter = "") {
     // Includes a safety guard so two large cards are never consecutive.
     const FEATURED_STEPS = [0, 4, 9, 14, 20, 27];
     const featuredIndexSet = new Set(FEATURED_STEPS);
+    const forcedFeaturedKeys = new Set([
+        "ultrakill",
+        "fallguys",
+        "motox3m",
+        "spacewaves",
+        "bankrobbery"
+    ]);
     let previousWasLarge = false;
 
     toShow.forEach((game, idx) => {
@@ -746,7 +753,9 @@ function render(filter = "") {
                         ? rawLevel
                         : (typeof TUBZI_LAYOUT !== "undefined" ? TUBZI_LAYOUT.TILE_LEVEL_DEFAULT : 8);
                 if (useFeaturedPokiPattern) {
-                    const canBeFeatured = featuredIndexSet.has(idx) && !previousWasLarge;
+                    const forcedKey = String(game.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+                    const isForcedFeatured = forcedFeaturedKeys.has(forcedKey);
+                    const canBeFeatured = (isForcedFeatured || featuredIndexSet.has(idx)) && !previousWasLarge;
                     if (canBeFeatured) {
                         // 2x2 full tile for featured picks.
                         level = 12;

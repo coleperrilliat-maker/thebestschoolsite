@@ -26,6 +26,14 @@
     padding: 28px 24px 48px;
     max-width: 1180px;
     margin: 0 auto;
+    width: 100%;
+}
+
+/* Popular picks: full width (no ad side gutters; grid uses the whole content area) */
+#gamesSection.container {
+    max-width: none;
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
 }
 
 .games-section-title {
@@ -39,14 +47,21 @@
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+    grid-auto-flow: dense;
     gap: 20px;
+}
+
+.grid.grid--visual-layout {
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-flow: dense;
+    grid-auto-rows: minmax(112px, auto);
 }
 
 .show-all-games-wrap {
     display: flex;
     justify-content: center;
-    padding: 8px 0 4px;
+    padding: 0 0 16px;
 }
 
 .show-all-games-btn {
@@ -65,6 +80,11 @@
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 6px 20px rgba(255, 106, 0, 0.35);
     transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    cursor: pointer;
+}
+button.show-all-games-btn {
+    font: inherit;
+    font-family: "Fredoka", system-ui, sans-serif;
 }
 
 .show-all-games-btn:hover {
@@ -121,6 +141,8 @@ body.light .games-divider {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
+
+/* Tile sizes 1–15: applied via js/tubzi-layout-store.js applyTileLevelToCard (inline width / span). */
 
 body.light .card {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -224,21 +246,11 @@ body.light .card::after {
         </div>
     </header>
 
-    <aside class="game-rail" aria-label="Navigation">
-        <div class="game-rail-inner">
-            <nav class="game-rail-scroll" id="gameRailNav"></nav>
-        </div>
-    </aside>
-
     <div class="app-content">
         <div class="app-scroll">
             <main class="site-main">
         <div class="container" id="gamesSection">
-            <h1 class="games-section-title" id="gamesSectionHeading">Popular picks</h1>
             <div class="grid" id="grid"></div>
-            <div class="show-all-games-wrap" id="showAllGamesWrap" hidden>
-                <a href="all-games.html" class="show-all-games-btn">Show all games</a>
-            </div>
             <hr class="games-divider" aria-hidden="true">
         </div>
 
@@ -399,6 +411,7 @@ body.light .card::after {
 
 <script src="js/tubzi-rail-data.js?v=2"></script>
 <script src="js/tubzi-game-entries.js"></script>
+<script src="js/tubzi-layout-store.js"></script>
 <script>
 
 const ICONS = window.TUBZI_RAIL.icons;
@@ -457,9 +470,23 @@ const games = TUBZI_GAME_ENTRIES.map(([name, genre]) => {
 
 const POPULARITY_ORDER = TUBZI_GAME_ENTRIES.map(([name]) => name);
 
-const POPULARITY_INDEX = new Map(
-    POPULARITY_ORDER.map((name, i) => [name.replace(/[^a-z0-9]+/g, ""), i])
-);
+const layoutMerged = typeof TUBZI_LAYOUT !== "undefined"
+    ? TUBZI_LAYOUT.loadMergedPopularity(games)
+    : null;
+
+const POPULARITY_INDEX = layoutMerged
+    ? layoutMerged.index
+    : new Map(
+        POPULARITY_ORDER.map((name, i) => [
+            String(name).toLowerCase().replace(/[^a-z0-9]+/g, ""),
+            i
+        ])
+    );
+
+const LAYOUT_SIZES = layoutMerged && layoutMerged.sizes ? layoutMerged.sizes : {};
+const LAYOUT_TILES = layoutMerged && layoutMerged.tiles ? layoutMerged.tiles : null;
+const LAYOUT_BOARD_COLS =
+    layoutMerged && layoutMerged.boardCols ? layoutMerged.boardCols : 12;
 
 function popularityRank(name) {
     const key = String(name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
@@ -474,24 +501,6 @@ function sortByPopularity(list) {
         }
         return a.name.localeCompare(b.name);
     });
-}
-
-function isAllGamesPage() {
-    return document.body.dataset.tubziPage === "all-games";
-}
-
-const HOME_PREVIEW_ROWS = 6;
-
-function getHomePreviewCap() {
-    const section = document.getElementById("gamesSection");
-    if (!section) {
-        return 48;
-    }
-    const w = Math.max(0, section.clientWidth - 8);
-    const minCell = 140;
-    const gap = 20;
-    const cols = Math.max(2, Math.floor((w + gap) / (minCell + gap)));
-    return cols * HOME_PREVIEW_ROWS;
 }
 
 let activeGenre = "all";
@@ -526,6 +535,9 @@ document.getElementById("btnRandom").addEventListener("click", () => {
 
 function buildRailNav() {
     const nav = document.getElementById("gameRailNav");
+    if (!nav) {
+        return;
+    }
     nav.innerHTML = "";
 
     RAIL_NAV_STRUCTURE.forEach(row => {
@@ -573,10 +585,6 @@ function buildRailNav() {
 
         btn.addEventListener("click", () => {
             if (item.id === "home") {
-                if (isAllGamesPage()) {
-                    window.location.href = "index.html";
-                    return;
-                }
                 activeGenre = "all";
                 search.value = "";
                 render("");
@@ -606,10 +614,10 @@ function updateRailActive() {
         let on = false;
         if (item.href) {
             if (item.id === "allgames") {
-                on = isAllGamesPage() && activeGenre === "all" && !searchTrimmed;
+                on = false;
             }
         } else if (item.id === "home") {
-            on = activeGenre === "all" && !isAllGamesPage() && !searchTrimmed;
+            on = activeGenre === "all" && !searchTrimmed;
         } else if (item.genre) {
             on = activeGenre === item.genre;
         }
@@ -627,10 +635,6 @@ function gameMatches(g) {
 const DEFAULT_INDEX_DOC_TITLE = "TubZi";
 
 function updateGamesSectionHeading(rawFilter) {
-    const el = document.getElementById("gamesSectionHeading");
-    if (!el) {
-        return;
-    }
     const trimmed = String(rawFilter || "").trim();
     const hasSearch = trimmed.length > 0;
     const genreRow = RAIL_NAV_STRUCTURE.find(r => r.kind === "item" && r.genre === activeGenre);
@@ -641,18 +645,15 @@ function updateGamesSectionHeading(rawFilter) {
             const display = trimmed.length > 48 ? `${trimmed.slice(0, 45)}…` : trimmed;
             heading = `Search: ${display}`;
         } else {
-            heading = isAllGamesPage() ? "All games" : "Popular picks";
+            heading = "Popular picks";
         }
     } else if (hasSearch) {
         heading = `${(genreRow && genreRow.label) || "Games"} · search`;
     } else {
         heading = (genreRow && genreRow.label) || "Games";
     }
-    el.textContent = heading;
 
-    if (isAllGamesPage()) {
-        document.title = `${heading} — TubZi`;
-    } else if (activeGenre === "all" && !hasSearch) {
+    if (activeGenre === "all" && !hasSearch) {
         document.title = DEFAULT_INDEX_DOC_TITLE;
     } else {
         document.title = `${heading} — TubZi`;
@@ -666,24 +667,36 @@ function render(filter = "") {
     const matchedBase = games
         .filter(gameMatches)
         .filter(g => g.name.toLowerCase().includes(q));
-    const matched = activeGenre === "all" ? sortByPopularity(matchedBase) : matchedBase;
+    const useVisualLayout =
+        activeGenre === "all" &&
+        LAYOUT_TILES &&
+        typeof TUBZI_LAYOUT !== "undefined" &&
+        TUBZI_LAYOUT.sortGamesForVisualRender;
 
-    const defaultExplore = activeGenre === "all" && !q;
-    const wrap = document.getElementById("showAllGamesWrap");
+    if (useVisualLayout) {
+        grid.classList.add("grid--visual-layout");
+        grid.style.gridTemplateColumns = `repeat(${LAYOUT_BOARD_COLS}, 1fr)`;
+    } else {
+        grid.classList.remove("grid--visual-layout");
+        grid.style.gridTemplateColumns = "";
+    }
+
+    let matched;
+    if (activeGenre === "all") {
+        matched = useVisualLayout
+            ? TUBZI_LAYOUT.sortGamesForVisualRender(matchedBase, LAYOUT_TILES)
+            : sortByPopularity(matchedBase);
+    } else {
+        matched = matchedBase;
+    }
+
     let toShow = matched;
 
-    if (wrap) {
-        if (isAllGamesPage() || !defaultExplore) {
-            wrap.hidden = true;
-        } else {
-            const cap = getHomePreviewCap();
-            const limited = matched.length > cap;
-            if (limited) {
-                toShow = matched.slice(0, cap);
-            }
-            wrap.hidden = !limited;
-        }
-    }
+    let flowCol = 0;
+    let flowRow =
+        useVisualLayout && TUBZI_LAYOUT.computeMaxTileRow
+            ? TUBZI_LAYOUT.computeMaxTileRow(LAYOUT_TILES)
+            : 0;
 
     toShow.forEach(game => {
 
@@ -696,6 +709,35 @@ function render(filter = "") {
             div.dataset.gameTitle = game.name;
 
             div.style.backgroundImage = imageLayersFromSlug(game.imageSlug);
+
+            const layoutKey = String(game.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+
+            if (useVisualLayout && LAYOUT_TILES[layoutKey]) {
+                if (TUBZI_LAYOUT.applyVisualTileToCard) {
+                    TUBZI_LAYOUT.applyVisualTileToCard(
+                        div,
+                        LAYOUT_TILES[layoutKey],
+                        LAYOUT_BOARD_COLS
+                    );
+                }
+            } else if (useVisualLayout) {
+                div.style.gridColumn = `${flowCol + 1} / span 1`;
+                div.style.gridRow = `${flowRow + 1} / span 1`;
+                flowCol += 1;
+                if (flowCol >= LAYOUT_BOARD_COLS) {
+                    flowCol = 0;
+                    flowRow += 1;
+                }
+            } else {
+                const rawLevel = LAYOUT_SIZES[layoutKey];
+                const level =
+                    rawLevel != null && rawLevel !== ""
+                        ? rawLevel
+                        : (typeof TUBZI_LAYOUT !== "undefined" ? TUBZI_LAYOUT.TILE_LEVEL_DEFAULT : 8);
+                if (typeof TUBZI_LAYOUT !== "undefined" && TUBZI_LAYOUT.applyTileLevelToCard) {
+                    TUBZI_LAYOUT.applyTileLevelToCard(div, level);
+                }
+            }
 
             const goPlay = () => {
                 window.location.href =
@@ -719,9 +761,6 @@ function render(filter = "") {
 
 let homePreviewResizeTimer;
 window.addEventListener("resize", () => {
-    if (isAllGamesPage()) {
-        return;
-    }
     clearTimeout(homePreviewResizeTimer);
     homePreviewResizeTimer = setTimeout(() => {
         const q = (search && search.value) || "";

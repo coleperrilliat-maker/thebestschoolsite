@@ -585,6 +585,7 @@ body.light-play .more-game-card {
     </section>
 </div>
 
+<script src="js/tubzi-layout-store.js"></script>
 <script>
 const VOTE_KEY = "tubzi-game-votes";
 const THEME_KEY = "tubzi-theme";
@@ -635,8 +636,8 @@ const GAME_HTML_STEM_TO_IMAGE_STEM = {
     noobrushvspromonster: "noobrushvsproMonster"
 };
 
-/* Same popularity order as index.html (random-game picker). */
-const GAMES = [
+/* Same popularity order as index when a layout is published (tubzi-layout-store). */
+let PLAY_GAME_NAMES = [
     "minecraft", "cookie clicker", "geometry dash", "among us", "shell shockers", "subway surfers", "slope", "1v1 lol", "ultrakill",
     "paper io", "8 ball classic", "aquapark io", "basketball stars", "bowmasters",
     "block blast", "block post", "attack hole", "amaze", "bank robbery", "brawl simulator 3d", "retro bowl", "bitlife", "drivemad", "basketball random",
@@ -652,7 +653,23 @@ const GAMES = [
     "pixel drift retro tetris", "solve or suffer", "hidden hero", "ayla world avatar city",
     "police here", "breakthrough team", "asteroid dodge", "stellar assault", "riot village",
     "samurai vs yakuza beat em up", "poppy office nightmare"
-].map(name => {
+];
+
+if (typeof TUBZI_LAYOUT !== "undefined") {
+    const merged = TUBZI_LAYOUT.loadMergedPopularity(PLAY_GAME_NAMES.map(n => ({ name: n })));
+    if (merged) {
+        PLAY_GAME_NAMES.sort((a, b) => {
+            const ia = merged.index.get(TUBZI_LAYOUT.normName(a)) ?? 99_999;
+            const ib = merged.index.get(TUBZI_LAYOUT.normName(b)) ?? 99_999;
+            if (ia !== ib) {
+                return ia - ib;
+            }
+            return a.localeCompare(b);
+        });
+    }
+}
+
+const GAMES = PLAY_GAME_NAMES.map(name => {
     const slug = fileSlugFromGameName(name);
     return {
         name,

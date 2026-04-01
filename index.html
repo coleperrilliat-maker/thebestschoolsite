@@ -422,19 +422,8 @@ function railItemById(id) {
 }
 
 const GAME_FILE_SLUG = {
-    johnytrigger: "johhnytrigger",
     yohio: "yohoio",
-    "0v0game": "OvOgame",
-    brickrush3d: "brickrush3d",
-    carmovegame: "carmovegame",
-    dutycallmodernwarfate2: "dutycallmodernwarfate2",
-    fallrushfun3d: "fallrushfun3d",
-    fisheatgettingbig: "fisheatgettingbig",
-    golfbattle: "golfbattle",
-    grandhotelmania: "grandhotelmania",
-    hungrysharkevolution2: "hungrysharkevolution2",
-    noobrushvspromonster: "noobrushvsproMonster",
-    speedboatchallengeracing: "speedboatchallengeracing"
+    "0v0game": "OvOgame"
 };
 
 function fileSlugFromGameName(name) {
@@ -443,11 +432,7 @@ function fileSlugFromGameName(name) {
 }
 
 function imageSlugFromGameName(name) {
-    const base = name.replace(/ /g, "").toLowerCase();
-    const IMAGE_SLUG_OVERRIDES = {
-        noobrushvspromonster: "noobrushvsproMonster"
-    };
-    return IMAGE_SLUG_OVERRIDES[base] || base;
+    return name.replace(/ /g, "").toLowerCase();
 }
 
 function imageLayersFromSlug(slug) {
@@ -705,14 +690,17 @@ function render(filter = "") {
         TUBZI_LAYOUT.applyTileLevelToCard;
     // Staggered "featured" cadence similar to Poki-style hero tiles.
     // Includes a safety guard so two large cards are never consecutive.
-    const FEATURED_STEPS = [0, 4, 9, 14, 20, 27];
+    const FEATURED_STEPS = [0, 3, 7, 11, 15, 19, 23, 27, 31, 35, 39];
     const featuredIndexSet = new Set(FEATURED_STEPS);
     const forcedFeaturedKeys = new Set([
         "ultrakill",
         "fallguys",
         "motox3m",
         "spacewaves",
-        "bankrobbery"
+        "bankrobbery",
+        "basketbros",
+        "basketballbros",
+        "supermariobros"
     ]);
     let previousWasLarge = false;
 

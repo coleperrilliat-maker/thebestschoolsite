@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Drift Hunters</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MSRCFHRBDK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-MSRCFHRBDK");
+  </script>
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #111; }
+    .webgl-content * { border: 0; margin: 0; padding: 0; }
+    .webgl-content { position: absolute; inset: 0; }
+    .webgl-content, #gameContainer, canvas { width: 100% !important; height: 100% !important; }
+  </style>
+</head>
+<body>
+  <div class="webgl-content">
+    <div id="gameContainer" style="width:100%;height:100%;margin:0;padding:0;background:#111;position:relative;"></div>
+  </div>
+  <script src="https://rawcdn.githack.com/unxa/unxa.github.io/976db99398423b4e5a8b327892c2b57b6a5b766f/g/drift-hunters/UnityLoader2019.js"></script>
+  <script>
+    UnityLoader.instantiate(
+      "gameContainer",
+      "https://rawcdn.githack.com/unxa/unxa.github.io/976db99398423b4e5a8b327892c2b57b6a5b766f/g/drift-hunters/dh.json"
+    );
+    function UnityProgress() {}
+  </script>
+</body>
+</html>

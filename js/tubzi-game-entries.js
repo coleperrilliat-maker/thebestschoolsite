@@ -114,6 +114,7 @@ window.TUBZI_GAME_ENTRIES = [
     ["half life", "action"],
     ["super mario bros", "platformer"],
     ["five nights at freddys", "horror"],
+    ["crazy motorcycle", "casual"],
 ];
 
 /* First entry = most popular for default grid / admin. Order is applied at load. */

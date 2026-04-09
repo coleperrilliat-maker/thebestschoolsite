@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Comprehensive Learning Program — Learn thousands of K-12 topics online. Get detailed feedback and guidance. Win fun awards! Master math, language arts, science, and social studies with our IXL interactive program. Award-Winning.">
+<meta property="og:description" content="Comprehensive Learning Program — Learn thousands of K-12 topics online. Get detailed feedback and guidance. Win fun awards! Master math, language arts, science, and social studies with our IXL interactive program. Award-Winning.">
+<meta property="og:title" content="TubZi">
+<meta property="og:type" content="website">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-MSRCFHRBDK"></script>
 <script>
@@ -170,23 +174,24 @@ body.light .card:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 0;
     padding: 12px;
     box-sizing: border-box;
     background: rgba(0, 0, 0, 0.55);
     color: #fff;
-    font-size: clamp(1.2rem, 12cqw, 3rem);
+    /* One line: shrink from name length (--title-chars set in JS). */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: clamp(0.55rem, calc(94cqw / (4 + var(--title-chars, 12))), 2.85rem);
     font-weight: 800;
     line-height: 1.12;
     letter-spacing: -0.02em;
     text-align: center;
-    text-wrap: balance;
     text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75), 0 0 2px rgba(0, 0, 0, 0.9);
     opacity: 0;
     transition: opacity 0.2s ease;
     pointer-events: none;
     overflow: hidden;
-    hyphens: auto;
-    -webkit-hyphens: auto;
 }
 
 .card:hover::after,
@@ -715,8 +720,8 @@ function render(filter = "") {
             div.setAttribute("role", "button");
             div.setAttribute("tabindex", "0");
             div.setAttribute("aria-label", `Play ${game.name}`);
-            div.title = game.name;
             div.dataset.gameTitle = game.name;
+            div.style.setProperty("--title-chars", String(Math.max(1, game.name.length)));
 
             div.style.backgroundImage = imageLayersFromSlug(game.imageSlug);
 

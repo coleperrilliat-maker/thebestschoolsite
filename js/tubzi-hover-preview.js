@@ -37,6 +37,7 @@
         basketballbros: "videos/hover_basketballbros.mp4",
         basketrandom: "videos/hover_basketrandom.mp4",
         boxingrandom: "videos/hover_boxingrandom.mp4",
+        brawlsimulator3d: "videos/hover_brawlsimulator3d.mp4",
         btd1: "videos/hover_btd1.mp4",
         btd2: "videos/hover_btd2.mp4",
         btd3: "videos/hover_btd3.mp4",
@@ -68,6 +69,7 @@
         plantsvszombies: "videos/hover_plantsvszombies.mp4",
         polytrack: "videos/hover_polytrack.mp4",
         spacewaves: "videos/hover_spacewaves.mp4",
+        subwaysurfers: "videos/hover_subwaysurfers.mp4",
         wordle: "videos/hover_wordle.mp4",
         "0v0game": "videos/hover_0v0game.mp4",
         retrobowlcollege: "videos/hover_retrobowlcollege.mp4",
@@ -77,9 +79,18 @@
         fivenightsatfreddys: "videos/hover_fivenightsatfreddys.mp4",
     };
 
-    /** Optional in/out (seconds). Disables native loop; segment loops in JS. */
+    /**
+     * Optional trim (seconds). Disables native loop; loops in JS.
+     * Omit `end` to play from start through the rest of the file, then repeat from start.
+     */
     var CLIP = {
-        spacewaves: { start: 13, end: 23 }
+        spacewaves: { start: 13, end: 23 },
+        subwaysurfers: { start: 7 }
+    };
+
+    /** object-position for object-fit: cover (fraction of leftover overflow). */
+    var OBJECT_POS = {
+        brawlsimulator3d: "center 32%"
     };
 
     function attach(card, layoutKey) {
@@ -87,7 +98,6 @@
         if (!src) {
             return;
         }
-        card.removeAttribute("title");
 
         var clip = CLIP[layoutKey];
 
@@ -100,13 +110,22 @@
         vid.preload = "metadata";
         vid.setAttribute("aria-hidden", "true");
         vid.src = src;
+        if (OBJECT_POS[layoutKey]) {
+            vid.style.objectPosition = OBJECT_POS[layoutKey];
+        }
         card.insertBefore(vid, card.firstChild);
 
         function seekIntoWindow() {
             if (!clip) {
                 return;
             }
-            if (vid.currentTime < clip.start || vid.currentTime >= clip.end) {
+            if (vid.currentTime < clip.start) {
+                vid.currentTime = clip.start;
+            }
+            if (typeof clip.end === "number" && vid.currentTime >= clip.end) {
+                vid.currentTime = clip.start;
+            }
+            if (typeof clip.end !== "number" && vid.duration && !isNaN(vid.duration) && vid.currentTime >= vid.duration - 0.15) {
                 vid.currentTime = clip.start;
             }
         }
@@ -116,11 +135,18 @@
                 vid.removeEventListener("loadedmetadata", onMeta);
                 seekIntoWindow();
             });
-            vid.addEventListener("timeupdate", function () {
-                if (vid.currentTime >= clip.end) {
+            if (typeof clip.end === "number") {
+                vid.addEventListener("timeupdate", function () {
+                    if (vid.currentTime >= clip.end) {
+                        vid.currentTime = clip.start;
+                    }
+                });
+            } else {
+                vid.addEventListener("ended", function onEnded() {
                     vid.currentTime = clip.start;
-                }
-            });
+                    vid.play().catch(function () {});
+                });
+            }
         }
 
         function play() {

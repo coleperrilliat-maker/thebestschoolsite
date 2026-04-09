@@ -13,6 +13,9 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Comprehensive Learning Program — Learn thousands of K-12 topics online. Get detailed feedback and guidance. Win fun awards! Master math, language arts, science, and social studies with our IXL interactive program. Award-Winning.">
+<meta property="og:description" content="Comprehensive Learning Program — Learn thousands of K-12 topics online. Get detailed feedback and guidance. Win fun awards! Master math, language arts, science, and social studies with our IXL interactive program. Award-Winning.">
+<meta property="og:title" content="Play — TubZi">
 <title>Play — TubZi</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 28'%3E%3Cellipse cx='17' cy='14' rx='13' ry='10' fill='%23ff6a00'/%3E%3Cpolygon points='29,14 39,8 39,20' fill='%23ff6a00'/%3E%3Ccircle cx='13' cy='13' r='2.2' fill='%23ffffff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -427,23 +430,23 @@ body.light-play .play-action-bar {
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 0;
     padding: 4px;
     box-sizing: border-box;
     background: rgba(0, 0, 0, 0.55);
     color: #fff;
-    font-size: clamp(0.68rem, 16cqw, 0.95rem);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: clamp(0.45rem, calc(96cqw / (4 + var(--title-chars, 12))), 0.92rem);
     font-weight: 800;
     line-height: 1.08;
     letter-spacing: -0.02em;
     text-align: center;
-    text-wrap: balance;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
     opacity: 0;
     transition: opacity 0.15s ease;
     pointer-events: none;
     overflow: hidden;
-    hyphens: auto;
-    -webkit-hyphens: auto;
 }
 
 .more-game-card:hover::after {
@@ -831,8 +834,9 @@ function makeMoreGameCard(g, duplicate) {
     const div = document.createElement("div");
     div.className = "more-game-card";
     div.style.backgroundImage = imageLayersFromSlug(g.imageSlug);
-    div.title = g.name;
     div.dataset.gameTitle = g.name;
+    div.style.setProperty("--title-chars", String(Math.max(1, g.name.length)));
+    div.setAttribute("aria-label", `Play ${g.name}`);
     if (duplicate) {
         div.setAttribute("aria-hidden", "true");
         div.tabIndex = -1;

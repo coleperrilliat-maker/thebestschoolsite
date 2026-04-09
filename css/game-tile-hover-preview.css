@@ -1,4 +1,4 @@
-/* Hover video tiles: name in a short band glued to the bottom (overrides .card::after full-bleed + center). */
+/* Hover video tiles: one-line title; font scales with tile width and name length (--title-chars from JS). */
 
 .card-hover-preview-video {
     position: absolute;
@@ -17,32 +17,29 @@
     opacity: 1;
 }
 
-/* Bottom strip only — not full tile height (avoids vertical centering). */
 .card--hover-preview::after {
     inset: auto 0 0 0 !important;
     top: auto !important;
     width: 100%;
+    min-width: 0;
     height: auto !important;
-    max-height: min(52%, 5rem);
+    max-height: min(16%, 1.4rem);
     z-index: 1;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    flex-wrap: wrap;
-    align-content: flex-end;
-    padding: 3px 6px 4px;
+    flex-wrap: nowrap !important;
+    align-content: center;
+    padding: 2px 5px 3px;
     box-sizing: border-box;
-    font-size: clamp(0.22rem, 3.9cqw, 0.5rem);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden !important;
+    font-size: clamp(0.1rem, calc(62cqw / (4 + var(--title-chars, 12))), 0.5rem);
     font-weight: 700;
     line-height: 1.12;
     letter-spacing: 0.005em;
     text-align: center;
-    text-wrap: balance;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-    hyphens: auto;
-    -webkit-hyphens: auto;
-    overflow: visible !important;
     background: transparent !important;
     color: #fff;
     text-shadow:
@@ -51,58 +48,51 @@
         0 1px 2px rgba(0, 0, 0, 0.95);
 }
 
-/* Extra-small tiles: much smaller type + more of the tile for 2–3 lines */
 @container (max-width: 108px) {
     .card--hover-preview::after {
-        font-size: clamp(0.14rem, 4.2cqw, 0.26rem);
-        max-height: min(62%, 4.2rem);
+        font-size: clamp(0.09rem, calc(46cqw / (4 + var(--title-chars, 12))), 0.3rem);
+        max-height: min(20%, 1.15rem);
         padding: 1px 2px 2px;
-        line-height: 1.08;
-        letter-spacing: -0.01em;
-        font-weight: 600;
     }
 }
 
 @container (min-width: 109px) and (max-width: 132px) {
     .card--hover-preview::after {
-        font-size: clamp(0.15rem, 4cqw, 0.29rem);
-        max-height: min(58%, 4.5rem);
+        font-size: clamp(0.09rem, calc(50cqw / (4 + var(--title-chars, 12))), 0.34rem);
+        max-height: min(18%, 1.2rem);
         padding: 1px 3px 2px;
-        line-height: 1.08;
-        letter-spacing: -0.008em;
     }
 }
 
 @container (min-width: 133px) and (max-width: 168px) {
     .card--hover-preview::after {
-        font-size: clamp(0.17rem, 3.6cqw, 0.34rem);
-        max-height: min(55%, 4.8rem);
-        padding: 2px 4px 3px;
-        line-height: 1.1;
+        font-size: clamp(0.1rem, calc(54cqw / (4 + var(--title-chars, 12))), 0.38rem);
+        max-height: min(17%, 1.28rem);
+        padding: 2px 4px 2px;
     }
 }
 
 @container (min-width: 169px) and (max-width: 220px) {
     .card--hover-preview::after {
-        font-size: clamp(0.19rem, 3.3cqw, 0.41rem);
-        max-height: min(52%, 5rem);
-        padding: 2px 6px 3px;
+        font-size: clamp(0.1rem, calc(56cqw / (4 + var(--title-chars, 12))), 0.44rem);
+        max-height: min(16%, 1.32rem);
+        padding: 2px 5px 3px;
     }
 }
 
 @container (min-width: 221px) and (max-width: 300px) {
     .card--hover-preview::after {
-        font-size: clamp(0.22rem, 2.9cqw, 0.52rem);
-        max-height: min(50%, 5.5rem);
-        padding: 3px 8px 4px;
+        font-size: clamp(0.1rem, calc(58cqw / (4 + var(--title-chars, 12))), 0.48rem);
+        max-height: min(15%, 1.38rem);
+        padding: 2px 7px 3px;
     }
 }
 
 @container (min-width: 301px) {
     .card--hover-preview::after {
-        font-size: clamp(0.28rem, 2.4cqw, 0.68rem);
-        max-height: min(48%, 6rem);
-        padding: 4px 12px 6px;
+        font-size: clamp(0.11rem, calc(62cqw / (4 + var(--title-chars, 12))), 0.52rem);
+        max-height: min(14%, 1.45rem);
+        padding: 3px 10px 4px;
     }
 }
 
@@ -132,9 +122,13 @@ body.light .card--hover-preview::after {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        flex-wrap: nowrap !important;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden !important;
         background: transparent !important;
         font-weight: 700;
-        line-height: 1.1;
+        line-height: 1.12;
         letter-spacing: 0.01em;
         text-align: center;
         color: #fff;

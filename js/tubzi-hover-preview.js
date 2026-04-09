@@ -13,8 +13,10 @@
         shellshockers: "videos/hover_shellshockers.mp4",
         slope: "videos/hover_slope.mp4",
         retrobowl: "videos/hover_retrobowl.mp4",
+        rocketleague: "videos/hover_rocketleague.mp4",
         driftboss: "videos/hover_driftboss.mp4",
         drifthunters: "videos/hover_drifthunters.mp4",
+        drivemad: "videos/hover_drivemad.mp4",
         basketballstars: "videos/hover_basketballstars.mp4",
         "8ballclassic": "videos/hover_8ballclassic.mp4",
         aquaparkio: "videos/hover_aquaparkio.mp4",
@@ -25,9 +27,11 @@
         volleyrandom: "videos/hover_volleyrandom.mp4",
         funnyshooter: "videos/hover_funnyshooter.mp4",
         timeshooter: "videos/hover_timeshooter.mp4",
+        tinyfishing: "videos/hover_tinyfishing.mp4",
         ragdollarchers: "videos/hover_ragdollarchers.mp4",
         jetpackjoyride: "videos/hover_jetpackjoyride.mp4",
         blockblast: "videos/hover_blockblast.mp4",
+        bitlife: "videos/hover_bitlife.mp4",
         crossyroad: "videos/hover_crossyroad.mp4",
         crazycars: "videos/hover_crazycars.mp4",
         "2048": "videos/hover_2048.mp4",
@@ -53,6 +57,7 @@
         happywheels: "videos/hover_happywheels.mp4",
         helixjump: "videos/hover_helixjump.mp4",
         holeio: "videos/hover_holeio.mp4",
+        houseofhazards: "videos/hover_houseofhazards.mp4",
         idlebreakout: "videos/hover_idlebreakout.mp4",
         littlealchemy2: "videos/hover_littlealchemy2.mp4",
         motox3mpoolparty: "videos/hover_motox3mpoolparty.mp4",
@@ -60,6 +65,7 @@
         motox3mwinter: "videos/hover_motox3mwinter.mp4",
         redball4: "videos/hover_redball4.mp4",
         run1: "videos/hover_run1.mp4",
+        run2: "videos/hover_run2.mp4",
         run3: "videos/hover_run3.mp4",
         papasdonuteria: "videos/hover_papasdonuteria.mp4",
         papasfreezeria: "videos/hover_papasfreezeria.mp4",
@@ -70,6 +76,7 @@
         polytrack: "videos/hover_polytrack.mp4",
         spacewaves: "videos/hover_spacewaves.mp4",
         subwaysurfers: "videos/hover_subwaysurfers.mp4",
+        survivorio: "videos/hover_survivorio.mp4",
         wordle: "videos/hover_wordle.mp4",
         "0v0game": "videos/hover_0v0game.mp4",
         retrobowlcollege: "videos/hover_retrobowlcollege.mp4",
@@ -105,7 +112,8 @@
         var vid = document.createElement("video");
         vid.className = "card-hover-preview-video";
         vid.muted = true;
-        vid.loop = !clip;
+        /* JS loop avoids native loop seam flicker in many browsers. */
+        vid.loop = false;
         vid.playsInline = true;
         vid.preload = "metadata";
         vid.setAttribute("aria-hidden", "true");
@@ -136,9 +144,22 @@
                 seekIntoWindow();
             });
             if (typeof clip.end === "number") {
+                var clipLoopSeeking = false;
                 vid.addEventListener("timeupdate", function () {
-                    if (vid.currentTime >= clip.end) {
+                    if (clipLoopSeeking) {
+                        return;
+                    }
+                    if (vid.currentTime >= clip.end - 0.05) {
+                        clipLoopSeeking = true;
                         vid.currentTime = clip.start;
+                        vid.addEventListener(
+                            "seeked",
+                            function onClipSeeked() {
+                                vid.removeEventListener("seeked", onClipSeeked);
+                                clipLoopSeeking = false;
+                            },
+                            { once: true }
+                        );
                     }
                 });
             } else {
@@ -147,6 +168,11 @@
                     vid.play().catch(function () {});
                 });
             }
+        } else {
+            vid.addEventListener("ended", function onLoop() {
+                vid.currentTime = 0;
+                vid.play().catch(function () {});
+            });
         }
 
         function play() {
@@ -155,6 +181,7 @@
         }
         function stop() {
             vid.pause();
+            vid.currentTime = clip ? clip.start : 0;
         }
         card.addEventListener("mouseenter", play);
         card.addEventListener("mouseleave", function () {

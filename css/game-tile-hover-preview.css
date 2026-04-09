@@ -1,15 +1,35 @@
 /* Hover video tiles: one-line title; font scales with tile width and name length (--title-chars from JS). */
 
+/* Isolate stacking; parent .card:hover uses transform: scale(var(--card-hover-scale)). */
+.card--hover-preview {
+    isolation: isolate;
+}
+
+/* Hide inline thumbnail layers while preview video is showing (opacity fade otherwise reveals them). */
+.card--hover-preview:hover,
+.card--hover-preview:focus-within {
+    background-image: none !important;
+    background-color: #0a0a0a !important;
+}
+
+body.light .card--hover-preview:hover,
+body.light .card--hover-preview:focus-within {
+    background-color: #1c1c1c !important;
+}
+
 .card-hover-preview-video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     z-index: 0;
     opacity: 0;
-    transition: opacity 0.28s ease;
+    transition: opacity 0.2s ease;
     pointer-events: none;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 .card--hover-preview:hover .card-hover-preview-video,
@@ -17,92 +37,102 @@
     opacity: 1;
 }
 
-.card--hover-preview::after {
-    inset: auto 0 0 0 !important;
-    top: auto !important;
+/* Bottom title bar for all game tiles (with or without hover video). */
+.card::after {
+    content: attr(data-game-title);
+    position: absolute;
+    inset: auto 0 0 0;
+    top: auto;
     width: 100%;
     min-width: 0;
-    height: auto !important;
-    max-height: min(16%, 1.4rem);
-    z-index: 1;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-wrap: nowrap !important;
+    min-height: 2.25em;
+    height: auto;
+    max-height: min(28%, 3.25rem);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
     align-content: center;
-    padding: 2px 5px 3px;
+    padding: 6px 8px 8px;
     box-sizing: border-box;
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow: hidden !important;
-    font-size: clamp(0.1rem, calc(62cqw / (4 + var(--title-chars, 12))), 0.5rem);
-    font-weight: 700;
-    line-height: 1.12;
-    letter-spacing: 0.005em;
+    overflow: hidden;
+    font-size: clamp(0.65rem, calc(92cqw / (3.5 + var(--title-chars, 12))), 1.85rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
     text-align: center;
-    background: transparent !important;
     color: #fff;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.55) 55%, transparent 100%);
     text-shadow:
-        0 0 3px rgba(0, 0, 0, 1),
-        0 0 10px rgba(0, 0, 0, 0.85),
-        0 1px 2px rgba(0, 0, 0, 0.95);
+        0 1px 2px rgba(0, 0, 0, 1),
+        0 0 12px rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.card:hover::after,
+.card:focus-visible::after {
+    opacity: 1;
+}
+
+body.light .card::after {
+    color: #fff;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.5) 55%, transparent 100%);
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 1),
+        0 0 10px rgba(0, 0, 0, 0.85);
 }
 
 @container (max-width: 108px) {
-    .card--hover-preview::after {
-        font-size: clamp(0.09rem, calc(46cqw / (4 + var(--title-chars, 12))), 0.3rem);
-        max-height: min(20%, 1.15rem);
-        padding: 1px 2px 2px;
+    .card::after {
+        font-size: clamp(0.55rem, calc(72cqw / (3.5 + var(--title-chars, 12))), 0.95rem);
+        max-height: min(32%, 2.6rem);
+        padding: 4px 5px 5px;
     }
 }
 
 @container (min-width: 109px) and (max-width: 132px) {
-    .card--hover-preview::after {
-        font-size: clamp(0.09rem, calc(50cqw / (4 + var(--title-chars, 12))), 0.34rem);
-        max-height: min(18%, 1.2rem);
-        padding: 1px 3px 2px;
+    .card::after {
+        font-size: clamp(0.58rem, calc(78cqw / (3.5 + var(--title-chars, 12))), 1.05rem);
+        max-height: min(30%, 2.75rem);
+        padding: 5px 6px 6px;
     }
 }
 
 @container (min-width: 133px) and (max-width: 168px) {
-    .card--hover-preview::after {
-        font-size: clamp(0.1rem, calc(54cqw / (4 + var(--title-chars, 12))), 0.38rem);
-        max-height: min(17%, 1.28rem);
-        padding: 2px 4px 2px;
+    .card::after {
+        font-size: clamp(0.6rem, calc(84cqw / (3.5 + var(--title-chars, 12))), 1.2rem);
+        max-height: min(29%, 2.9rem);
+        padding: 5px 7px 7px;
     }
 }
 
 @container (min-width: 169px) and (max-width: 220px) {
-    .card--hover-preview::after {
-        font-size: clamp(0.1rem, calc(56cqw / (4 + var(--title-chars, 12))), 0.44rem);
-        max-height: min(16%, 1.32rem);
-        padding: 2px 5px 3px;
+    .card::after {
+        font-size: clamp(0.62rem, calc(88cqw / (3.5 + var(--title-chars, 12))), 1.4rem);
+        max-height: min(28%, 3rem);
+        padding: 6px 8px 8px;
     }
 }
 
 @container (min-width: 221px) and (max-width: 300px) {
-    .card--hover-preview::after {
-        font-size: clamp(0.1rem, calc(58cqw / (4 + var(--title-chars, 12))), 0.48rem);
-        max-height: min(15%, 1.38rem);
-        padding: 2px 7px 3px;
+    .card::after {
+        font-size: clamp(0.65rem, calc(90cqw / (3.5 + var(--title-chars, 12))), 1.65rem);
+        max-height: min(28%, 3.15rem);
+        padding: 6px 9px 9px;
     }
 }
 
 @container (min-width: 301px) {
-    .card--hover-preview::after {
-        font-size: clamp(0.11rem, calc(62cqw / (4 + var(--title-chars, 12))), 0.52rem);
-        max-height: min(14%, 1.45rem);
-        padding: 3px 10px 4px;
+    .card::after {
+        font-size: clamp(0.68rem, calc(92cqw / (3.5 + var(--title-chars, 12))), 1.85rem);
+        max-height: min(28%, 3.25rem);
+        padding: 7px 10px 10px;
     }
-}
-
-body.light .card--hover-preview::after {
-    color: #111;
-    background: transparent !important;
-    text-shadow:
-        0 0 3px rgba(255, 255, 255, 1),
-        0 0 10px rgba(255, 255, 255, 0.9),
-        0 1px 2px rgba(255, 255, 255, 0.95);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -115,35 +145,40 @@ body.light .card--hover-preview::after {
         opacity: 0;
     }
 
-    .card--hover-preview::after {
-        inset: auto 0 0 0 !important;
-        top: auto !important;
-        height: auto !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        flex-wrap: nowrap !important;
+    .card::after {
+        transition: none;
+        opacity: 0;
+        inset: auto 0 0 0;
+        top: auto;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: nowrap;
         white-space: nowrap;
         text-overflow: ellipsis;
-        overflow: hidden !important;
-        background: transparent !important;
-        font-weight: 700;
-        line-height: 1.12;
+        overflow: hidden;
+        font-weight: 800;
+        line-height: 1.15;
         letter-spacing: 0.01em;
         text-align: center;
         color: #fff;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.55) 55%, transparent 100%);
         text-shadow:
-            0 0 3px rgba(0, 0, 0, 1),
-            0 0 10px rgba(0, 0, 0, 0.85),
-            0 1px 2px rgba(0, 0, 0, 0.95);
+            0 1px 2px rgba(0, 0, 0, 1),
+            0 0 12px rgba(0, 0, 0, 0.9);
     }
 
-    body.light .card--hover-preview::after {
-        color: #111;
-        background: transparent !important;
+    .card:hover::after,
+    .card:focus-visible::after {
+        opacity: 1;
+    }
+
+    body.light .card::after {
+        color: #fff;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.5) 55%, transparent 100%);
         text-shadow:
-            0 0 3px rgba(255, 255, 255, 1),
-            0 0 10px rgba(255, 255, 255, 0.9),
-            0 1px 2px rgba(255, 255, 255, 0.95);
+            0 1px 2px rgba(0, 0, 0, 1),
+            0 0 10px rgba(0, 0, 0, 0.85);
     }
 }

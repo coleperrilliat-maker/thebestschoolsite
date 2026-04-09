@@ -636,7 +636,7 @@ let PLAY_GAME_NAMES = [
     "little alchemy 2", "melonsandbox", "moneyrush", "moto x3m pool party", "moto x3m spooky land", "moto x3m winter", "redball 4", "run 1", "run 2", "run 3",
     "tombofthemask", "papas donuteria", "papas freezeria", "papas hotdoggeria", "papas pastaria", "papas pizzeria", "plantsvszombies", "polytrack",
     "ragdolldrop", "slicemaster", "smashyroad", "soundbuttons", "spacewaves", "survivor io", "terraria", "wordle", "wheelielife", "yohio", "0v0game",
-    "block post", "basket bros", "retro bowl college", "worlds hardest game", "blocky snakes", "angry birds", "temple run 2", "half life", "super mario bros",
+    "block post", "retro bowl college", "worlds hardest game", "blocky snakes", "angry birds", "temple run 2", "half life", "super mario bros",
     "five nights at freddys",
     "drift hunters", "bad parenting", "blackjack"
 ];
@@ -758,24 +758,34 @@ function formatCount(n) {
 }
 
 function refreshCounts() {
+    const likeEl = document.getElementById("likeCount");
+    const dislikeEl = document.getElementById("dislikeCount");
+    if (!likeEl || !dislikeEl) {
+        return;
+    }
     const s = getStats();
-    document.getElementById("likeCount").textContent = formatCount(s.likes);
-    document.getElementById("dislikeCount").textContent = formatCount(s.dislikes);
+    likeEl.textContent = formatCount(s.likes);
+    dislikeEl.textContent = formatCount(s.dislikes);
 }
 
-document.getElementById("btnLike").addEventListener("click", () => {
-    const s = getStats();
-    s.likes += 1;
-    setStats(s);
-    refreshCounts();
-});
-
-document.getElementById("btnDislike").addEventListener("click", () => {
-    const s = getStats();
-    s.dislikes += 1;
-    setStats(s);
-    refreshCounts();
-});
+const btnLike = document.getElementById("btnLike");
+const btnDislike = document.getElementById("btnDislike");
+if (btnLike) {
+    btnLike.addEventListener("click", () => {
+        const s = getStats();
+        s.likes += 1;
+        setStats(s);
+        refreshCounts();
+    });
+}
+if (btnDislike) {
+    btnDislike.addEventListener("click", () => {
+        const s = getStats();
+        s.dislikes += 1;
+        setStats(s);
+        refreshCounts();
+    });
+}
 
 refreshCounts();
 

@@ -1,57 +1,32 @@
-<!--
-
-
-
-EaglercraftX 1.8 by lax1dude and ayunami2000 THIS CODE OPENS Eagletcraft IN A PROXY WITH FULLSCREEN
-
-Eagletcraft compiled by PlanetDoge w/ help from the PlanetGamez team SHARE THIS WITH EVERYONE!
-
-EaglercraftX average RAM usage: 1.2 GB
-Eagletcraft average RAM usage: 0.6 GB
-
-
-
-
-
-
-
-
-PlanetGamez: https://sites.google.com/view/planet-gamez/
-GitHub Link: https://github.com/PlanetDogeCodes/EagletcraftX/
-
--->
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4769618736904438" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft</title>
+  <base target="_blank">
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MSRCFHRBDK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4769618736904438" crossorigin="anonymous"></script>
 
-  gtag('config', 'G-MSRCFHRBDK');
-</script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MSRCFHRBDK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MSRCFHRBDK');
+  </script>
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 28'%3E%3Cellipse cx='17' cy='14' rx='13' ry='10' fill='%23ff6a00'/%3E%3Cpolygon points='29,14 39,8 39,20' fill='%23ff6a00'/%3E%3Ccircle cx='13' cy='13' r='2.2' fill='%23ffffff'/%3E%3C/svg%3E">
-</head>
-<body>
-  <div id="container">
-    <iframe id="fr" width="100%" height="100%" frameborder="0" allowfullscreen=""></iframe>
-    <button class="play-button" type="button" onclick="PlayTo(this)">CLICK TO PLAY</button>
-    <button class="fullscreen-button" type="button" onclick="openFullscreen()">FULLSCREEN</button>
-    <p id="unblocked-text"></p>
-  </div>
 
   <style>
     .play-button {
-      padding: 1600px 1080px;
+      padding: 20px 40px;
       background: #000;
       color: #fff;
       border: 2px solid #4a148c;
       border-radius: 10px;
-      font: 24px Impact;
+      font: bold 24px Arial;
       cursor: pointer;
       position: absolute;
       top: 50%;
@@ -59,69 +34,61 @@ GitHub Link: https://github.com/PlanetDogeCodes/EagletcraftX/
       transform: translate(-50%, -50%);
       z-index: 1001;
     }
+    .play-button:hover { background: #4a148c; }
     .fullscreen-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 10px 20px;
-      background: #4a148c;
+      padding: 10px 15px;
+      background: #000;
       color: #fff;
-      border: none;
+      border: 2px solid #4a148c;
       border-radius: 5px;
+      font: bold 14px Arial;
       cursor: pointer;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
       z-index: 1002;
     }
-    .play-button:hover {
-      background: #4a148c;
-    }
-    body, html {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      height: 100%;
-    }
+    .fullscreen-button:hover { background: #4a148c; }
+    body, html { margin: 0; padding: 0; overflow: hidden; height: 100%; }
+    #container { position: relative; width: 100%; height: 100%; }
+    #fr { display: none; border: 0; width: 100%; height: 100%; }
   </style>
+</head>
+<body>
+<!--
+YOU ARE PLAYING ON THE LATEST STABLE EAGLERCRAFT VERSION: 1.12 u2
+
+THIS CLIENT IS NOW STABLE! PLEASE EXCUSE ANY REMAINING BUGS AND REPORT THEM HERE: https://discord.gg/UEE39zHuCx
+
+Eagletcraft plays directly in the iframe, while  pressing the undetectable button
+opens Eagletcraft in a new window that appears blank to screen-monitoring software such as GoGuardian and Securely
+
+Eaglercraft 1.12 created by PeytonPlayz595
+
+EaglercraftX Engine created by lax1dude and ayunami2000
+
+Eagletcraft compiled by PlanetDoge w/ help from the PlanetGamez team
+
+EaglercraftX 1.12 average RAM usage: 1.6 GB
+Eagletcraft 1.12 Undetectable average RAM usage: 0.8 GB
+
+Eagletcraft's code is liscensed under the Apache 2.0 terms. Redistribution of code without attribution is prohibited.
+GitHub Link: https://github.com/PlanetDogeCodes/Eagletcraft-1.12
+-->
+
+<div id="container">
+  <iframe id="fr" width="100%" height="100%" frameborder="0" allowfullscreen=""></iframe>
+  <button class="play-button" type="button" onclick="PlayTo(this)">PLAY REGULAR</button>
+  <button class="fullscreen-button" type="button" onclick="openFullscreen()">OPEN UNDETECTABLE</button>
+</div>
 
 <script>
-  // Existing game SDK code...
-
-  function openFullscreen() {
-    const iframe = document.getElementById("fr");
-    if (iframe.requestFullscreen) {
-      iframe.requestFullscreen();
-    } else if (iframe.mozRequestFullScreen) { // Firefox
-      iframe.mozRequestFullScreen();
-    } else if (iframe.webkitRequestFullscreen) { // Chrome, Safari and Opera
-      iframe.webkitRequestFullscreen();
-    } else if (iframe.msRequestFullscreen) { // IE/Edge
-      iframe.msRequestFullscreen();
-    }
-  }
-</script>
-<script>
-  // GameMonetize SDK Entegrasyonu
-  window.SDK_OPTIONS = {
-    gameId: "jp112o3o4hzgrnc7zaewjkrfk282pul8",
-    onEvent: function (a) {
-      switch (a.name) {
-        case "SDK_GAME_PAUSE":
-          console.log("Oyun duraklatıldı, reklam gösteriliyor...");
-          break;
-        case "SDK_GAME_START":
-          console.log("Reklam bitti, oyun devam ediyor...");
-          break;
-        case "SDK_READY":
-          console.log("SDK hazır.");
-          break;
-      }
-    }
-  };
+  function showAdOnClick() {}
 
   const DB_NAME = 'GameCacheDB';
   const STORE_NAME = 'GameFiles';
   const CACHE_DURATION = 90 * 24 * 60 * 60 * 1000; // 3 ay
-  const FILE_URL = 'https://cdn.jsdelivr.net/gh/PlanetDogeCodes/EagletcraftX@main/egcfixed.xml';
-  const SDK_URL = 'https://cdn.jsdelivr.net/gh/testamalame/sef@main/sedk.js';
+  const FILE_URL = 'https://cdn.jsdelivr.net/gh/PlanetDogeCodes/Eagletcraft-1.12@main/source%20file/egc1-12.xml';
 
   function openDB() {
     return new Promise((resolve, reject) => {
@@ -171,7 +138,6 @@ GitHub Link: https://github.com/PlanetDogeCodes/EagletcraftX/
     });
   }
 
-
   function PlayTo(button) {
     const iframe = document.getElementById("fr");
     getFileFromCache(FILE_URL).then((text) => {
@@ -185,7 +151,7 @@ GitHub Link: https://github.com/PlanetDogeCodes/EagletcraftX/
       iframe.contentWindow.document.addEventListener('touchstart', showAdOnClick);
     }).catch((err) => {
       console.error('Error:', err);
-      alert('Oyun yüklenemedi.');
+      alert('An error was detected. Error Code: -21345');
     });
   }
 
@@ -200,15 +166,19 @@ GitHub Link: https://github.com/PlanetDogeCodes/EagletcraftX/
         newWindow.document.addEventListener('pointerdown', showAdOnClick);
         newWindow.document.addEventListener('touchstart', showAdOnClick);
       } else {
-        console.warn('Fullscreen window blocked by browser.');
+        alert('Tam ekran açılamadı.');
       }
     }).catch((err) => {
       console.error('Error:', err);
       alert('Tam ekran yüklenemedi.');
     });
   }
-</script><div id="imaContainer" style="position: absolute; z-index: 10000; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgb(0, 0, 0); visibility: hidden; overflow: hidden;">
+</script>
+
 <!--
-HOW IT WORKS:
-Eagletcraft was made by distibuting the code of EaglercraftX into many seperate hosted files, then using the page you're on now as a sort of relay for all the seperate files to communicate with one another. This inherently creates latency, so all the files are loaded onto your PC's flash memory to combat this. When the files are loaded to your flash memory, you can turn off wifi and play offline.
+This OneCompiler instance updates automatically
+Current Version: v1.0 p5
+Last Updated: 2/6/2026
 -->
+</body>
+</html>

@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="css/footer.css">
 <link rel="stylesheet" href="css/tubzi-shell.css">
 <link rel="stylesheet" href="css/home-browse.css">
+<link rel="stylesheet" href="css/game-tile-hover-preview.css">
 
 <style>
 .container {
@@ -412,6 +413,7 @@ body.light .card::after {
 <script src="js/tubzi-rail-data.js?v=2"></script>
 <script src="js/tubzi-game-entries.js"></script>
 <script src="js/tubzi-layout-store.js"></script>
+<script src="js/tubzi-hover-preview.js"></script>
 <script>
 
 const ICONS = window.TUBZI_RAIL.icons;
@@ -756,6 +758,8 @@ function render(filter = "") {
                     TUBZI_LAYOUT.applyTileLevelToCard(div, level);
                 }
             }
+
+            tubziAttachHoverGamePreview(div, layoutKey);
 
             const goPlay = () => {
                 window.location.href =

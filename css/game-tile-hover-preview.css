@@ -13,7 +13,9 @@
 }
 
 body.light .card--hover-preview:hover,
-body.light .card--hover-preview:focus-within {
+body.light .card--hover-preview:focus-within,
+body.light-play .card--hover-preview:hover,
+body.light-play .card--hover-preview:focus-within {
     background-color: #1c1c1c !important;
 }
 
@@ -79,7 +81,8 @@ body.light .card--hover-preview:focus-within {
     opacity: 1;
 }
 
-body.light .card::after {
+body.light .card::after,
+body.light-play .card::after {
     color: #fff;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.5) 55%, transparent 100%);
     text-shadow:
@@ -174,7 +177,8 @@ body.light .card::after {
         opacity: 1;
     }
 
-    body.light .card::after {
+    body.light .card::after,
+    body.light-play .card::after {
         color: #fff;
         background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.5) 55%, transparent 100%);
         text-shadow:

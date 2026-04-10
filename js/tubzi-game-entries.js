@@ -1,10 +1,10 @@
 window.TUBZI_GAME_ENTRIES = [
     ["minecraft", "casual"],
-    ["steal a brainrot", "casual"],
     ["among us", "io"],
     ["subway surfers", "action"],
     ["geometry dash", "puzzle"],
     ["spacewaves", "puzzle"],
+    ["steal a brainrot", "casual"],
     ["brawl simulator 3d", "action"],
     ["rocket league", "driving"],
     ["moto x3m", "driving"],
@@ -129,9 +129,8 @@ window.TUBZI_GAME_ENTRIES = [
     }
     var PRIORITY = [
         "minecraft",
-        "steal a brainrot",
-        "subway surfers",
         "among us",
+        "subway surfers",
         "geometry dash",
         "spacewaves",
         "hole io",
@@ -166,6 +165,7 @@ window.TUBZI_GAME_ENTRIES = [
         "blackjack",
         "ultrakill",
         "brawl simulator 3d",
+        "steal a brainrot",
         "run 3",
         "run 2",
         "run 1",

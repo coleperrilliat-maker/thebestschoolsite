@@ -1,5 +1,13 @@
 window.TUBZI_GAME_ENTRIES = [
     ["minecraft", "casual"],
+    ["my perfect hotel", "casual"],
+    ["steal and run", "action"],
+    ["gun fest", "action"],
+    ["ragdoll hit", "action"],
+    ["tower war", "puzzle"],
+    ["stickman clash", "action"],
+    ["merge round racers", "puzzle"],
+    ["obby roads", "driving"],
     ["among us", "io"],
     ["subway surfers", "action"],
     ["geometry dash", "puzzle"],
@@ -128,6 +136,14 @@ window.TUBZI_GAME_ENTRIES = [
     }
     var PRIORITY = [
         "minecraft",
+        "my perfect hotel",
+        "steal and run",
+        "gun fest",
+        "ragdoll hit",
+        "tower war",
+        "stickman clash",
+        "merge round racers",
+        "obby roads",
         "subway surfers",
         "among us",
         "geometry dash",

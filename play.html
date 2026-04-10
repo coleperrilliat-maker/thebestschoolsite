@@ -39,6 +39,7 @@
     /* Match homepage header “Random” (tubzi-shell .hdr-btn-random). */
     --accent-green: #22c55e;
     --accent-green-hover: #16a34a;
+    --play-content-max: min(1180px, 100%);
 }
 
 body.light-play {
@@ -56,13 +57,20 @@ body.light-play {
     box-sizing: border-box;
 }
 
-html, body {
+html {
+    min-height: 100%;
+}
+
+html:has(body.is-fullscreen) {
     height: 100%;
+    overflow: hidden;
 }
 
 body {
     margin: 0;
-    min-height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
@@ -77,6 +85,9 @@ body.light-play {
 
 body.is-fullscreen {
     background: #000;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
 }
 
 body.is-fullscreen .play-below,
@@ -89,7 +100,7 @@ body.is-fullscreen .play-stage-row {
 }
 
 .play-main {
-    flex: 1;
+    flex: 1 1 auto;
     width: 100%;
     min-width: 0;
     display: flex;
@@ -99,14 +110,16 @@ body.is-fullscreen .play-stage-row {
 
 .play-dashboard {
     flex-shrink: 0;
+    position: relative;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
+    gap: 10px;
     flex-wrap: wrap;
     width: 100%;
     box-sizing: border-box;
-    padding: 14px 20px;
+    padding: 8px 14px;
     background: var(--bar-bg-solid);
     border: none;
     border-radius: 0;
@@ -122,12 +135,12 @@ body.light-play .play-dashboard {
 .play-dash-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 11px 18px;
-    border-radius: 10px;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 8px;
     font-family: "Fredoka", system-ui, sans-serif;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 13px;
     line-height: 1.2;
     text-decoration: none;
     border: none;
@@ -151,8 +164,8 @@ body.light-play .play-dashboard {
 }
 
 .play-dash-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     flex-shrink: 0;
 }
 
@@ -160,14 +173,14 @@ button.play-dash-btn {
     font: inherit;
     font-family: "Fredoka", system-ui, sans-serif;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 13px;
 }
 
 .play-dash-btn--home {
     background: transparent;
     color: var(--bar-text);
     font-weight: 700;
-    padding: 10px 12px;
+    padding: 6px 10px;
     border: 1px solid rgba(255, 255, 255, 0.28);
     border-radius: 10px;
 }
@@ -186,8 +199,8 @@ body.light-play .play-dash-btn--home:hover {
 }
 
 .play-dash-btn--home svg {
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
 }
 
 .play-dash-btn--all {
@@ -222,8 +235,8 @@ body.light-play .play-dash-btn--home:hover {
 
 .play-dash-btn--discord svg,
 .play-dash-btn--tiktok svg {
-    width: 22px;
-    height: 22px;
+    width: 19px;
+    height: 19px;
 }
 
 .play-dash-btn--tiktok {
@@ -242,18 +255,18 @@ body.light-play .play-dash-btn--home:hover {
 .play-dash-nav {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 7px;
     flex-wrap: wrap;
 }
 
 .play-stage-wrap {
-    flex: 1;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     min-height: 0;
-    padding: 12px 16px 0;
+    padding: 8px 12px 0;
     width: 100%;
-    max-width: 1200px;
+    max-width: var(--play-content-max);
     margin: 0 auto;
     box-sizing: border-box;
 }
@@ -278,7 +291,7 @@ body.light-play .play-dash-btn--home:hover {
 
 .play-game-inner {
     width: 100%;
-    max-width: min(1080px, 100%);
+    max-width: 100%;
     margin: 0 auto;
     flex: 1 1 auto;
     min-height: 0;
@@ -295,6 +308,12 @@ body.light-play .play-dash-btn--home:hover {
     box-shadow: none;
     display: flex;
     flex-direction: column;
+}
+
+@media (min-width: 721px) {
+    .game-frame-shell {
+        min-height: min(60vh, 780px);
+    }
 }
 
 .game-frame-shell iframe {
@@ -314,8 +333,8 @@ body.light-play .play-dash-btn--home:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    padding: 12px 18px;
+    gap: 12px;
+    padding: 8px 14px;
     flex-wrap: wrap;
 }
 
@@ -327,14 +346,14 @@ body.light-play .play-action-bar {
 .action-bar-left {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 10px;
     min-width: 0;
 }
 
 .action-thumb {
-    width: 52px;
-    height: 52px;
-    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
     background-color: var(--bg-elevated);
     background-size: cover;
     background-position: center;
@@ -345,7 +364,7 @@ body.light-play .play-action-bar {
 .action-title {
     font-family: "Fredoka", system-ui, sans-serif;
     font-weight: 600;
-    font-size: 17px;
+    font-size: 15px;
     color: var(--bar-text);
     line-height: 1.2;
     margin: 0;
@@ -354,9 +373,9 @@ body.light-play .play-action-bar {
 .action-sub {
     font-family: "Fredoka", system-ui, sans-serif;
     font-weight: 500;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--bar-muted);
-    margin: 4px 0 0;
+    margin: 2px 0 0;
 }
 
 .action-bar-right {
@@ -398,8 +417,8 @@ body.light-play .play-action-bar {
 }
 
 .fs-btn {
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
     border: none;
     border-radius: 12px;
     background: transparent;
@@ -421,18 +440,33 @@ body.light-play .play-action-bar {
 }
 
 .play-below {
+    flex: 0 0 auto;
     flex-shrink: 0;
-    padding: 20px 0 32px;
+    padding: 10px 16px max(24px, env(safe-area-inset-bottom, 0px));
     width: 100%;
-    align-self: stretch;
+    max-width: var(--play-content-max);
+    box-sizing: border-box;
+    align-self: center;
+    position: relative;
+    z-index: 1;
+}
+
+.more-games-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    position: relative;
+    isolation: isolate;
 }
 
 .more-games-title {
     font-family: "Fredoka", system-ui, sans-serif;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 15px;
     color: var(--text);
-    margin: 0 auto 18px;
+    margin: 0 auto 10px;
     padding: 0 12px;
     width: 100%;
     letter-spacing: 0.02em;
@@ -445,11 +479,13 @@ body.light-play .play-action-bar {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: stretch;
-    gap: 18px;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 10px;
+    row-gap: 12px;
     width: 100%;
     margin: 0 auto;
-    padding: 0 8px 12px;
+    padding: 0 8px 6px;
     box-sizing: border-box;
 }
 
@@ -457,10 +493,10 @@ body.light-play .play-action-bar {
     position: relative;
     overflow: hidden;
     container-type: inline-size;
-    flex: 1 1 148px;
-    width: 148px;
-    max-width: 200px;
-    min-width: 132px;
+    flex: 0 0 104px;
+    width: 104px;
+    min-width: 104px;
+    max-width: 104px;
     aspect-ratio: 1;
     border-radius: var(--card-radius);
     background-color: var(--bg-elevated);
@@ -484,6 +520,66 @@ body.light-play .more-game-card:focus-visible {
 
 body.light-play .more-game-card {
     box-shadow: none;
+}
+
+.play-game-about {
+    margin-top: 28px;
+    padding: 18px 16px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+body.light-play .play-game-about {
+    border-top-color: rgba(26, 39, 68, 0.15);
+}
+
+.play-game-about__heading {
+    font-family: "Fredoka", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.1rem, 2.8vw, 1.35rem);
+    color: var(--text);
+    margin: 0 0 16px;
+    letter-spacing: 0.02em;
+}
+
+.play-game-about__row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: clamp(16px, 3vw, 28px);
+    width: 100%;
+}
+
+.play-game-about__copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.play-game-about__text {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    margin: 0;
+    max-width: none;
+    white-space: pre-line;
+}
+
+.play-game-about__thumb {
+    flex-shrink: 0;
+    width: min(240px, 38vw);
+    aspect-ratio: 1;
+    border-radius: var(--card-radius);
+    background-color: var(--bg-elevated);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.play-game-about__thumb--empty {
+    display: none;
 }
 
 @media (max-width: 720px) {
@@ -511,9 +607,22 @@ body.light-play .more-game-card {
     }
 
     .more-game-card {
-        flex: 1 1 calc(50% - 12px);
-        max-width: none;
+        flex: 0 1 calc((100% - 10px) / 2);
+        width: auto;
         min-width: 0;
+        max-width: none;
+        aspect-ratio: 1;
+    }
+
+    .play-game-about__row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .play-game-about__thumb {
+        width: 100%;
+        max-width: 280px;
+        margin: 16px auto 0;
     }
 }
 </style>
@@ -604,10 +713,25 @@ body.light-play .more-game-card {
 
     <section class="play-below" id="moreGamesSection" aria-label="More games">
         <h2 class="more-games-title">More games</h2>
-        <div class="more-games-row" id="moreGamesRow"></div>
+        <div class="more-games-grid">
+            <div class="more-games-row" id="moreGamesRow1"></div>
+            <div class="more-games-row" id="moreGamesRow2"></div>
+            <div class="more-games-row" id="moreGamesRow3"></div>
+        </div>
+        <section class="play-game-about" aria-labelledby="playGameAboutHeading">
+            <h2 class="play-game-about__heading" id="playGameAboutHeading"></h2>
+            <div class="play-game-about__row">
+                <div class="play-game-about__copy">
+                    <p class="play-game-about__text" id="playGameAboutText"></p>
+                </div>
+                <div class="play-game-about__thumb play-game-about__thumb--empty" id="playGameAboutThumb" role="img" aria-hidden="true"></div>
+            </div>
+        </section>
     </section>
 </div>
 
+<script src="js/tubzi-game-entries.js"></script>
+<script src="js/tubzi-game-about-detail.js"></script>
 <script src="js/tubzi-layout-store.js"></script>
 <script src="js/tubzi-hover-preview.js"></script>
 <script>
@@ -725,7 +849,15 @@ if (htmlStem) {
 }
 if (thumbPath) {
     const thumbSlug = thumbPath.replace(/^images\//i, "").replace(/\.[^.]+$/, "");
-    document.getElementById("actionThumb").style.backgroundImage = imageLayersFromSlug(thumbSlug);
+    const layers = imageLayersFromSlug(thumbSlug);
+    document.getElementById("actionThumb").style.backgroundImage = layers;
+    const aboutThumb = document.getElementById("playGameAboutThumb");
+    if (aboutThumb) {
+        aboutThumb.style.backgroundImage = layers;
+        aboutThumb.classList.remove("play-game-about__thumb--empty");
+        aboutThumb.setAttribute("aria-label", `Cover art for ${gameName}`);
+        aboutThumb.removeAttribute("aria-hidden");
+    }
 }
 
 function gamePathKey(path) {
@@ -848,14 +980,146 @@ document.addEventListener("webkitfullscreenchange", syncFullscreenClass);
 document.addEventListener("MSFullscreenChange", syncFullscreenClass);
 
 const currentFileNorm = gamePathKey(gameFile);
-const moreRow = document.getElementById("moreGamesRow");
-const others = GAMES.filter(g => gamePathKey(g.file) !== currentFileNorm);
-const pool = (others.length ? others : GAMES).slice();
+
+function playNormKey(name) {
+    return String(name || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "");
+}
+
+function formatGameTitle(name) {
+    return String(name || "")
+        .split(/(\s+)/)
+        .map(part => (/\s+/.test(part) ? part : part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()))
+        .join("");
+}
+
+function smallHash(str) {
+    let h = 0;
+    const s = String(str || "");
+    for (let i = 0; i < s.length; i++) {
+        h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+    }
+    return Math.abs(h);
+}
+
+const GENRE_LONG_FALLBACK = {
+    action:
+        "Expect responsive movement, short time-to-engagement, and rounds that reward reading enemy tells rather than grinding stats. Most browser action titles on TubZi emphasize readable hitboxes and restart-friendly checkpoints so you can improve quickly between attempts.",
+    io: "Expect drop-in style pacing where leaderboards, map control, or elimination chains matter more than long tutorials. These games shine when you learn spawn timings, safe rotations, and when to reset after a bad fight.",
+    driving:
+        "Expect arcade physics—big air, forgiving resets, and tracks that reward clean racing lines more than simulation tuning. Mastery usually comes from memorizing corner entries, boost placement, and how each vehicle’s weight transfers on landings.",
+    puzzle:
+        "Expect rules you can explain in one sentence but depth that unfolds across dozens of stages. Good puzzle design here means fair failure: when you miss, you understand why and adjust the next attempt without guesswork.",
+    sports:
+        "Expect simplified controls that still respect timing—release points on shots, contest windows on defense, and momentum swings that keep matches dramatic. Sessions are built to finish before the bell rings in real life.",
+    casual:
+        "Expect low-friction loops you can pause anytime: incremental upgrades, cozy management, or toy-like interactions that do not demand twitch reflexes. These titles are ideal when you want progress without pressure.",
+    horror:
+        "Expect sound design and lighting to carry tension as much as jump scares. Stealth, resource limits, and restricted vision are common—headphones help, and playing in a well-lit room is smart if you are sensitive to frights.",
+    platformer:
+        "Expect jump arcs, enemy patterns, and level geometry that teach you one new trick per world. Checkpoints and generous retries keep the focus on mastery rather than punishment."
+};
+
+function longAboutFallback(displayTitle, genreRaw) {
+    const g = String(genreRaw || "casual").toLowerCase();
+    const genreLabel = g.charAt(0).toUpperCase() + g.slice(1);
+    const body = GENRE_LONG_FALLBACK[g] || GENRE_LONG_FALLBACK.casual;
+    const pick = (arr, salt) => arr[smallHash(`${displayTitle}|${salt}`) % arr.length];
+    const hooks = [
+        `On TubZi, ${displayTitle} is grouped as a ${genreLabel.toLowerCase()} experience: ${pick(
+            [
+                "it is meant to be easy to start in one click and deep enough to revisit later the same day.",
+                "the focus is on readable feedback—so you always know what to try differently after a loss.",
+                "sessions are sized for school breaks: enough meat for twenty minutes, not a fifty-gig install."
+            ],
+            "hook"
+        )}`,
+        body,
+        `${displayTitle} runs entirely in your browser in the TubZi player. If audio or controls feel wrong, try a refresh; if the frame stutters, closing other heavy tabs usually helps. Use the home grid or the More games rows under the player when you want to hop to something else without hunting URLs.`
+    ];
+    return hooks.join("\n\n");
+}
+
+function resolveAboutText(displayTitle, key, genre) {
+    if (typeof TUBZI_GAME_ABOUT_DETAIL !== "undefined" && TUBZI_GAME_ABOUT_DETAIL[key]) {
+        return TUBZI_GAME_ABOUT_DETAIL[key];
+    }
+    return longAboutFallback(displayTitle, genre);
+}
+
+const GENRE_LOOKUP = new Map();
+const ABOUT_BY_KEY = new Map();
+if (typeof TUBZI_GAME_ENTRIES !== "undefined") {
+    TUBZI_GAME_ENTRIES.forEach(([n, genre]) => {
+        const k = playNormKey(n);
+        const g = String(genre || "casual").toLowerCase();
+        GENRE_LOOKUP.set(k, g);
+        ABOUT_BY_KEY.set(k, resolveAboutText(formatGameTitle(n), k, g));
+    });
+}
+
+PLAY_GAME_NAMES.forEach(name => {
+    const k = playNormKey(name);
+    if (!GENRE_LOOKUP.has(k)) {
+        GENRE_LOOKUP.set(k, "casual");
+    }
+    if (!ABOUT_BY_KEY.has(k)) {
+        ABOUT_BY_KEY.set(k, resolveAboutText(formatGameTitle(name), k, GENRE_LOOKUP.get(k)));
+    }
+});
+
+function fillPlayingAbout() {
+    const h = document.getElementById("playGameAboutHeading");
+    const p = document.getElementById("playGameAboutText");
+    if (!h || !p) {
+        return;
+    }
+    const k = playNormKey(gameName);
+    const genre = GENRE_LOOKUP.get(k) || "casual";
+    h.textContent = `About ${gameName}`;
+    p.textContent = ABOUT_BY_KEY.get(k) || resolveAboutText(gameName, k, genre);
+}
+
+fillPlayingAbout();
+
+const GAMES_PER_MORE_ROW = 8;
+const MORE_GAME_ROWS = 3;
+const MORE_GAMES_TOTAL = GAMES_PER_MORE_ROW * MORE_GAME_ROWS;
+
+const moreRows = [
+    document.getElementById("moreGamesRow1"),
+    document.getElementById("moreGamesRow2"),
+    document.getElementById("moreGamesRow3")
+].filter(Boolean);
+
+let pool = GAMES.filter(g => gamePathKey(g.file) !== currentFileNorm);
+if (!pool.length) {
+    pool = GAMES.slice();
+}
 for (let i = pool.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
 }
-const showGames = pool.slice(0, 8);
+
+const picked = [];
+const seenPath = new Set();
+for (const g of pool) {
+    if (picked.length >= MORE_GAMES_TOTAL) {
+        break;
+    }
+    const key = gamePathKey(g.file);
+    if (seenPath.has(key)) {
+        continue;
+    }
+    seenPath.add(key);
+    picked.push(g);
+}
+let fillRot = 0;
+while (picked.length < MORE_GAMES_TOTAL && pool.length > 0) {
+    picked.push(pool[fillRot % pool.length]);
+    fillRot += 1;
+}
 
 function makeMoreGameCard(g) {
     const div = document.createElement("div");
@@ -883,9 +1147,11 @@ function makeMoreGameCard(g) {
     return div;
 }
 
-if (moreRow) {
-    showGames.forEach(g => moreRow.appendChild(makeMoreGameCard(g)));
-}
+moreRows.forEach((rowEl, rowIndex) => {
+    const start = rowIndex * GAMES_PER_MORE_ROW;
+    const slice = picked.slice(start, start + GAMES_PER_MORE_ROW);
+    slice.forEach(g => rowEl.appendChild(makeMoreGameCard(g)));
+});
 
 if (localStorage.getItem(THEME_KEY) === "light") {
     document.body.classList.add("light-play");

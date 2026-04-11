@@ -741,7 +741,9 @@ const THEME_KEY = "tubzi-theme";
 /* Slug must match real filenames in /games (see yohoio, OvOgame). */
 const GAME_FILE_SLUG = {
     yohio: "yohoio",
-    "0v0game": "OvOgame"
+    "0v0game": "OvOgame",
+    fruitninja: "clfruitninja",
+    elytraflight: "clelytraflight"
 };
 
 function fileSlugFromGameName(name) {
@@ -767,7 +769,9 @@ function imageLayersFromSlug(slug) {
 /** Map actual game HTML stem → image stem (for action bar thumb when ?game= uses .html name). */
 const GAME_HTML_STEM_TO_IMAGE_STEM = {
     yohoio: "yohio",
-    ovogame: "0v0game"
+    ovogame: "0v0game",
+    clfruitninja: "fruitninja",
+    clelytraflight: "elytraflight"
 };
 
 /* Same popularity order as index when a layout is published (tubzi-layout-store). */
@@ -776,13 +780,13 @@ let PLAY_GAME_NAMES = [
     "1v1 lol", "shell shockers", "slope", "retro bowl", "bitlife", "drivemad", "crossyroad", "drift boss", "basketball stars", "8 ball classic",
     "aquapark io", "tiny fishing", "monkey mart", "elastic man", "snow rider 3d", "basketball random", "stick man hook", "soccerrandom", "volleyrandom",
     "get away shoot out", "funny shooter", "time shooter", "house of hazards", "rag doll archers", "level devil", "jetpackjoyride", "block blast",
-    "attack hole", "bowmasters", "bank robbery", "escape road", "escape road 2", "crazy cars", "2048", "adventurecapitalist", "ahoysurvival",
+    "attack hole", "bowmasters", "bank robbery", "bank robbery 2", "bank robbery 3", "bacon may die", "bob the robber 2", "basket battle", "car parking", "gobble", "tung tung obby", "vex", "escape road", "escape road 2", "crazy cars", "2048", "adventurecapitalist", "ahoysurvival",
     "asmallworldcup", "backrooms", "baldisbasics", "basketballbros", "basketrandom", "boxingrandom", "btd 1", "btd 2", "btd 3", "btd 4", "btd 5",
     "crazycattle 3 d", "ducklife 1", "dumbwaystodie", "fallguys", "fisquarium", "fivenightsatepsteins", "fnaf 1", "fnaf 2", "fnaf 3", "fnaf 4",
     "geometry dash meltdown", "geometry dash subzero", "geometry dash world", "granny", "happywheels", "helixjump", "hole io", "idlebreakout",
     "little alchemy 2", "melonsandbox", "moneyrush", "moto x3m pool party", "moto x3m spooky land", "moto x3m winter", "redball 4", "run 1", "run 2", "run 3",
     "tombofthemask", "papas donuteria", "papas freezeria", "papas hotdoggeria", "papas pastaria", "papas pizzeria", "plantsvszombies", "polytrack",
-    "ragdolldrop", "slicemaster", "smashyroad", "soundbuttons", "survivor io", "terraria", "wordle", "wheelielife", "yohio", "0v0game",
+    "ragdolldrop", "slicemaster", "fruit ninja", "elytra flight", "smashyroad", "soundbuttons", "survivor io", "terraria", "wordle", "wheelielife", "yohio", "0v0game",
     "block post", "retro bowl college", "worlds hardest game", "blocky snakes", "angry birds", "temple run 2", "half life", "super mario bros",
     "five nights at freddys",
     "drift hunters", "bad parenting", "blackjack"

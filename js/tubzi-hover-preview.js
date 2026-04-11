@@ -84,6 +84,7 @@
         templerun2: "videos/hover_templerun2.mp4",
         supermariobros: "videos/hover_supermariobros.mp4",
         fivenightsatfreddys: "videos/hover_fivenightsatfreddys.mp4",
+        elytraflight: "videos/hover_elytraflight.mp4",
     };
 
     /**
@@ -92,12 +93,19 @@
      */
     var CLIP = {
         spacewaves: { start: 13, end: 23 },
-        subwaysurfers: { start: 7 }
+        subwaysurfers: { start: 7 },
+        /** First 5s loop; `end` capped to file duration in attach(). */
+        elytraflight: { start: 0, end: 5 }
     };
 
     /** object-position for object-fit: cover (fraction of leftover overflow). */
     var OBJECT_POS = {
         brawlsimulator3d: "center 32%"
+    };
+
+    /** Stretch to tile (no letterboxing); default CSS uses cover. */
+    var OBJECT_FIT = {
+        elytraflight: "fill"
     };
 
     function attach(card, layoutKey) {
@@ -106,7 +114,8 @@
             return;
         }
 
-        var clip = CLIP[layoutKey];
+        var clipRaw = CLIP[layoutKey];
+        var clip = clipRaw ? { start: clipRaw.start, end: clipRaw.end } : null;
 
         card.classList.add("card--hover-preview");
         var vid = document.createElement("video");
@@ -118,6 +127,9 @@
         vid.preload = "metadata";
         vid.setAttribute("aria-hidden", "true");
         vid.src = src;
+        if (OBJECT_FIT[layoutKey]) {
+            vid.style.objectFit = OBJECT_FIT[layoutKey];
+        }
         if (OBJECT_POS[layoutKey]) {
             vid.style.objectPosition = OBJECT_POS[layoutKey];
         }
@@ -141,6 +153,16 @@
         if (clip) {
             vid.addEventListener("loadedmetadata", function onMeta() {
                 vid.removeEventListener("loadedmetadata", onMeta);
+                if (typeof clip.end === "number" && vid.duration && isFinite(vid.duration) && vid.duration > 0) {
+                    clip.end = Math.min(clip.end, vid.duration);
+                }
+                if (
+                    typeof clip.start === "number" &&
+                    typeof clip.end === "number" &&
+                    clip.end - clip.start < 0.2
+                ) {
+                    clip.end = clip.start + 0.2;
+                }
                 seekIntoWindow();
             });
             if (typeof clip.end === "number") {

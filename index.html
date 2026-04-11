@@ -34,11 +34,12 @@
     width: 100%;
 }
 
-/* Popular picks: full width (no ad side gutters; grid uses the whole content area) */
+/* Popular picks: full width with comfortable side gutters from the viewport edge */
 #gamesSection.container {
     max-width: none;
-    padding-left: max(20px, env(safe-area-inset-left));
-    padding-right: max(20px, env(safe-area-inset-right));
+    --games-side-gutter: clamp(48px, 9vw, 112px);
+    padding-left: max(var(--games-side-gutter), env(safe-area-inset-left));
+    padding-right: max(var(--games-side-gutter), env(safe-area-inset-right));
 }
 
 .games-section-title {

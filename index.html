@@ -231,12 +231,9 @@ body.light .card:hover {
                         <h2 class="survey-cta__headline" id="surveyCtaHeading">What game should we add next?</h2>
                         <p class="survey-cta__sub">One quick answer is all it takes—we use your ideas to grow TubZi’s lineup.</p>
                     </div>
-                    <a
-                        class="survey-cta__btn"
-                        href="https://docs.google.com/forms/d/1rbhbtZX5yNy_lnOonpgdB0SbixqSrHszwLzjV0XEgWw/viewform"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >Suggest a game →</a>
+                    <button type="button" class="survey-cta__btn" id="btnOpenTallyRequest" aria-haspopup="dialog" aria-controls="tallyGameRequestDialog">
+                        Suggest a game →
+                    </button>
                 </div>
             </div>
         </div>
@@ -379,6 +376,41 @@ body.light .card:hover {
     </div>
 </div>
 
+<div id="tallyGameRequestLayer" class="tally-game-request-layer" hidden>
+    <div class="tally-game-request-layer__backdrop" data-tally-close tabindex="-1" aria-hidden="true"></div>
+    <div
+        id="tallyGameRequestDialog"
+        class="tally-mini-browser"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tallyMiniBrowserTitle"
+        tabindex="-1"
+    >
+        <div class="tally-mini-browser__chrome" data-tally-drag-handle>
+            <span class="tally-mini-browser__traffic" aria-hidden="true">
+                <span class="tally-mini-browser__dot tally-mini-browser__dot--r"></span>
+                <span class="tally-mini-browser__dot tally-mini-browser__dot--y"></span>
+                <span class="tally-mini-browser__dot tally-mini-browser__dot--g"></span>
+            </span>
+            <span class="tally-mini-browser__title" id="tallyMiniBrowserTitle">TubZi — Request a game</span>
+            <button type="button" class="tally-mini-browser__close" data-tally-close aria-label="Close form">×</button>
+        </div>
+        <div class="tally-mini-browser__urlbar" aria-hidden="true">
+            <span class="tally-mini-browser__url">tally.so · New game request</span>
+        </div>
+        <div class="tally-mini-browser__frame-wrap">
+            <iframe
+                id="tallyRequestIframe"
+                class="tally-mini-browser__frame"
+                title="TubZi New Game Request (Tally form)"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="clipboard-write"
+            ></iframe>
+        </div>
+    </div>
+</div>
+
 <script src="js/tubzi-rail-data.js?v=2"></script>
 <script src="js/tubzi-game-entries.js"></script>
 <script src="js/tubzi-layout-store.js"></script>
@@ -396,7 +428,12 @@ const GAME_FILE_SLUG = {
     yohio: "yohoio",
     "0v0game": "OvOgame",
     fruitninja: "clfruitninja",
-    elytraflight: "clelytraflight"
+    elytraflight: "clelytraflight",
+    smashkarts: "smash-karts",
+    doodlejump: "doodle-jump",
+    vexx3m: "vex-x3m",
+    realflightsimulator: "real-flight-simulator",
+    tallmanrun: "tall-man-run"
 };
 
 function fileSlugFromGameName(name) {
@@ -788,6 +825,7 @@ buildRailNav();
 render();
 
 </script>
+<script src="js/tubzi-tally-request.js" defer></script>
 
 </body>
 </html>

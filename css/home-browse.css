@@ -98,6 +98,220 @@ body.light .survey-cta__btn {
     box-shadow: 0 4px 14px rgba(255, 106, 0, 0.28);
 }
 
+button.survey-cta__btn {
+    font: inherit;
+    font-family: "Fredoka", system-ui, sans-serif;
+    cursor: pointer;
+    border: none;
+    margin: 0;
+}
+
+/* Tally “mini browser” popup (homepage suggest-a-game) */
+.tally-game-request-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.tally-game-request-layer:not([hidden]) {
+    pointer-events: auto;
+}
+
+.tally-game-request-layer[hidden] {
+    display: none !important;
+}
+
+.tally-game-request-layer__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    pointer-events: auto;
+}
+
+body.light .tally-game-request-layer__backdrop {
+    background: rgba(20, 24, 40, 0.35);
+}
+
+.tally-mini-browser {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    width: min(460px, calc(100vw - 40px));
+    height: min(720px, calc(100vh - 40px));
+    max-height: 92vh;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow:
+        0 22px 50px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    background: #1e1f26;
+    pointer-events: auto;
+    touch-action: none;
+}
+
+.tally-mini-browser--dragging {
+    cursor: grabbing;
+    box-shadow:
+        0 28px 60px rgba(0, 0, 0, 0.65),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.tally-mini-browser__chrome {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: linear-gradient(180deg, #3a3d4a 0%, #2d3038 100%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.tally-mini-browser--dragging .tally-mini-browser__chrome {
+    cursor: grabbing;
+}
+
+.tally-mini-browser__traffic {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.tally-mini-browser__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0.35);
+}
+
+.tally-mini-browser__dot--r {
+    background: #ff5f57;
+}
+
+.tally-mini-browser__dot--y {
+    background: #febc2e;
+}
+
+.tally-mini-browser__dot--g {
+    background: #28c840;
+}
+
+.tally-mini-browser__title {
+    flex: 1;
+    min-width: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #e8e8ef;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tally-mini-browser__close {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    line-height: 1;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+}
+
+.tally-mini-browser__close:hover {
+    background: rgba(255, 95, 87, 0.85);
+}
+
+.tally-mini-browser__close:focus-visible {
+    outline: 2px solid #ff6a00;
+    outline-offset: 2px;
+}
+
+.tally-mini-browser__urlbar {
+    flex-shrink: 0;
+    padding: 5px 10px 7px;
+    background: #252830;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.tally-mini-browser__url {
+    display: block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px;
+    color: #9aa3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tally-mini-browser__frame-wrap {
+    flex: 1;
+    min-height: 0;
+    background: #fff;
+    position: relative;
+}
+
+.tally-mini-browser__frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
+body.light .tally-mini-browser {
+    background: #f0f2f7;
+    box-shadow:
+        0 22px 50px rgba(15, 23, 42, 0.25),
+        0 0 0 1px rgba(15, 23, 42, 0.08);
+}
+
+body.light .tally-mini-browser__chrome {
+    background: linear-gradient(180deg, #e4e6ed 0%, #d8dbe6 100%);
+    border-bottom-color: rgba(15, 23, 42, 0.12);
+}
+
+body.light .tally-mini-browser__title {
+    color: #1e293b;
+}
+
+body.light .tally-mini-browser__urlbar {
+    background: #eef0f6;
+}
+
+body.light .tally-mini-browser__url {
+    color: #64748b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tally-game-request-layer__backdrop {
+        backdrop-filter: none;
+    }
+}
+
 /* Brand / ads promo — below category browse (compact strip) */
 .home-promo-wrap {
     width: 100%;

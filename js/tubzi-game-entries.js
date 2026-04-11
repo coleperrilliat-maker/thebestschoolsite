@@ -125,6 +125,12 @@ window.TUBZI_GAME_ENTRIES = [
     ["gobble", "casual"],
     ["tung tung obby", "casual"],
     ["vex", "platformer"],
+    ["smash karts", "io"],
+    ["doodle jump", "casual"],
+    ["vex x3m", "driving"],
+    ["real flight simulator", "casual"],
+    ["karlson", "action"],
+    ["tall man run", "casual"],
 ];
 
 /* First entry = most popular for default grid / admin. Order is applied at load. */
@@ -264,6 +270,12 @@ window.TUBZI_GAME_ENTRIES = [
         "gobble",
         "tung tung obby",
         "vex",
+        "smash karts",
+        "doodle jump",
+        "vex x3m",
+        "real flight simulator",
+        "karlson",
+        "tall man run",
         "fivenightsatepsteins",
     ];
     var rank = {};

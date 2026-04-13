@@ -26,11 +26,11 @@
 :root {
     --brand: #ff6a00;
     --brand-hover: #e55f00;
-    --bg: #12141f;
-    --bg-elevated: #1a1d2e;
+    --bg: #1b1b2f;
+    --bg-elevated: #232338;
     --text: #f4f4f8;
     --text-muted: #9aa3b8;
-    --bar-bg-solid: #1e1b37;
+    --bar-bg-solid: #16182a;
     --bar-text: #f4f4f8;
     --bar-muted: #9aa3b8;
     --bar-border: rgba(255, 106, 0, 0.22);
@@ -84,7 +84,7 @@ body.light-play {
 }
 
 body.is-fullscreen {
-    background: #000;
+    background: var(--bg);
     height: 100%;
     min-height: 0;
     overflow: hidden;
@@ -304,7 +304,7 @@ body.light-play .play-dash-btn--home:hover {
     min-height: 0;
     border-radius: var(--card-radius) var(--card-radius) 0 0;
     overflow: hidden;
-    background: #000;
+    background: var(--bg);
     box-shadow: none;
     display: flex;
     flex-direction: column;
@@ -748,7 +748,8 @@ const GAME_FILE_SLUG = {
     doodlejump: "doodle-jump",
     vexx3m: "vex-x3m",
     realflightsimulator: "real-flight-simulator",
-    tallmanrun: "tall-man-run"
+    tallmanrun: "tall-man-run",
+    "racesurvival:arenaking": "carparking"
 };
 
 function fileSlugFromGameName(name) {
@@ -757,8 +758,13 @@ function fileSlugFromGameName(name) {
 }
 
 /** PNGs in /images use the simple name slug, not the mismatched .html filenames. */
+const GAME_IMAGE_SLUG = {
+    "racesurvival:arenaking": "carparking"
+};
+
 function imageSlugFromGameName(name) {
-    return name.replace(/ /g, "").toLowerCase();
+    const base = name.replace(/ /g, "").toLowerCase();
+    return GAME_IMAGE_SLUG[base] || base;
 }
 
 function imageLayersFromSlug(slug) {
@@ -790,7 +796,7 @@ let PLAY_GAME_NAMES = [
     "1v1 lol", "shell shockers", "slope", "retro bowl", "bitlife", "drivemad", "crossyroad", "drift boss", "basketball stars", "8 ball classic",
     "aquapark io", "tiny fishing", "monkey mart", "elastic man", "snow rider 3d", "basketball random", "stick man hook", "soccerrandom", "volleyrandom",
     "get away shoot out", "funny shooter", "time shooter", "house of hazards", "rag doll archers", "level devil", "jetpackjoyride", "block blast",
-    "attack hole", "bowmasters", "bank robbery", "bank robbery 2", "bank robbery 3", "bacon may die", "bob the robber 2", "basket battle", "car parking", "gobble", "tung tung obby", "vex", "escape road", "escape road 2", "crazy cars", "2048", "adventurecapitalist", "ahoysurvival",
+    "attack hole", "bowmasters", "bank robbery", "bank robbery 2", "bank robbery 3", "bacon may die", "bob the robber 2", "basket battle", "Race Survival: Arena King", "gobble", "tung tung obby", "vex", "escape road", "escape road 2", "crazy cars", "2048", "adventurecapitalist", "ahoysurvival",
     "asmallworldcup", "backrooms", "baldisbasics", "basketballbros", "basketrandom", "boxingrandom", "btd 1", "btd 2", "btd 3", "btd 4", "btd 5",
     "crazycattle 3 d", "ducklife 1", "dumbwaystodie", "fallguys", "fisquarium", "fivenightsatepsteins", "fnaf 1", "fnaf 2", "fnaf 3", "fnaf 4",
     "geometry dash meltdown", "geometry dash subzero", "geometry dash world", "granny", "happywheels", "helixjump", "hole io", "idlebreakout",

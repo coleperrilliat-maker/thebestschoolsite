@@ -99,13 +99,35 @@ button.show-all-games-btn {
     filter: brightness(1.05);
 }
 
+.show-all-games-btn:active {
+    transform: translateY(1px);
+    box-shadow:
+        0 3px 0 #1a0a04,
+        0 5px 16px rgba(255, 106, 0, 0.35);
+}
+
 .show-all-games-btn:focus-visible {
     outline: 2px solid var(--brand);
     outline-offset: 3px;
 }
 
 body.light .show-all-games-btn {
-    box-shadow: 0 6px 18px rgba(255, 106, 0, 0.28);
+    border-color: #7c2d12;
+    box-shadow:
+        0 4px 0 rgba(124, 45, 18, 0.45),
+        0 8px 20px rgba(255, 106, 0, 0.22);
+}
+
+body.light .show-all-games-btn:hover {
+    box-shadow:
+        0 5px 0 rgba(124, 45, 18, 0.45),
+        0 10px 24px rgba(255, 106, 0, 0.28);
+}
+
+body.light .show-all-games-btn:active {
+    box-shadow:
+        0 2px 0 rgba(124, 45, 18, 0.45),
+        0 4px 14px rgba(255, 106, 0, 0.2);
 }
 
 .games-divider {
@@ -146,13 +168,19 @@ body.light .games-divider {
     background-size: cover;
     background-position: center;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    box-shadow:
+        0 0 0 3px rgba(0, 0, 0, 0.55),
+        0 5px 0 rgba(0, 0, 0, 0.35),
+        0 8px 18px rgba(0, 0, 0, 0.35);
 }
 
 /* Tile sizes 1–15: applied via js/tubzi-layout-store.js applyTileLevelToCard (inline width / span). */
 
 body.light .card {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow:
+        0 0 0 3px rgba(30, 35, 50, 0.2),
+        0 4px 0 rgba(30, 35, 50, 0.12),
+        0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
 .card:focus-visible {
@@ -164,15 +192,17 @@ body.light .card {
     transform: scale(var(--card-hover-scale));
     box-shadow:
         0 8px 22px rgba(0, 0, 0, 0.35),
-        0 0 0 3px #fff,
-        0 0 0 5px rgba(0, 0, 0, 0.45);
+        0 0 0 4px #fff,
+        0 0 0 7px rgba(0, 0, 0, 0.55),
+        0 6px 0 rgba(0, 0, 0, 0.3);
 }
 
 body.light .card:hover {
     box-shadow:
         0 6px 18px rgba(0, 0, 0, 0.12),
-        0 0 0 3px #fff,
-        0 0 0 5px rgba(0, 0, 0, 0.35);
+        0 0 0 4px #fff,
+        0 0 0 7px rgba(30, 35, 50, 0.35),
+        0 5px 0 rgba(30, 35, 50, 0.12);
 }
 
 </style>
@@ -193,7 +223,7 @@ body.light .card:hover {
             </a>
             <div class="header-search-slot">
                 <div class="search-wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                     <input id="search" type="search" placeholder="What do you want to play?" autocomplete="off">
@@ -206,10 +236,10 @@ body.light .card:hover {
                 Random
             </button>
             <button type="button" class="theme-icon-btn" id="themeBtn" aria-label="Toggle light and dark mode">
-                <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
                 </svg>
-                <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
                 </svg>
             </button>
@@ -376,6 +406,37 @@ body.light .card:hover {
     </div>
 </div>
 
+<div id="welcomeFirstLayer" class="welcome-first-layer" hidden>
+    <div class="welcome-first-layer__backdrop" data-welcome-dismiss tabindex="-1" aria-hidden="true"></div>
+    <div
+        class="welcome-first-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="welcomeFirstTitle"
+        aria-describedby="welcomeFirstDesc"
+    >
+        <h2 class="welcome-first-card__title" id="welcomeFirstTitle">Welcome to TubZi</h2>
+        <p class="welcome-first-card__text" id="welcomeFirstDesc">
+            Click a game to play in your browser. Use search or <strong>Random</strong>, or scroll to browse categories.
+        </p>
+        <p class="welcome-first-card__text">
+            <strong>Suggest a game</strong> if we’re missing one—we read every submission.
+        </p>
+        <p class="welcome-first-card__text">
+            Join <a class="welcome-first-card__link" href="https://discord.gg/nj5YYgKBap" target="_blank" rel="noopener noreferrer">Discord</a> for updates and backup links.
+        </p>
+        <div class="welcome-first-card__actions">
+            <button type="button" class="welcome-first-card__btn" id="welcomeFirstDismiss">Got it</button>
+            <a
+                class="welcome-first-card__btn welcome-first-card__btn--secondary"
+                href="https://discord.gg/nj5YYgKBap"
+                target="_blank"
+                rel="noopener noreferrer"
+            >Open Discord</a>
+        </div>
+    </div>
+</div>
+
 <div id="tallyGameRequestLayer" class="tally-game-request-layer" hidden>
     <div class="tally-game-request-layer__backdrop" data-tally-close tabindex="-1" aria-hidden="true"></div>
     <div
@@ -433,7 +494,8 @@ const GAME_FILE_SLUG = {
     doodlejump: "doodle-jump",
     vexx3m: "vex-x3m",
     realflightsimulator: "real-flight-simulator",
-    tallmanrun: "tall-man-run"
+    tallmanrun: "tall-man-run",
+    "racesurvival:arenaking": "carparking"
 };
 
 function fileSlugFromGameName(name) {
@@ -441,8 +503,13 @@ function fileSlugFromGameName(name) {
     return GAME_FILE_SLUG[base] || base;
 }
 
+const GAME_IMAGE_SLUG = {
+    "racesurvival:arenaking": "carparking"
+};
+
 function imageSlugFromGameName(name) {
-    return name.replace(/ /g, "").toLowerCase();
+    const base = name.replace(/ /g, "").toLowerCase();
+    return GAME_IMAGE_SLUG[base] || base;
 }
 
 function imageLayersFromSlug(slug) {
@@ -825,6 +892,7 @@ buildRailNav();
 render();
 
 </script>
+<script src="js/tubzi-welcome-first-visit.js" defer></script>
 <script src="js/tubzi-tally-request.js" defer></script>
 
 </body>

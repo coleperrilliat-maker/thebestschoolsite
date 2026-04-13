@@ -3,7 +3,7 @@
 :root {
     --brand: #ff6a00;
     --brand-hover: #e55f00;
-    --bg: #1a1c2c;
+    --bg: #1b1b2f;
     --header-bg: #16182a;
     --header-border: #2a2d42;
     --text: #e8e8ef;
@@ -16,9 +16,13 @@
     --search-placeholder: #6c7088;
     --accent-green: #22c55e;
     --accent-green-hover: #16a34a;
-    --card-radius: 16px;
+    --card-radius: 18px;
     --rail-width: 276px;
     --site-header-height: 88px;
+    /* Clip-art / sticker weight */
+    --clip-ink: rgba(8, 6, 12, 0.88);
+    --clip-ink-soft: rgba(8, 6, 12, 0.55);
+    --clip-ledge: 0 4px 0 rgba(0, 0, 0, 0.42);
 }
 
 body.light {
@@ -33,6 +37,9 @@ body.light {
     --search-bg: #f1f3f9;
     --search-border: #c8cedd;
     --search-placeholder: #8b909f;
+    --clip-ink: rgba(55, 40, 30, 0.9);
+    --clip-ink-soft: rgba(55, 40, 30, 0.45);
+    --clip-ledge: 0 3px 0 rgba(55, 40, 30, 0.22);
 }
 
 * {
@@ -208,12 +215,12 @@ body.light .game-rail {
     margin: 3px 2px;
     padding: 8px 12px;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     background: transparent;
     cursor: pointer;
     font-family: "Fredoka", system-ui, sans-serif;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.02em;
     text-align: left;
     color: var(--text-muted);
@@ -231,11 +238,11 @@ body.light .game-rail {
 .rail-nav-item.is-active {
     background: var(--btn-bg-hover);
     color: var(--text);
-    box-shadow: 0 0 0 2px rgba(255, 106, 0, 0.35);
+    box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.55);
 }
 
 body.light .rail-nav-item.is-active {
-    box-shadow: 0 0 0 2px rgba(255, 106, 0, 0.28);
+    box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.4);
 }
 
 .rail-icon {
@@ -244,7 +251,7 @@ body.light .rail-nav-item.is-active {
     flex-shrink: 0;
     stroke: var(--brand);
     fill: none;
-    stroke-width: 2;
+    stroke-width: 2.65;
     stroke-linecap: round;
     stroke-linejoin: round;
     transition: stroke 0.18s ease;
@@ -333,15 +340,32 @@ a.logo-brand:focus-visible {
     display: block;
     width: 48px;
     height: 34px;
+    filter: drop-shadow(0 2px 0 var(--clip-ink)) drop-shadow(0 3px 4px rgba(0, 0, 0, 0.35));
+}
+
+body.light .logo-icon {
+    filter: drop-shadow(0 2px 0 rgba(124, 45, 18, 0.25)) drop-shadow(0 2px 6px rgba(124, 45, 18, 0.12));
 }
 
 .logo-text {
     font-family: "Fredoka", system-ui, sans-serif;
     font-size: clamp(1.8rem, 4.5vw, 2.4rem);
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.02em;
     line-height: 1;
     color: var(--brand);
+    paint-order: stroke fill;
+    -webkit-text-stroke: 2px var(--clip-ink-soft);
+    text-shadow:
+        0 2px 0 var(--clip-ink),
+        0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+body.light .logo-text {
+    -webkit-text-stroke: 2px rgba(234, 88, 12, 0.35);
+    text-shadow:
+        0 2px 0 rgba(124, 45, 18, 0.35),
+        0 3px 10px rgba(124, 45, 18, 0.15);
 }
 
 .header-search-slot {
@@ -380,11 +404,13 @@ a.logo-brand:focus-visible {
     width: 100%;
     padding: 13px 18px 13px 52px;
     border-radius: 999px;
-    border: 1px solid var(--search-border);
+    border: 3px solid var(--search-border);
     background: var(--search-bg);
     color: var(--text);
     font-size: 16px;
+    font-weight: 600;
     outline: none;
+    box-shadow: var(--clip-ledge);
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -394,21 +420,22 @@ a.logo-brand:focus-visible {
 
 #search:focus {
     border-color: var(--brand);
-    box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.22);
+    box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.22), var(--clip-ledge);
 }
 
 .theme-icon-btn {
     flex-shrink: 0;
     width: 48px;
     height: 48px;
-    border-radius: 12px;
-    border: 1px solid var(--btn-border);
+    border-radius: 14px;
+    border: 3px solid var(--btn-border);
     background: var(--btn-bg);
     color: #fbbf24;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: var(--clip-ledge);
     transition: background 0.15s ease, transform 0.1s ease;
 }
 
@@ -443,31 +470,47 @@ body.light .theme-icon-btn .icon-moon {
     align-items: center;
     gap: 6px;
     padding: 11px 17px;
-    border-radius: 10px;
-    border: 1px solid var(--btn-border);
+    border-radius: 12px;
+    border: 3px solid var(--btn-border);
     background: var(--btn-bg);
     color: var(--text);
-    font-family: inherit;
+    font-family: "Fredoka", system-ui, sans-serif;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: 0.02em;
     cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
+    box-shadow: var(--clip-ledge);
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 }
 
 .hdr-btn:hover {
     background: var(--btn-bg-hover);
 }
 
+.hdr-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+body.light .hdr-btn:active {
+    box-shadow: 0 2px 0 rgba(55, 40, 30, 0.18);
+}
+
 .hdr-btn-random {
     flex-shrink: 0;
     background: var(--accent-green);
-    border-color: var(--accent-green-hover);
+    border-color: #0f5132;
     color: #fff;
+    box-shadow: 0 4px 0 #0a3d26, 0 6px 16px rgba(34, 197, 94, 0.35);
 }
 
 .hdr-btn-random:hover {
     background: var(--accent-green-hover);
-    border-color: var(--accent-green-hover);
+    border-color: #0a3d26;
+}
+
+.hdr-btn-random:active {
+    box-shadow: 0 2px 0 #0a3d26, 0 3px 10px rgba(34, 197, 94, 0.3);
 }
 
 .hdr-btn-random svg {

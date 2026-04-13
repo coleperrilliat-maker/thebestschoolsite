@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050403"/>
+      <stop offset="55%" stop-color="#0c0a08"/>
+      <stop offset="100%" stop-color="#12100d"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff6a00" stop-opacity="0.85"/>
+      <stop offset="35%" stop-color="#ffb366" stop-opacity="0.95"/>
+      <stop offset="70%" stop-color="#ff6a00" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#e55f00" stop-opacity="0.5"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+
+  <!-- Back ribbons: cool dark grays, sharp fills -->
+  <path
+    d="M -60 1020 C 280 880 520 980 880 900 C 1240 820 1520 860 1980 720 L 1980 1100 L -60 1100 Z"
+    fill="#0a0807"
+    stroke="#1a1815"
+    stroke-width="1.5"/>
+  <path
+    d="M -60 900 C 340 760 700 840 1040 760 C 1380 680 1680 700 1980 560 L 1980 920 C 1580 860 1180 920 760 980 C 340 1040 80 1000 -60 960 Z"
+    fill="#100e0c"
+    stroke="url(#edge)"
+    stroke-width="1.25"
+    opacity="0.92"/>
+
+  <path
+    d="M -60 720 C 400 580 780 680 1120 600 C 1460 520 1740 540 1980 400 L 1980 780 C 1620 840 1300 800 920 860 C 540 920 200 880 -60 820 Z"
+    fill="#161412"
+    stroke="#2a2622"
+    stroke-width="1"/>
+  <path
+    d="M -40 560 C 420 420 820 520 1180 440 C 1540 360 1780 380 1980 260 L 1980 620 C 1600 700 1240 660 860 720 C 480 780 160 740 -40 680 Z"
+    fill="#1c1a17"
+    stroke="url(#edge)"
+    stroke-width="1.35"
+    opacity="0.95"/>
+
+  <path
+    d="M -40 400 C 440 260 860 360 1220 280 C 1580 200 1820 220 1980 120 L 1980 480 C 1620 560 1260 520 880 580 C 500 640 180 600 -40 540 Z"
+    fill="#22201d"
+    stroke="#35312c"
+    stroke-width="1"/>
+  <path
+    d="M -40 240 C 460 100 900 200 1260 120 C 1620 40 1860 60 1980 -20 L 1980 340 C 1640 420 1280 380 900 440 C 520 500 200 460 -40 400 Z"
+    fill="#282522"
+    stroke="url(#edge)"
+    stroke-width="1.5"/>
+
+  <!-- Light crest lines for extra clarity -->
+  <path
+    d="M 0 618 C 360 498 720 568 1080 498 S 1620 438 1920 358"
+    fill="none"
+    stroke="rgba(255,106,0,0.35)"
+    stroke-width="2"
+    stroke-linecap="round"/>
+  <path
+    d="M 0 458 C 400 338 800 418 1180 338 S 1680 278 1920 198"
+    fill="none"
+    stroke="rgba(255,180,120,0.28)"
+    stroke-width="1.5"
+    stroke-linecap="round"/>
+</svg>

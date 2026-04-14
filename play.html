@@ -416,21 +416,25 @@ body.light-play .play-action-bar {
 }
 
 .stat-btn#btnLike,
+.stat-btn#btnDislike,
 .fs-btn {
     background: transparent;
     color: var(--ui-accent);
 }
 
 .stat-btn#btnLike:hover,
+.stat-btn#btnDislike:hover,
 .fs-btn:hover {
     background: rgba(255, 106, 0, 0.14);
 }
 
-.stat-btn#btnLike .stat-count {
+.stat-btn#btnLike .stat-count,
+.stat-btn#btnDislike .stat-count {
     color: var(--bar-text);
 }
 
-body.light-play .stat-btn#btnLike .stat-count {
+body.light-play .stat-btn#btnLike .stat-count,
+body.light-play .stat-btn#btnDislike .stat-count {
     color: var(--bar-text);
 }
 

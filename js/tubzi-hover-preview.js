@@ -97,7 +97,6 @@
      * Omit `end` to play from start through the rest of the file, then repeat from start.
      */
     var CLIP = {
-        subwaysurfers: { start: 7 },
         /** Skip intro; loop from here through end of file. */
         elytraflight: { start: 1.6 }
     };

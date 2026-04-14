@@ -122,6 +122,14 @@ body.light .survey-cta__btn {
         0 5px 14px rgba(255, 106, 0, 0.22);
 }
 
+/* Play page: same CTA button when used outside .survey-cta strip */
+body.light-play .survey-cta__btn {
+    border-color: #7c2d12;
+    box-shadow:
+        0 3px 0 rgba(124, 45, 18, 0.4),
+        0 5px 14px rgba(255, 106, 0, 0.22);
+}
+
 button.survey-cta__btn {
     font: inherit;
     font-family: "Fredoka", system-ui, sans-serif;
@@ -306,6 +314,32 @@ body.light .tally-game-request-layer__backdrop {
     display: block;
 }
 
+/* Draggable Tally panel without fake browser chrome (traffic lights / URL bar) */
+.tally-mini-browser--plain .tally-mini-browser__chrome {
+    padding-left: 12px;
+}
+
+/* Issue form: height follows Tally embed.js + dynamicHeight; no tall empty iframe area */
+.tally-mini-browser--plain {
+    height: auto;
+    max-height: 92vh;
+}
+
+.tally-mini-browser--plain .tally-mini-browser__frame-wrap {
+    flex: 0 0 auto;
+    min-height: 0;
+    background: #0a0a0b;
+}
+
+.tally-mini-browser--plain .tally-mini-browser__frame {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 200px;
+    min-height: 120px;
+    border: 0;
+}
+
 body.light .tally-mini-browser {
     background: #f0f2f7;
     box-shadow:
@@ -327,6 +361,34 @@ body.light .tally-mini-browser__urlbar {
 }
 
 body.light .tally-mini-browser__url {
+    color: #64748b;
+}
+
+body.light-play .tally-game-request-layer__backdrop {
+    background: rgba(20, 24, 40, 0.35);
+}
+
+body.light-play .tally-mini-browser {
+    background: #f0f2f7;
+    box-shadow:
+        0 22px 50px rgba(15, 23, 42, 0.25),
+        0 0 0 1px rgba(15, 23, 42, 0.08);
+}
+
+body.light-play .tally-mini-browser__chrome {
+    background: linear-gradient(180deg, #e4e6ed 0%, #d8dbe6 100%);
+    border-bottom-color: rgba(15, 23, 42, 0.12);
+}
+
+body.light-play .tally-mini-browser__title {
+    color: #1e293b;
+}
+
+body.light-play .tally-mini-browser__urlbar {
+    background: #eef0f6;
+}
+
+body.light-play .tally-mini-browser__url {
     color: #64748b;
 }
 

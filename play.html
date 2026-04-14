@@ -21,7 +21,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/home-browse.css">
 <link rel="stylesheet" href="css/game-tile-hover-preview.css">
+<script src="https://tally.so/widgets/embed.js" defer></script>
 <style>
 :root {
     --brand: #ff6a00;
@@ -34,11 +36,11 @@
     --bar-text: #f4f4f8;
     --bar-muted: #9aa3b8;
     --bar-border: rgba(255, 106, 0, 0.22);
-    --ui-accent: #ff6a00;
     --card-radius: 16px;
-    /* Match homepage header “Random” (tubzi-shell .hdr-btn-random). */
-    --accent-green: #22c55e;
-    --accent-green-hover: #16a34a;
+    --ui-accent: #ff6a00;
+    --play-btn-solid: #35394d;
+    --play-btn-solid-hover: #43485f;
+    --play-btn-fg: #f4f4f8;
     --play-content-max: min(1180px, 100%);
 }
 
@@ -51,6 +53,9 @@ body.light-play {
     --bar-text: #1a2744;
     --bar-muted: #64748b;
     --bar-border: rgba(124, 58, 237, 0.2);
+    --play-btn-solid: #35394d;
+    --play-btn-solid-hover: #43485f;
+    --play-btn-fg: #f4f4f8;
 }
 
 * {
@@ -145,8 +150,8 @@ body.light-play .play-dashboard {
     text-decoration: none;
     border: none;
     cursor: pointer;
-    color: #fff;
-    transition: filter 0.15s ease, transform 0.1s ease;
+    color: var(--play-btn-fg);
+    transition: filter 0.15s ease, transform 0.1s ease, background 0.15s ease;
     box-sizing: border-box;
     box-shadow: none;
 }
@@ -177,25 +182,17 @@ button.play-dash-btn {
 }
 
 .play-dash-btn--home {
-    background: transparent;
-    color: var(--bar-text);
+    background: var(--play-btn-solid);
+    color: var(--play-btn-fg);
     font-weight: 700;
-    padding: 6px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    border-radius: 10px;
-}
-
-body.light-play .play-dash-btn--home {
-    border-color: rgba(26, 39, 68, 0.22);
+    padding: 7px 12px;
+    border: none;
+    border-radius: 8px;
 }
 
 .play-dash-btn--home:hover {
     filter: none;
-    background: rgba(255, 255, 255, 0.08);
-}
-
-body.light-play .play-dash-btn--home:hover {
-    background: rgba(0, 0, 0, 0.06);
+    background: var(--play-btn-solid-hover);
 }
 
 .play-dash-btn--home svg {
@@ -203,34 +200,26 @@ body.light-play .play-dash-btn--home:hover {
     height: 22px;
 }
 
-.play-dash-btn--all {
-    background: #7c3aed;
+.play-dash-btn--all,
+.play-dash-btn--random,
+.play-dash-btn--browse,
+.play-dash-btn--discord,
+.play-dash-btn--tiktok {
+    background: var(--play-btn-solid);
+    color: var(--play-btn-fg);
 }
 
-.play-dash-btn--random {
-    background: var(--accent-green);
-}
-
-.play-dash-btn--random:hover {
-    background: var(--accent-green-hover);
+.play-dash-btn--all:hover,
+.play-dash-btn--random:hover,
+.play-dash-btn--browse:hover,
+.play-dash-btn--discord:hover,
+.play-dash-btn--tiktok:hover {
     filter: none;
-}
-
-.play-dash-btn--browse {
-    background: #0284c7;
-}
-
-.play-dash-btn--discord {
-    background: #5865f2;
-    color: #ffffff;
-}
-
-.play-dash-btn--discord:hover {
-    filter: brightness(1.08);
+    background: var(--play-btn-solid-hover);
 }
 
 .play-dash-btn--discord .discord-mark {
-    fill: #ffffff;
+    fill: currentColor;
 }
 
 .play-dash-btn--discord svg,
@@ -239,17 +228,8 @@ body.light-play .play-dash-btn--home:hover {
     height: 19px;
 }
 
-.play-dash-btn--tiktok {
-    background: #0d9488;
-    color: #ffffff;
-}
-
-.play-dash-btn--tiktok:hover {
-    filter: brightness(1.08);
-}
-
 .play-dash-btn--tiktok .tiktok-mark {
-    fill: #ffffff;
+    fill: currentColor;
 }
 
 .play-dash-nav {
@@ -393,14 +373,14 @@ body.light-play .play-action-bar {
     padding: 6px 10px;
     border: none;
     border-radius: 12px;
-    background: transparent;
+    background: var(--play-btn-solid);
     cursor: pointer;
-    color: var(--ui-accent);
+    color: var(--play-btn-fg);
     transition: background 0.15s ease;
 }
 
 .stat-btn:hover {
-    background: rgba(255, 106, 0, 0.12);
+    background: var(--play-btn-solid-hover);
 }
 
 .stat-btn svg {
@@ -412,7 +392,8 @@ body.light-play .play-action-bar {
     font-family: "Fredoka", system-ui, sans-serif;
     font-weight: 600;
     font-size: 12px;
-    color: var(--bar-text);
+    color: inherit;
+    opacity: 0.92;
     line-height: 1;
 }
 
@@ -421,8 +402,8 @@ body.light-play .play-action-bar {
     height: 42px;
     border: none;
     border-radius: 12px;
-    background: transparent;
-    color: var(--ui-accent);
+    background: var(--play-btn-solid);
+    color: var(--play-btn-fg);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -431,7 +412,26 @@ body.light-play .play-action-bar {
 }
 
 .fs-btn:hover {
-    background: rgba(255, 106, 0, 0.12);
+    background: var(--play-btn-solid-hover);
+}
+
+.stat-btn#btnLike,
+.fs-btn {
+    background: transparent;
+    color: var(--ui-accent);
+}
+
+.stat-btn#btnLike:hover,
+.fs-btn:hover {
+    background: rgba(255, 106, 0, 0.14);
+}
+
+.stat-btn#btnLike .stat-count {
+    color: var(--bar-text);
+}
+
+body.light-play .stat-btn#btnLike .stat-count {
+    color: var(--bar-text);
 }
 
 .fs-btn svg {
@@ -565,6 +565,11 @@ body.light-play .play-game-about {
     margin: 0;
     max-width: none;
     white-space: pre-line;
+}
+
+.play-game-about__issue {
+    margin-top: 18px;
+    padding-top: 4px;
 }
 
 .play-game-about__thumb {
@@ -723,6 +728,11 @@ body.light-play .play-game-about {
             <div class="play-game-about__row">
                 <div class="play-game-about__copy">
                     <p class="play-game-about__text" id="playGameAboutText"></p>
+                    <div class="play-game-about__issue">
+                        <button type="button" class="survey-cta__btn" id="btnOpenTallyIssue" aria-haspopup="dialog" aria-controls="tallyGameIssueDialog">
+                            Report an issue with this game →
+                        </button>
+                    </div>
                 </div>
                 <div class="play-game-about__thumb play-game-about__thumb--empty" id="playGameAboutThumb" role="img" aria-hidden="true"></div>
             </div>
@@ -730,10 +740,42 @@ body.light-play .play-game-about {
     </section>
 </div>
 
+<div id="tallyGameIssueLayer" class="tally-game-request-layer" hidden>
+    <div class="tally-game-request-layer__backdrop" data-tally-issue-close tabindex="-1" aria-hidden="true"></div>
+    <div
+        id="tallyGameIssueDialog"
+        class="tally-mini-browser tally-mini-browser--plain"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tallyIssuePanelTitle"
+        tabindex="-1"
+    >
+        <div class="tally-mini-browser__chrome" data-tally-issue-drag>
+            <span class="tally-mini-browser__title" id="tallyIssuePanelTitle">Report an issue</span>
+            <button type="button" class="tally-mini-browser__close" data-tally-issue-close aria-label="Close form">×</button>
+        </div>
+        <div class="tally-mini-browser__frame-wrap">
+            <iframe
+                id="tallyIssueIframe"
+                class="tally-mini-browser__frame"
+                title="Report a game issue (Tally form)"
+                width="100%"
+                height="200"
+                frameborder="0"
+                marginheight="0"
+                marginwidth="0"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="clipboard-write"
+            ></iframe>
+        </div>
+    </div>
+</div>
+
 <script src="js/tubzi-game-entries.js"></script>
 <script src="js/tubzi-game-about-detail.js"></script>
 <script src="js/tubzi-layout-store.js"></script>
 <script src="js/tubzi-hover-preview.js"></script>
+<script src="js/tubzi-tally-issue.js"></script>
 <script>
 const VOTE_KEY = "tubzi-game-votes";
 const THEME_KEY = "tubzi-theme";
@@ -744,6 +786,7 @@ const GAME_FILE_SLUG = {
     "0v0game": "OvOgame",
     fruitninja: "clfruitninja",
     elytraflight: "clelytraflight",
+    eggycar: "cleggycar",
     smashkarts: "smash-karts",
     doodlejump: "doodle-jump",
     vexx3m: "vex-x3m",
@@ -783,6 +826,7 @@ const GAME_HTML_STEM_TO_IMAGE_STEM = {
     ovogame: "0v0game",
     clfruitninja: "fruitninja",
     clelytraflight: "elytraflight",
+    cleggycar: "eggycar",
     "smash-karts": "smashkarts",
     "doodle-jump": "doodlejump",
     "vex-x3m": "vexx3m",
@@ -802,7 +846,7 @@ let PLAY_GAME_NAMES = [
     "geometry dash meltdown", "geometry dash subzero", "geometry dash world", "granny", "happywheels", "helixjump", "hole io", "idlebreakout",
     "little alchemy 2", "melonsandbox", "moneyrush", "moto x3m pool party", "moto x3m spooky land", "moto x3m winter", "redball 4", "run 1", "run 2", "run 3",
     "tombofthemask", "papas donuteria", "papas freezeria", "papas hotdoggeria", "papas pastaria", "papas pizzeria", "plantsvszombies", "polytrack",
-    "ragdolldrop", "slicemaster", "fruit ninja", "elytra flight", "smash karts", "doodle jump", "vex x3m", "real flight simulator", "karlson", "tall man run", "smashyroad", "soundbuttons", "survivor io", "terraria", "wordle", "wheelielife", "yohio", "0v0game",
+    "ragdolldrop", "slicemaster", "fruit ninja", "elytra flight", "eggy car", "smash karts", "doodle jump", "vex x3m", "real flight simulator", "karlson", "tall man run", "smashyroad", "soundbuttons", "survivor io", "terraria", "wordle", "wheelielife", "yohio", "0v0game",
     "block post", "retro bowl college", "worlds hardest game", "blocky snakes", "angry birds", "temple run 2", "half life", "super mario bros",
     "five nights at freddys",
     "drift hunters", "bad parenting", "blackjack"

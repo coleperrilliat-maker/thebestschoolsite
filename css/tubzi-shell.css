@@ -350,22 +350,22 @@ body.light .logo-icon {
 .logo-text {
     font-family: "Fredoka", system-ui, sans-serif;
     font-size: clamp(1.8rem, 4.5vw, 2.4rem);
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0.02em;
     line-height: 1;
     color: var(--brand);
     paint-order: stroke fill;
-    -webkit-text-stroke: 2px var(--clip-ink-soft);
+    -webkit-text-stroke: 1px var(--clip-ink-soft);
     text-shadow:
-        0 2px 0 var(--clip-ink),
-        0 4px 12px rgba(0, 0, 0, 0.35);
+        0 1px 0 var(--clip-ink),
+        0 3px 10px rgba(0, 0, 0, 0.28);
 }
 
 body.light .logo-text {
-    -webkit-text-stroke: 2px rgba(234, 88, 12, 0.35);
+    -webkit-text-stroke: 1px rgba(234, 88, 12, 0.28);
     text-shadow:
-        0 2px 0 rgba(124, 45, 18, 0.35),
-        0 3px 10px rgba(124, 45, 18, 0.15);
+        0 1px 0 rgba(124, 45, 18, 0.28),
+        0 2px 8px rgba(124, 45, 18, 0.12);
 }
 
 .header-search-slot {

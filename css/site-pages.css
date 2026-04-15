@@ -1,4 +1,4 @@
-/* Shared styles for About, Legal, Blog, Contact, Advertise */
+/* Shared styles for About, Legal, Blog, Contact, Advertise, Link hub */
 @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap");
 
 :root {
@@ -75,4 +75,55 @@ body {
     border-radius: 16px;
     padding: 24px;
     box-shadow: 0 4px 20px rgba(15, 19, 32, 0.06);
+}
+
+.page-shell h2.link-hub-section-title {
+    margin-top: 24px;
+    margin-bottom: 8px;
+}
+
+.page-shell h2.link-hub-section-title:first-of-type {
+    margin-top: 20px;
+}
+
+.link-hub-list {
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.link-hub-list > li {
+    margin: 0;
+}
+
+.link-hub-link {
+    display: block;
+    padding: 16px 18px;
+    border-radius: 12px;
+    border: 1px solid var(--page-border);
+    background: #fafbff;
+    font-family: "Fredoka", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--page-text);
+    text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+}
+
+.link-hub-link:hover {
+    border-color: var(--page-brand);
+    box-shadow: 0 0 0 2px rgba(255, 106, 0, 0.14);
+    color: var(--page-brand);
+}
+
+.link-hub-link small {
+    display: block;
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--page-muted);
+    margin-top: 6px;
+    letter-spacing: 0.01em;
 }

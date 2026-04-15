@@ -160,6 +160,11 @@
     line-height: 1.5;
 }
 
+.site-footer__legal-sep {
+    margin: 0 0.15em;
+    opacity: 0.85;
+}
+
 /* Light page theme: match header / page chrome */
 body.light .site-footer {
     --footer-bg-top: #ffffff;

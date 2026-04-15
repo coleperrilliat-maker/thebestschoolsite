@@ -79,6 +79,7 @@
         smashkarts: "videos/hover_smashkarts.mp4",
         snowrider3d: "videos/hover_snowrider3d.mp4",
         soccerrandom: "videos/hover_soccerrandom.mp4",
+        spacewaves: "videos/hover_spacewaves.mp4",
         stealabrainrot: "videos/hover_stealabrainrot.mp4",
         subwaysurfers: "videos/hover_subwaysurfers.mp4",
         supermariobros: "videos/hover_supermariobros.mp4",

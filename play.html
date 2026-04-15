@@ -397,7 +397,8 @@ body.light-play .play-action-bar {
     line-height: 1;
 }
 
-.fs-btn {
+.fs-btn,
+.mute-btn {
     width: 42px;
     height: 42px;
     border: none;
@@ -411,20 +412,23 @@ body.light-play .play-action-bar {
     transition: background 0.15s ease;
 }
 
-.fs-btn:hover {
+.fs-btn:hover,
+.mute-btn:hover {
     background: var(--play-btn-solid-hover);
 }
 
 .stat-btn#btnLike,
 .stat-btn#btnDislike,
-.fs-btn {
+.fs-btn,
+.mute-btn {
     background: transparent;
     color: var(--ui-accent);
 }
 
 .stat-btn#btnLike:hover,
 .stat-btn#btnDislike:hover,
-.fs-btn:hover {
+.fs-btn:hover,
+.mute-btn:hover {
     background: rgba(255, 106, 0, 0.14);
 }
 
@@ -438,9 +442,27 @@ body.light-play .stat-btn#btnDislike .stat-count {
     color: var(--bar-text);
 }
 
-.fs-btn svg {
+.fs-btn svg,
+.mute-btn svg {
     width: 22px;
     height: 22px;
+}
+
+.mute-btn {
+    flex-shrink: 0;
+}
+
+.mute-btn .mute-btn__slash {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.mute-btn.is-muted .mute-btn__slash {
+    opacity: 1;
+}
+
+.mute-btn.is-muted .mute-waves {
+    opacity: 0.35;
 }
 
 .play-below {
@@ -708,6 +730,13 @@ body.light-play .play-game-about {
                                 </svg>
                                 <span class="stat-count" id="dislikeCount">0</span>
                             </button>
+                            <button type="button" class="mute-btn" id="btnGameMute" title="Mute game" aria-label="Mute game audio" aria-pressed="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5z"/>
+                                    <path class="mute-waves" stroke-linecap="round" stroke-linejoin="round" d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"/>
+                                    <path class="mute-btn__slash" stroke-linecap="round" d="M3 3l18 18"/>
+                                </svg>
+                            </button>
                             <button type="button" class="fs-btn" id="btnFullscreen" title="Fullscreen" aria-label="Fullscreen">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/>
@@ -780,6 +809,7 @@ body.light-play .play-game-about {
 <script src="js/tubzi-layout-store.js"></script>
 <script src="js/tubzi-hover-preview.js"></script>
 <script src="js/tubzi-tally-issue.js"></script>
+<script src="js/tubzi-game-audio-mute.js"></script>
 <script>
 const VOTE_KEY = "tubzi-game-votes";
 const THEME_KEY = "tubzi-theme";
@@ -796,7 +826,17 @@ const GAME_FILE_SLUG = {
     vexx3m: "vex-x3m",
     realflightsimulator: "real-flight-simulator",
     tallmanrun: "tall-man-run",
-    "racesurvival:arenaking": "carparking"
+    "racesurvival:arenaking": "carparking",
+    adventuredrivers: "adventure-drivers",
+    bouncybasketball: "bouncy-basketball",
+    clashofvikings: "clash-of-vikings",
+    crazymotorcycle: "crazy-motorcycle",
+    crazyplanelanding: "crazy-plane-landing",
+    dogeminer: "doge-miner",
+    dogeminer2: "doge-miner-2",
+    dunkshot: "dunk-shot",
+    extremerun3d: "extreme-run-3d",
+    goingballs: "going-balls"
 };
 
 function fileSlugFromGameName(name) {
@@ -806,7 +846,17 @@ function fileSlugFromGameName(name) {
 
 /** PNGs in /images use the simple name slug, not the mismatched .html filenames. */
 const GAME_IMAGE_SLUG = {
-    "racesurvival:arenaking": "carparking"
+    "racesurvival:arenaking": "carparking",
+    adventuredrivers: "adventure-drivers",
+    bouncybasketball: "bouncy-basketball",
+    clashofvikings: "clash-of-vikings",
+    crazymotorcycle: "crazy-motorcycle",
+    crazyplanelanding: "crazy-plane-landing",
+    dogeminer: "doge-miner",
+    dogeminer2: "doge-miner-2",
+    dunkshot: "dunk-shot",
+    extremerun3d: "extreme-run-3d",
+    goingballs: "going-balls"
 };
 
 function imageSlugFromGameName(name) {
@@ -853,7 +903,10 @@ let PLAY_GAME_NAMES = [
     "ragdolldrop", "slicemaster", "fruit ninja", "elytra flight", "eggy car", "smash karts", "doodle jump", "vex x3m", "real flight simulator", "karlson", "tall man run", "smashyroad", "soundbuttons", "survivor io", "terraria", "wordle", "wheelielife", "yohio", "0v0game",
     "block post", "retro bowl college", "worlds hardest game", "blocky snakes", "angry birds", "temple run 2", "half life", "super mario bros",
     "five nights at freddys",
-    "drift hunters", "bad parenting", "blackjack"
+    "drift hunters", "bad parenting", "blackjack",
+    "adventure drivers", "bouncy basketball", "clash of vikings", "crazy motorcycle", "crazy plane landing",
+    "doge miner", "doge miner 2", "dunk shot", "extreme run 3d", "going balls",
+    "Bad Monday Simulator", "Anton Blast", "Pokemon Red", "FIFA 11", "Emulator JS", "Ruffle", "Gorilla Tag", "Raft", "Getting Over It", "repo", "Super Monkey Ball", "not my neighbor", "Brotato", "i have no mouth", "Apes vs Helium", "Shift at Midnight", "Scary Shawarma", "Scary Teacher 3D", "Tung Tung Horror", "Tralale Escape Tung", "We Become What We Behold", "Web Fishing", "DTA 6", "GTA Vice City", "Zombie Road"
 ];
 
 if (typeof TUBZI_LAYOUT !== "undefined") {

@@ -13,8 +13,8 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Comprehensive Learning Program — Learn thousands of K-12 topics online. Get detailed feedback and guidance. Win fun awards! Master math, language arts, science, and social studies with our IXL interactive program. Award-Winning.">
-<meta property="og:description" content="Comprehensive Learning Program — Learn thousands of K-12 topics online. Get detailed feedback and guidance. Win fun awards! Master math, language arts, science, and social studies with our IXL interactive program. Award-Winning.">
+<meta name="description" content="Play browser games on TubZi with full-screen controls, game guides, and quick access to more popular picks.">
+<meta property="og:description" content="Play browser games on TubZi with guides, tips, and instant access to more games.">
 <meta property="og:title" content="Play — TubZi">
 <title>Play — TubZi</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 28'%3E%3Cellipse cx='17' cy='14' rx='13' ry='10' fill='%23ff6a00'/%3E%3Cpolygon points='29,14 39,8 39,20' fill='%23ff6a00'/%3E%3Ccircle cx='13' cy='13' r='2.2' fill='%23ffffff'/%3E%3C/svg%3E">
@@ -593,6 +593,45 @@ body.light-play .play-game-about {
     white-space: pre-line;
 }
 
+.play-game-about__grid {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.play-game-about__card {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 12px 12px 10px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+body.light-play .play-game-about__card {
+    border-color: rgba(26, 39, 68, 0.18);
+    background: rgba(255, 255, 255, 0.78);
+}
+
+.play-game-about__card h3 {
+    margin: 0 0 6px;
+    font-family: "Fredoka", system-ui, sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+    color: var(--text);
+}
+
+.play-game-about__list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.play-game-about__list li + li {
+    margin-top: 4px;
+}
+
 .play-game-about__issue {
     margin-top: 18px;
     padding-top: 4px;
@@ -611,6 +650,30 @@ body.light-play .play-game-about {
 
 .play-game-about__thumb--empty {
     display: none;
+}
+
+.play-game-about__media {
+    flex-shrink: 0;
+    width: min(240px, 38vw);
+}
+
+.play-game-about__keys-tip {
+    margin-top: 10px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+body.light-play .play-game-about__keys-tip {
+    border-color: rgba(26, 39, 68, 0.18);
+    background: rgba(26, 39, 68, 0.04);
+}
+
+.play-game-about__keys-tip img {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 @media (max-width: 720px) {
@@ -650,10 +713,18 @@ body.light-play .play-game-about {
         align-items: stretch;
     }
 
-    .play-game-about__thumb {
+    .play-game-about__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .play-game-about__media {
         width: 100%;
         max-width: 280px;
         margin: 16px auto 0;
+    }
+
+    .play-game-about__thumb {
+        width: 100%;
     }
 }
 </style>
@@ -761,13 +832,36 @@ body.light-play .play-game-about {
             <div class="play-game-about__row">
                 <div class="play-game-about__copy">
                     <p class="play-game-about__text" id="playGameAboutText"></p>
+                    <div class="play-game-about__grid">
+                        <section class="play-game-about__card" aria-labelledby="playGameControlsHeading">
+                            <h3 id="playGameControlsHeading">Controls</h3>
+                            <ul class="play-game-about__list" id="playGameControlsList"></ul>
+                        </section>
+                        <section class="play-game-about__card" aria-labelledby="playGameHowHeading">
+                            <h3 id="playGameHowHeading">How to play</h3>
+                            <ul class="play-game-about__list" id="playGameHowList"></ul>
+                        </section>
+                        <section class="play-game-about__card" aria-labelledby="playGameTipsHeading">
+                            <h3 id="playGameTipsHeading">Tips</h3>
+                            <ul class="play-game-about__list" id="playGameTipsList"></ul>
+                        </section>
+                        <section class="play-game-about__card" aria-labelledby="playGameFeaturesHeading">
+                            <h3 id="playGameFeaturesHeading">Key features</h3>
+                            <ul class="play-game-about__list" id="playGameFeaturesList"></ul>
+                        </section>
+                    </div>
                     <div class="play-game-about__issue">
                         <button type="button" class="survey-cta__btn" id="btnOpenTallyIssue" aria-haspopup="dialog" aria-controls="tallyGameIssueDialog">
                             Report an issue with this game →
                         </button>
                     </div>
                 </div>
-                <div class="play-game-about__thumb play-game-about__thumb--empty" id="playGameAboutThumb" role="img" aria-hidden="true"></div>
+                <div class="play-game-about__media">
+                    <div class="play-game-about__thumb play-game-about__thumb--empty" id="playGameAboutThumb" role="img" aria-hidden="true"></div>
+                    <figure class="play-game-about__keys-tip">
+                        <img src="images/arrow-keys-tip.png" alt="Arrow keys control reference">
+                    </figure>
+                </div>
             </div>
         </section>
     </section>
@@ -1142,6 +1236,72 @@ const GENRE_LONG_FALLBACK = {
         "Expect jump arcs, enemy patterns, and level geometry that teach you one new trick per world. Checkpoints and generous retries keep the focus on mastery rather than punishment."
 };
 
+const GAME_GUIDE_DETAIL = {
+    basketballstars: {
+        controls: ["Arrow keys or A/D to move and jump.", "Use shot/steal buttons to contest possessions.", "Time blocks and steals instead of spamming."],
+        how: ["Create space with quick direction changes.", "Stay between your opponent and the hoop on defense.", "Take high-percentage shots close to the rim."],
+        tips: ["Read the first move your opponent uses each possession.", "Pump fake before driving when block attempts are aggressive.", "Protect a lead by slowing tempo late game."],
+        features: ["Fast 1v1 streetball pacing.", "Timing-based steals, blocks, and shot release.", "Quick matches that are easy to replay."]
+    },
+    blockblast: {
+        controls: ["Drag pieces into open board spaces.", "Place each shape to complete rows and columns.", "Manage space for large pieces first."],
+        how: ["Build for future placements, not just instant clears.", "Set up double-line clears when possible.", "Avoid creating isolated one-cell gaps."],
+        tips: ["Place awkward shapes before easy square pieces.", "Keep a central lane open for flexible recovery.", "Think 2-3 moves ahead before dropping pieces."],
+        features: ["Simple-to-learn grid puzzle loop.", "Combo scoring from chain clears.", "Short sessions with strong replay value."]
+    },
+    slope: {
+        controls: ["Use left/right arrows or A/D to steer.", "Make short taps rather than long holds.", "Keep the ball near center when possible."],
+        how: ["Read the next turn early at high speed.", "Use tiny counter-steers to recover balance.", "Prioritize survival over risky edge lines."],
+        tips: ["Do not over-correct after each corner.", "Expect acceleration spikes during long clean runs.", "Reset focus after obstacle clusters."],
+        features: ["Endless neon runner challenge.", "Pure reflex gameplay with instant restarts.", "High-score loop built for mastery."]
+    },
+    subwaysurfers: {
+        controls: ["Arrow keys or swipe to change lanes.", "Jump over high obstacles and roll under low ones.", "Use hoverboards or power-ups when available."],
+        how: ["Stay center lane when possible to keep options open.", "Grab magnets and jetpacks to grow score faster.", "Complete missions to increase multipliers."],
+        tips: ["Save hoverboards for dense obstacle sections.", "Do not chase every coin if it traps movement.", "Memorize train spacing patterns for smoother runs."],
+        features: ["Classic endless-runner chase loop.", "Mission and multiplier progression.", "Power-ups and frequent map variety."]
+    },
+    geometrydash: {
+        controls: ["Tap/click/space to jump.", "Hold and release in ship sections to control height.", "One collision resets the attempt."],
+        how: ["Learn each section pattern in chunks.", "Use music beats to time critical jumps.", "Practice difficult segments repeatedly."],
+        tips: ["Commit to rhythm and avoid hesitation jumps.", "Mentally split levels into checkpoints.", "Consistency beats risky speed attempts."],
+        features: ["Music-synced precision platforming.", "High-skill one-button control model.", "Strong replay and mastery curve."]
+    }
+};
+
+const GENRE_GUIDE_FALLBACK = {
+    action: {
+        controls: ["WASD/arrows to move and position.", "Primary input for attack, secondary for utility.", "Use dodge/cover tools during burst damage."],
+        how: ["Clear the closest threats first.", "Use corners and cover to break enemy sight.", "Reset fights when low on health or ammo."],
+        tips: ["Reload during safe windows, not in open sight.", "Focus high-damage targets first.", "Keep moving to avoid predictable hits."],
+        features: ["Fast engagement and retry loop.", "Skill-based movement and timing.", "Short sessions that still reward mastery."]
+    },
+    puzzle: {
+        controls: ["Mouse or touch drag for piece placement.", "Use restart/undo when available.", "Keep board visibility clear before committing."],
+        how: ["Plan your board state before your first move.", "Preserve flexible open zones for odd shapes.", "Trade quick points for long-term board control."],
+        tips: ["Solve constraints first, easy moves second.", "Avoid sealing narrow dead zones early.", "Pause briefly to scan all options each turn."],
+        features: ["Rule-based gameplay with clear feedback.", "Score and efficiency replay goals.", "Good fit for focused short sessions."]
+    },
+    sports: {
+        controls: ["Movement keys plus one or two action buttons.", "Time shot release and defensive contests.", "Use quick passes to create clean looks."],
+        how: ["Read opponent tendencies each possession.", "Take high-percentage plays over hero shots.", "Control tempo when protecting a lead."],
+        tips: ["Avoid forcing contested attempts repeatedly.", "Rotate defense to deny easy lanes.", "Use fakes to bait blocks and steals."],
+        features: ["Competitive rounds with quick turnaround.", "Timing-based offense and defense.", "Replayable head-to-head progression."]
+    },
+    driving: {
+        controls: ["Arrow keys/WASD for steering and throttle.", "Brake before tight turns to keep control.", "Use boost on clean exits when available."],
+        how: ["Take wider entries and late apex corners.", "Learn hazard locations through reruns.", "Preserve speed by avoiding wall contact."],
+        tips: ["Smooth steering beats constant corrections.", "Master one reliable route before shortcuts.", "Recover early after mistakes to save runs."],
+        features: ["Arcade handling tuned for quick play.", "Track memorization and time-attack depth.", "Rapid retry loop for improvement."]
+    },
+    casual: {
+        controls: ["Simple tap/click inputs with low setup.", "Primary action drives most of the loop.", "Pause-friendly design for quick breaks."],
+        how: ["Learn the core loop, then optimize upgrades.", "Prioritize unlocks that increase steady progress.", "Use resets to improve route efficiency."],
+        tips: ["Bank easy gains before risky plays.", "Focus on one objective at a time.", "Plan your next upgrade before spending."],
+        features: ["Low-friction onboarding and controls.", "Steady progression and reward pacing.", "Great for relaxed browser sessions."]
+    }
+};
+
 function longAboutFallback(displayTitle, genreRaw) {
     const g = String(genreRaw || "casual").toLowerCase();
     const genreLabel = g.charAt(0).toUpperCase() + g.slice(1);
@@ -1167,6 +1327,37 @@ function resolveAboutText(displayTitle, key, genre) {
         return TUBZI_GAME_ABOUT_DETAIL[key];
     }
     return longAboutFallback(displayTitle, genre);
+}
+
+function resolveGuideDetail(key, genre) {
+    return GAME_GUIDE_DETAIL[key] || GENRE_GUIDE_FALLBACK[genre] || GENRE_GUIDE_FALLBACK.casual;
+}
+
+function extendAboutText(displayTitle, baseText, detail) {
+    const controlsLead = detail && detail.controls && detail.controls.length ? detail.controls[0] : "Use simple browser controls and learn the timing quickly.";
+    const tipsLead = detail && detail.tips && detail.tips.length ? detail.tips[0] : "Start with safe, consistent plays before taking bigger risks.";
+    const featuresLead = detail && detail.features && detail.features.length ? detail.features[0] : "Short sessions and quick restarts make improvement easy.";
+
+    const extra = [
+        `${displayTitle} works best when you treat each run as a small learning loop: test one adjustment, keep what works, and build consistency over several attempts instead of expecting a perfect first game.`,
+        `Practical starting point: ${controlsLead} Once you are comfortable, layer in strategy with this approach: ${tipsLead} That pacing helps new players improve faster without getting frustrated.`,
+        `Why players keep coming back: ${featuresLead} Combined with fast load times and no install, ${displayTitle} is easy to replay for a quick break or a longer high-score session.`
+    ].join("\n\n");
+
+    return `${baseText}\n\n${extra}`;
+}
+
+function fillGuideList(elementId, items) {
+    const list = document.getElementById(elementId);
+    if (!list) {
+        return;
+    }
+    list.innerHTML = "";
+    items.forEach(text => {
+        const li = document.createElement("li");
+        li.textContent = text;
+        list.appendChild(li);
+    });
 }
 
 const GENRE_LOOKUP = new Map();
@@ -1198,8 +1389,14 @@ function fillPlayingAbout() {
     }
     const k = playNormKey(gameName);
     const genre = GENRE_LOOKUP.get(k) || "casual";
+    const detail = resolveGuideDetail(k, genre);
+    const baseAbout = ABOUT_BY_KEY.get(k) || resolveAboutText(gameName, k, genre);
     h.textContent = `About ${gameName}`;
-    p.textContent = ABOUT_BY_KEY.get(k) || resolveAboutText(gameName, k, genre);
+    p.textContent = extendAboutText(gameName, baseAbout, detail);
+    fillGuideList("playGameControlsList", detail.controls);
+    fillGuideList("playGameHowList", detail.how);
+    fillGuideList("playGameTipsList", detail.tips);
+    fillGuideList("playGameFeaturesList", detail.features);
 }
 
 fillPlayingAbout();

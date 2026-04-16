@@ -397,8 +397,7 @@ body.light-play .play-action-bar {
     line-height: 1;
 }
 
-.fs-btn,
-.mute-btn {
+.fs-btn {
     width: 42px;
     height: 42px;
     border: none;
@@ -412,23 +411,20 @@ body.light-play .play-action-bar {
     transition: background 0.15s ease;
 }
 
-.fs-btn:hover,
-.mute-btn:hover {
+.fs-btn:hover {
     background: var(--play-btn-solid-hover);
 }
 
 .stat-btn#btnLike,
 .stat-btn#btnDislike,
-.fs-btn,
-.mute-btn {
+.fs-btn {
     background: transparent;
     color: var(--ui-accent);
 }
 
 .stat-btn#btnLike:hover,
 .stat-btn#btnDislike:hover,
-.fs-btn:hover,
-.mute-btn:hover {
+.fs-btn:hover {
     background: rgba(255, 106, 0, 0.14);
 }
 
@@ -442,27 +438,9 @@ body.light-play .stat-btn#btnDislike .stat-count {
     color: var(--bar-text);
 }
 
-.fs-btn svg,
-.mute-btn svg {
+.fs-btn svg {
     width: 22px;
     height: 22px;
-}
-
-.mute-btn {
-    flex-shrink: 0;
-}
-
-.mute-btn .mute-btn__slash {
-    opacity: 0;
-    transition: opacity 0.15s ease;
-}
-
-.mute-btn.is-muted .mute-btn__slash {
-    opacity: 1;
-}
-
-.mute-btn.is-muted .mute-waves {
-    opacity: 0.35;
 }
 
 .play-below {
@@ -801,13 +779,6 @@ body.light-play .play-game-about__keys-tip {
                                 </svg>
                                 <span class="stat-count" id="dislikeCount">0</span>
                             </button>
-                            <button type="button" class="mute-btn" id="btnGameMute" title="Mute game" aria-label="Mute game audio" aria-pressed="false">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5z"/>
-                                    <path class="mute-waves" stroke-linecap="round" stroke-linejoin="round" d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"/>
-                                    <path class="mute-btn__slash" stroke-linecap="round" d="M3 3l18 18"/>
-                                </svg>
-                            </button>
                             <button type="button" class="fs-btn" id="btnFullscreen" title="Fullscreen" aria-label="Fullscreen">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/>
@@ -903,7 +874,6 @@ body.light-play .play-game-about__keys-tip {
 <script src="js/tubzi-layout-store.js"></script>
 <script src="js/tubzi-hover-preview.js"></script>
 <script src="js/tubzi-tally-issue.js"></script>
-<script src="js/tubzi-game-audio-mute.js"></script>
 <script>
 const VOTE_KEY = "tubzi-game-votes";
 const THEME_KEY = "tubzi-theme";

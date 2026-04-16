@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
 One-off: copy games from ~/Downloads/for_tubzi 2 into games/{slug}.html,
-normalize names (TubZi slug = display name with spaces removed, lowercased),
-append tubzi-game-audio-mute.js if missing.
+normalize names (TubZi slug = display name with spaces removed, lowercased).
 
 Re-run is safe: skips if dest already exists (delete dest to overwrite).
 """
@@ -14,21 +13,6 @@ import shutil
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 GAMES = ROOT / "games"
 DOWNLOADS = pathlib.Path.home() / "Downloads" / "for_tubzi 2"
-
-MUTE_LINE = '  <script src="../js/tubzi-game-audio-mute.js"></script>\n'
-
-
-def ensure_mute(html: str) -> str:
-    if "tubzi-game-audio-mute.js" in html:
-        return html
-    low = html.lower()
-    i = low.rfind("</body>")
-    if i != -1:
-        return html[:i] + MUTE_LINE + html[i:]
-    i = low.rfind("</html>")
-    if i != -1:
-        return html[:i] + MUTE_LINE + html[i:]
-    return html.rstrip() + "\n" + MUTE_LINE
 
 
 # (relative path under DOWNLOADS, slug stem for games/{slug}.html, display name, genre)
@@ -76,7 +60,7 @@ def main() -> None:
             print("exists (skip):", dest.name)
             continue
         raw = src.read_text(encoding="utf-8", errors="replace")
-        dest.write_text(ensure_mute(raw), encoding="utf-8")
+        dest.write_text(raw, encoding="utf-8")
         print("wrote", dest.relative_to(ROOT))
         copied += 1
     print("done, copied", copied, "new files")

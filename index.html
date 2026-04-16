@@ -85,7 +85,9 @@ body.light .games-sort-wrap {
 
 .games-sort-select {
     width: 100%;
-    border: 2px solid #a855f7;
+    accent-color: #ff6a00;
+    /* Orange ring only while focused (click / keyboard)—not when idle */
+    border: 2px solid transparent;
     border-radius: 10px;
     padding: 10px 34px 10px 12px;
     font-size: 13px;
@@ -101,9 +103,11 @@ body.light .games-sort-wrap {
     box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
 }
 
+.games-sort-select:focus,
 .games-sort-select:focus-visible {
-    outline: 2px solid #c084fc;
-    outline-offset: 2px;
+    outline: none;
+    border-color: #ff6a00;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
 }
 
 body.light .games-sort-label {
@@ -112,7 +116,12 @@ body.light .games-sort-label {
 
 body.light .games-sort-select {
     background-color: #4b556f;
-    border-color: #a855f7;
+    border-color: transparent;
+}
+
+body.light .games-sort-select:focus,
+body.light .games-sort-select:focus-visible {
+    border-color: #ff6a00;
 }
 
 .grid {
@@ -687,6 +696,34 @@ body.light .home-about-list {
     </div>
 </div>
 
+<div id="gameHeadsUpLayer" class="welcome-first-layer" hidden>
+    <div class="welcome-first-layer__backdrop" data-game-headsup-dismiss tabindex="-1" aria-hidden="true"></div>
+    <div
+        class="welcome-first-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="gameHeadsUpTitle"
+        aria-describedby="gameHeadsUpDesc"
+    >
+        <h2 class="welcome-first-card__title" id="gameHeadsUpTitle">WAIT... get more unblocked links</h2>
+        <p class="welcome-first-card__text" id="gameHeadsUpDesc">
+            Some school and work filters block game links without warning.
+        </p>
+        <p class="welcome-first-card__text">
+            Join our Discord for backup unblocked links, fast updates, and a place to suggest games you want next.
+        </p>
+        <div class="welcome-first-card__actions">
+            <a
+                class="welcome-first-card__btn"
+                href="https://discord.gg/nj5YYgKBap"
+                target="_blank"
+                rel="noopener noreferrer"
+            >Join Discord</a>
+            <button type="button" class="welcome-first-card__btn welcome-first-card__btn--secondary" id="gameHeadsUpContinue">Continue to game</button>
+        </div>
+    </div>
+</div>
+
 <div id="tallyGameRequestLayer" class="tally-game-request-layer" hidden>
     <div class="tally-game-request-layer__backdrop" data-tally-close tabindex="-1" aria-hidden="true"></div>
     <div
@@ -730,6 +767,99 @@ body.light .home-about-list {
 
 const ICONS = window.TUBZI_RAIL.icons;
 const RAIL_NAV_STRUCTURE = window.TUBZI_RAIL.structure;
+const GAME_HEADSUP_SEEN_KEY = "tubzi_game_heads_up_seen_v1";
+
+function getHeadsUpTargetFromHref(rawHref) {
+    if (!rawHref) {
+        return "";
+    }
+    try {
+        const absolute = new URL(rawHref, window.location.href);
+        if (!absolute.pathname.endsWith("/play.html")) {
+            return "";
+        }
+        if (!absolute.searchParams.get("game")) {
+            return "";
+        }
+        return absolute.pathname + absolute.search + absolute.hash;
+    } catch (err) {
+        return "";
+    }
+}
+
+function openGameWithHeadsUp(targetHref) {
+    if (!targetHref) {
+        return;
+    }
+
+    try {
+        if (window.localStorage.getItem(GAME_HEADSUP_SEEN_KEY) === "1") {
+            window.location.href = targetHref;
+            return;
+        }
+    } catch (err) {
+        window.location.href = targetHref;
+        return;
+    }
+
+    const layer = document.getElementById("gameHeadsUpLayer");
+    const continueBtn = document.getElementById("gameHeadsUpContinue");
+    if (!layer || !continueBtn) {
+        window.location.href = targetHref;
+        return;
+    }
+
+    let previousOverflow = document.body.style.overflow;
+
+    const cleanup = () => {
+        layer.querySelectorAll("[data-game-headsup-dismiss]").forEach(el => {
+            el.removeEventListener("click", dismissOnly);
+        });
+        continueBtn.removeEventListener("click", continueToGame);
+        document.removeEventListener("keydown", handleEsc);
+    };
+
+    const close = () => {
+        layer.hidden = true;
+        document.body.style.overflow = previousOverflow;
+        cleanup();
+    };
+
+    const markSeen = () => {
+        try {
+            window.localStorage.setItem(GAME_HEADSUP_SEEN_KEY, "1");
+        } catch (err) {
+            /* ignore storage failures */
+        }
+    };
+
+    const continueToGame = () => {
+        markSeen();
+        close();
+        window.location.href = targetHref;
+    };
+
+    const dismissOnly = () => {
+        close();
+    };
+
+    const handleEsc = e => {
+        if (e.key === "Escape" && !layer.hidden) {
+            dismissOnly();
+        }
+    };
+
+    layer.querySelectorAll("[data-game-headsup-dismiss]").forEach(el => {
+        el.addEventListener("click", dismissOnly);
+    });
+    continueBtn.addEventListener("click", continueToGame);
+    document.addEventListener("keydown", handleEsc);
+
+    layer.hidden = false;
+    previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(() => continueBtn.focus());
+}
 
 function railItemById(id) {
     return window.TUBZI_RAIL.itemById(id);
@@ -908,7 +1038,7 @@ themeBtn.addEventListener("click", () => {
 
 document.getElementById("btnRandom").addEventListener("click", () => {
     const game = games[Math.floor(Math.random() * games.length)];
-    window.location.href = `play.html?game=${game.file}&name=${encodeURIComponent(game.name)}`;
+    openGameWithHeadsUp(`play.html?game=${game.file}&name=${encodeURIComponent(game.name)}`);
 });
 
 if (gamesSort) {
@@ -1160,8 +1290,7 @@ function render(filter = "") {
             tubziAttachHoverGamePreview(div, layoutKey);
 
             const goPlay = () => {
-                window.location.href =
-                    `play.html?game=${game.file}&name=${encodeURIComponent(game.name)}`;
+                openGameWithHeadsUp(`play.html?game=${game.file}&name=${encodeURIComponent(game.name)}`);
             };
 
             div.addEventListener("click", goPlay);
@@ -1213,6 +1342,19 @@ search.addEventListener("input", e => {
 
 buildRailNav();
 render();
+
+document.addEventListener("click", e => {
+    const link = e.target.closest("a[href]");
+    if (!link) {
+        return;
+    }
+    const target = getHeadsUpTargetFromHref(link.getAttribute("href"));
+    if (!target) {
+        return;
+    }
+    e.preventDefault();
+    openGameWithHeadsUp(target);
+});
 
 </script>
 <script src="js/tubzi-welcome-first-visit.js" defer></script>

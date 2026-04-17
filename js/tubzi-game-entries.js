@@ -64,6 +64,7 @@ window.TUBZI_GAME_ENTRIES = [
     ["fallguys", "action"],
     ["fisquarium", "puzzle"],
     ["fivenightsatepsteins", "action"],
+    ["epstein clicker", "casual"],
     ["fnaf 1", "action"],
     ["fnaf 2", "action"],
     ["fnaf 3", "action"],
@@ -167,6 +168,7 @@ window.TUBZI_GAME_ENTRIES = [
     ["DTA 6", "action"],
     ["GTA Vice City", "driving"],
     ["Zombie Road", "action"],
+    ["Rooftop Snipers", "action"],
 ];
 
 /* First entry = most popular for default grid / admin. Order is applied at load. */
@@ -314,6 +316,7 @@ window.TUBZI_GAME_ENTRIES = [
         "karlson",
         "tall man run",
         "fivenightsatepsteins",
+        "epstein clicker",
     ];
     var rank = {};
     for (var p = 0; p < PRIORITY.length; p++) {

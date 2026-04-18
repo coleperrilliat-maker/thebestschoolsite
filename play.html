@@ -967,10 +967,10 @@ let PLAY_GAME_NAMES = [
     "ragdolldrop", "slicemaster", "fruit ninja", "elytra flight", "eggy car", "smash karts", "doodle jump", "vex x3m", "real flight simulator", "karlson", "tall man run", "smashyroad", "soundbuttons", "survivor io", "terraria", "wordle", "wheelielife", "yohio", "0v0game",
     "block post", "retro bowl college", "worlds hardest game", "blocky snakes", "angry birds", "temple run 2", "half life", "super mario bros",
     "five nights at freddys",
-    "drift hunters", "bad parenting", "blackjack",
+    "drift hunters", "bad parenting", "247 blackjack",
     "adventure drivers", "bouncy basketball", "clash of vikings", "crazy motorcycle", "crazy plane landing",
     "doge miner", "doge miner 2", "dunk shot", "extreme run 3d", "going balls",
-    "Bad Monday Simulator", "Anton Blast", "Pokemon Red", "FIFA 11", "Emulator JS", "Ruffle", "Gorilla Tag", "Raft", "Getting Over It", "repo", "Super Monkey Ball", "not my neighbor", "Brotato", "i have no mouth", "Apes vs Helium", "Shift at Midnight", "Scary Shawarma", "Scary Teacher 3D", "Tung Tung Horror", "Tralale Escape Tung", "We Become What We Behold", "Web Fishing", "DTA 6", "GTA Vice City", "Zombie Road"
+    "Bad Monday Simulator", "Anton Blast", "Pokemon Red", "FIFA 11", "Gorilla Tag", "Raft", "Getting Over It", "repo", "Super Monkey Ball", "not my neighbor", "Brotato", "i have no mouth", "Apes vs Helium", "Shift at Midnight", "Scary Shawarma", "Scary Teacher 3D", "Tung Tung Horror", "Tralale Escape Tung", "We Become What We Behold", "Web Fishing", "DTA 6", "GTA Vice City", "Zombie Road"
 ];
 
 if (typeof TUBZI_LAYOUT !== "undefined") {
@@ -1154,6 +1154,49 @@ function toggleFullscreen() {
 }
 
 document.getElementById("btnFullscreen").addEventListener("click", toggleFullscreen);
+
+/* F = fullscreen only when not “in” the game (pointer over the iframe shell). */
+(function setupFullscreenHotkey() {
+    const shell = document.querySelector(".game-frame-shell");
+    if (!shell || !iframe) {
+        return;
+    }
+    let pointerOverGame = false;
+    shell.addEventListener("pointerenter", () => {
+        pointerOverGame = true;
+    });
+    shell.addEventListener("pointerleave", () => {
+        pointerOverGame = false;
+    });
+    iframe.addEventListener("focus", () => {
+        pointerOverGame = true;
+    });
+    iframe.addEventListener("blur", () => {
+        pointerOverGame = false;
+    });
+
+    document.addEventListener(
+        "keydown",
+        e => {
+            if (e.code !== "KeyF" && e.key !== "f" && e.key !== "F") {
+                return;
+            }
+            if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) {
+                return;
+            }
+            const t = e.target;
+            if (t && t.closest && t.closest("input, textarea, select, [contenteditable='true']")) {
+                return;
+            }
+            if (pointerOverGame) {
+                return;
+            }
+            e.preventDefault();
+            toggleFullscreen();
+        },
+        true
+    );
+})();
 
 function syncFullscreenClass() {
     const fs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;

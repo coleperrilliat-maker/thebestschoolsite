@@ -22,8 +22,6 @@ PLAN: list[tuple[str, str, str, str]] = [
     ("anton blast/Antonblast.html", "antonblast", "Anton Blast", "action"),
     ("Pokemon red/Pokemon Red.html", "pokemonred", "Pokemon Red", "puzzle"),
     ("fifa soccer 11/FIFA 11.html", "fifa11", "FIFA 11", "sports"),
-    ("emulator.js/Emulator.JS.html", "emulatorjs", "Emulator JS", "casual"),
-    ("ruffle/Ruffle.html", "ruffle", "Ruffle", "casual"),
     ("gorilla tag/Gorilla Tag.html", "gorillatag", "Gorilla Tag", "action"),
     ("raft/Raft.html", "raft", "Raft", "casual"),
     ("getting over it/Getting Over It with Bennett Foddy.html", "gettingoverit", "Getting Over It", "puzzle"),

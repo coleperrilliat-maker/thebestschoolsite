@@ -210,8 +210,6 @@
             "Terraria on TubZi offers a slice of the dig-craft-explore loop: tunnel for ores, craft gear, and survive night enemies with increasing depth danger. Boss checks gate progression; NPC housing and biome variety reward thorough worlds. It is 2D Minecraft-adjacent with heavier combat focus. Sessions stretch long once upgrades click. Bring patience for inventory juggling and spelunking rewards.",
         wordle:
             "Wordle is the daily five-letter guessing game where each guess returns green, yellow, or gray feedback, forcing deduction in six tries or fewer. Strategy mixes vowel coverage, consonant elimination, and pattern locking. Social sharing made it a culture moment; solo play remains a calm brain teaser. TubZi keeps letters turning without app friction. Perfect morning ritual.",
-        wheelielife:
-            "Wheelie Life is a bike balance game where you hold wheelies through traffic, ramps, and distance challenges without flipping backward. Fine throttle control and rider lean matter. Crashes are instant but funny. TubZi pulls stunts in-browser. Motorbike fans who like skill tricks over racing laps will enjoy the focus.",
         yohio:
             "Yohio / fish.io-style experiences pit you as a growing fish eating smaller prey while avoiding bigger predators until you top the food chain. Movement is smooth, vision matters, and burst boosts add risk-reward. Rounds are short enough for constant rematches. TubZi hosts aquatic king-of-the-hill energy. Simple to read, tense at the top.",
         "0v0game":
@@ -224,8 +222,6 @@
             "The World’s Hardest Game is infamous blue-square avoidance through moving red dots and tight corridors with brutal checkpoint spacing. It counts deaths proudly and demands memorization masochism. Later levels feel unfair until patterns click—then you feel brilliant. TubZi preserves the legend. Play if you enjoy suffering with clear rules.",
         blockysnakes:
             "Blocky Snakes is an io snake game with Minecraft-style voxels where you eat pellets, cut off rivals, and grow long enough to trap the map. Speed boosts risk self-collision. Leaderboard tension spikes when space shrinks. TubZi coils snakes online instantly. Classic .io social pressure with chunky visuals.",
-        angrybirds:
-            "Angry Birds is the physics-puzzle classic where you sling birds with unique powers to collapse forts and pop green pigs. Trajectory intuition and weak-point spotting matter more than power. Star scores reward efficiency and clever trick shots. TubZi launches birds without a phone app. Still one of the best introductions to 2D physics puzzles.",
         templerun2:
             "Temple Run 2 expands the endless runner with new worlds, vehicles, rope slides, and sharper turns while you flee a beast. Power-ups and objectives layer goals beyond distance. Graphics polish over the original without losing swipe muscle memory. TubZi keeps the idol chase alive. A mobile icon that still feels great on keyboard or touch.",
         halflife:

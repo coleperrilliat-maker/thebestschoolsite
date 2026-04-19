@@ -1,5 +1,11 @@
 /* Browse by category — homepage, full-width grid (no sidebar) */
 
+/* Keep in sync with tubzi-shell.css :root (play.html loads this file but not the shell). */
+:root {
+    --tubzi-gutter-x: clamp(12px, 4vw + 8px, 88px);
+    --tubzi-gutter-games-x: clamp(14px, 6vw + 10px, 220px);
+}
+
 /* Survey CTA — between game grid and category browse */
 .survey-cta-wrap {
     width: 100%;
@@ -10,7 +16,7 @@
 .survey-cta-inner {
     max-width: 1180px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 var(--tubzi-gutter-x);
     box-sizing: border-box;
 }
 
@@ -20,7 +26,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    padding: 20px 24px;
+    padding: 20px max(18px, var(--tubzi-gutter-x));
     border-radius: 18px;
     background: linear-gradient(165deg, #2a1f18 0%, #1a1512 100%);
     border: 3px solid rgba(255, 106, 0, 0.85);
@@ -408,7 +414,7 @@ body.light-play .tally-mini-browser__url {
 .home-promo-inner {
     max-width: 1180px;
     margin: 0 auto;
-    padding: 20px 24px;
+    padding: 20px var(--tubzi-gutter-x);
     box-sizing: border-box;
     text-align: left;
     display: flex;
@@ -525,7 +531,7 @@ body.light .home-promo__btn {
 .home-browse-inner {
     max-width: 1180px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 var(--tubzi-gutter-x);
     box-sizing: border-box;
 }
 
@@ -631,12 +637,8 @@ body.light .home-browse-card {
 }
 
 @media (max-width: 520px) {
-    .home-browse-inner {
-        padding: 0 16px;
-    }
-
     .home-promo-wrap {
-        padding: 0 16px 20px;
+        padding: 0 var(--tubzi-gutter-x) 20px;
     }
 
     .home-promo-inner {
@@ -655,10 +657,6 @@ body.light .home-browse-card {
     .home-promo__btn {
         width: auto;
         box-sizing: border-box;
-    }
-
-    .survey-cta-inner {
-        padding: 0 16px;
     }
 
     .survey-cta {

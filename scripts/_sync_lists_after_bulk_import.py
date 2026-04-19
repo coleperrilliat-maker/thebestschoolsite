@@ -70,7 +70,6 @@ new_items = [
     ("tombofthemask", "puzzle"),
     ("ultrakill", "action"),
     ("volleyrandom", "sports"),
-    ("wheelielife", "driving"),
     ("wordle", "puzzle"),
     ("worlds hardest game", "puzzle"),
 ]

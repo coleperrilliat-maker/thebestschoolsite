@@ -106,14 +106,12 @@ window.TUBZI_GAME_ENTRIES = [
     ["survivor io", "io"],
     ["terraria", "puzzle"],
     ["wordle", "puzzle"],
-    ["wheelielife", "driving"],
     ["yohio", "casual"],
     ["0v0game", "io"],
     ["block post", "puzzle"],
     ["retro bowl college", "sports"],
     ["worlds hardest game", "puzzle"],
     ["blocky snakes", "io"],
-    ["angry birds", "puzzle"],
     ["temple run 2", "action"],
     ["half life", "action"],
     ["super mario bros", "platformer"],
@@ -178,6 +176,7 @@ window.TUBZI_GAME_ENTRIES = [
     ["Enchain", "action"],
     ["Eagle Ride", "casual"],
     ["Drive Russia", "driving"],
+    ["Iron Snout", "action"],
 ];
 
 /* First entry = most popular for default grid / admin. Order is applied at load. */
@@ -236,7 +235,6 @@ window.TUBZI_GAME_ENTRIES = [
         "happywheels",
         "granny",
         "temple run 2",
-        "angry birds",
         "super mario bros",
         "five nights at freddys",
         "blocky snakes",
@@ -279,7 +277,6 @@ window.TUBZI_GAME_ENTRIES = [
         "crazy cars",
         "worlds hardest game",
         "tombofthemask",
-        "wheelielife",
         "moneyrush",
         "adventurecapitalist",
         "basketballbros",
@@ -339,6 +336,7 @@ window.TUBZI_GAME_ENTRIES = [
         "Enchain",
         "Eagle Ride",
         "Drive Russia",
+        "Iron Snout",
     ];
     var rank = {};
     for (var p = 0; p < PRIORITY.length; p++) {

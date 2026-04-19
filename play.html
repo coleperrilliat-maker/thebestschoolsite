@@ -42,6 +42,8 @@
     --play-btn-solid-hover: #43485f;
     --play-btn-fg: #f4f4f8;
     --play-content-max: min(1180px, 100%);
+    /* Same fluid rule as --tubzi-gutter-x (defined in home-browse.css). */
+    --play-gutter-x: var(--tubzi-gutter-x);
 }
 
 body.light-play {
@@ -124,7 +126,7 @@ body.is-fullscreen .play-stage-row {
     flex-wrap: wrap;
     width: 100%;
     box-sizing: border-box;
-    padding: 8px 14px;
+    padding: 8px var(--play-gutter-x);
     background: var(--bar-bg-solid);
     border: none;
     border-radius: 0;
@@ -244,7 +246,7 @@ button.play-dash-btn {
     display: flex;
     flex-direction: column;
     min-height: 0;
-    padding: 8px 12px 0;
+    padding: 8px var(--play-gutter-x) 0;
     width: 100%;
     max-width: var(--play-content-max);
     margin: 0 auto;
@@ -446,7 +448,7 @@ body.light-play .stat-btn#btnDislike .stat-count {
 .play-below {
     flex: 0 0 auto;
     flex-shrink: 0;
-    padding: 10px 16px max(24px, env(safe-area-inset-bottom, 0px));
+    padding: 10px var(--play-gutter-x) max(24px, env(safe-area-inset-bottom, 0px));
     width: 100%;
     max-width: var(--play-content-max);
     box-sizing: border-box;
@@ -471,7 +473,7 @@ body.light-play .stat-btn#btnDislike .stat-count {
     font-size: 15px;
     color: var(--text);
     margin: 0 auto 10px;
-    padding: 0 12px;
+    padding: 0 var(--play-gutter-x);
     width: 100%;
     letter-spacing: 0.02em;
     box-sizing: border-box;
@@ -489,7 +491,7 @@ body.light-play .stat-btn#btnDislike .stat-count {
     row-gap: 12px;
     width: 100%;
     margin: 0 auto;
-    padding: 0 8px 6px;
+    padding: 0 var(--play-gutter-x) 6px;
     box-sizing: border-box;
 }
 
@@ -528,7 +530,7 @@ body.light-play .more-game-card {
 
 .play-game-about {
     margin-top: 28px;
-    padding: 18px 16px 0;
+    padding: 18px var(--play-gutter-x) 0;
     border-top: 1px solid rgba(255, 255, 255, 0.12);
     text-align: left;
     width: 100%;
@@ -964,8 +966,8 @@ let PLAY_GAME_NAMES = [
     "geometry dash meltdown", "geometry dash subzero", "geometry dash world", "granny", "happywheels", "helixjump", "hole io", "idlebreakout",
     "little alchemy 2", "melonsandbox", "moneyrush", "moto x3m pool party", "moto x3m spooky land", "moto x3m winter", "redball 4", "run 1", "run 2", "run 3",
     "tombofthemask", "papas donuteria", "papas freezeria", "papas hotdoggeria", "papas pastaria", "papas pizzeria", "plantsvszombies", "polytrack",
-    "ragdolldrop", "slicemaster", "fruit ninja", "elytra flight", "eggy car", "smash karts", "doodle jump", "vex x3m", "real flight simulator", "karlson", "tall man run", "smashyroad", "soundbuttons", "survivor io", "terraria", "wordle", "wheelielife", "yohio", "0v0game",
-    "block post", "retro bowl college", "worlds hardest game", "blocky snakes", "angry birds", "temple run 2", "half life", "super mario bros",
+    "ragdolldrop", "slicemaster", "fruit ninja", "elytra flight", "eggy car", "smash karts", "doodle jump", "vex x3m", "real flight simulator", "karlson", "tall man run", "smashyroad", "soundbuttons", "survivor io", "terraria", "wordle", "yohio", "0v0game",
+    "block post", "retro bowl college", "worlds hardest game", "blocky snakes", "temple run 2", "half life", "super mario bros",
     "five nights at freddys",
     "drift hunters", "bad parenting", "247 blackjack",
     "adventure drivers", "bouncy basketball", "clash of vikings", "crazy motorcycle", "crazy plane landing",

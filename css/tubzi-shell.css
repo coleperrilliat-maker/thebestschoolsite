@@ -19,6 +19,9 @@
     --card-radius: 18px;
     --rail-width: 276px;
     --site-header-height: 88px;
+    /* Fluid gutters: always a small inset on phones, wider as viewport grows (capped on ultra-wide). */
+    --tubzi-gutter-x: clamp(12px, 4vw + 8px, 88px);
+    --tubzi-gutter-games-x: clamp(14px, 6vw + 10px, 220px);
     /* Clip-art / sticker weight */
     --clip-ink: rgba(8, 6, 12, 0.88);
     --clip-ink-soft: rgba(8, 6, 12, 0.55);
@@ -77,7 +80,7 @@ body {
     flex-shrink: 0;
     background: var(--header-bg);
     border-bottom: 1px solid var(--header-border);
-    padding: 16px 24px;
+    padding: 14px var(--tubzi-gutter-x);
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
@@ -581,7 +584,7 @@ body[data-tubzi-page="category"] .hdr-btn-random {
 
 @media (max-width: 640px) {
     .site-header {
-        padding: 12px 16px;
+        padding: 12px var(--tubzi-gutter-x);
     }
 
     .header-inner {

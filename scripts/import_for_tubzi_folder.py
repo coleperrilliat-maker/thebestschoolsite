@@ -20,7 +20,6 @@ DOWNLOADS = pathlib.Path.home() / "Downloads" / "for_tubzi 2"
 PLAN: list[tuple[str, str, str, str]] = [
     ("bad monday sim/Bad Monday Simulator.html", "badmondaysimulator", "Bad Monday Simulator", "casual"),
     ("anton blast/Antonblast.html", "antonblast", "Anton Blast", "action"),
-    ("Pokemon red/Pokemon Red.html", "pokemonred", "Pokemon Red", "puzzle"),
     ("fifa soccer 11/FIFA 11.html", "fifa11", "FIFA 11", "sports"),
     ("gorilla tag/Gorilla Tag.html", "gorillatag", "Gorilla Tag", "action"),
     ("raft/Raft.html", "raft", "Raft", "casual"),

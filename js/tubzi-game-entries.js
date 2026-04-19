@@ -145,7 +145,6 @@ window.TUBZI_GAME_ENTRIES = [
     ["going balls", "casual"],
     ["Bad Monday Simulator", "casual"],
     ["Anton Blast", "action"],
-    ["Pokemon Red", "puzzle"],
     ["FIFA 11", "sports"],
     ["Gorilla Tag", "action"],
     ["Raft", "casual"],

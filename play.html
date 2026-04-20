@@ -28,11 +28,12 @@
 :root {
     --brand: #ff6a00;
     --brand-hover: #e55f00;
-    --bg: #1b1b2f;
-    --bg-elevated: #232338;
+    /* Slightly lighter than #1a1a2e while keeping the same “midnight navy” vibe. */
+    --bg: #222238;
+    --bg-elevated: #2b2b44;
     --text: #f4f4f8;
     --text-muted: #9aa3b8;
-    --bar-bg-solid: #16182a;
+    --bar-bg-solid: #1c1c32;
     --bar-text: #f4f4f8;
     --bar-muted: #9aa3b8;
     --bar-border: rgba(255, 106, 0, 0.22);
@@ -41,9 +42,13 @@
     --play-btn-solid: #35394d;
     --play-btn-solid-hover: #43485f;
     --play-btn-fg: #f4f4f8;
-    --play-content-max: min(1180px, 100%);
+    /* Full-width stage; “more games” / about can still cap readability if needed. */
+    --play-content-max: 100%;
     /* Same fluid rule as --tubzi-gutter-x (defined in home-browse.css). */
     --play-gutter-x: var(--tubzi-gutter-x);
+    /* Edge rail + gutter between grey panels and the game (sandwich layout). */
+    --play-ad-edge: clamp(6px, 1vw, 14px);
+    --play-ad-game-gap: clamp(10px, 1.4vw, 22px);
 }
 
 body.light-play {
@@ -106,6 +111,10 @@ body.is-fullscreen .play-stage-row {
     gap: 0;
 }
 
+body.is-fullscreen .play-side-ad {
+    display: none !important;
+}
+
 .play-main {
     flex: 1 1 auto;
     width: 100%;
@@ -142,7 +151,7 @@ body.light-play .play-dashboard {
 .play-dash-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
     padding: 7px 12px;
     border-radius: 8px;
     font-family: "Fredoka", system-ui, sans-serif;
@@ -246,29 +255,49 @@ button.play-dash-btn {
     display: flex;
     flex-direction: column;
     min-height: 0;
-    padding: 8px var(--play-gutter-x) 0;
+    padding: 8px var(--play-ad-edge) 0;
     width: 100%;
-    max-width: var(--play-content-max);
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
     box-sizing: border-box;
 }
 
 .play-stage-row {
-    flex: 1;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: row;
     align-items: stretch;
-    gap: 0;
+    gap: var(--play-ad-game-gap);
+    width: 100%;
+    min-width: 0;
     min-height: 0;
 }
 
+.play-stage-row.play-stage-row--hide-ads .play-side-ad {
+    display: none;
+}
+
+.play-side-ad {
+    flex: 0 0 150px;
+    width: 150px;
+    min-width: 150px;
+    align-self: stretch;
+    min-height: 0;
+    height: min(600px, 100%);
+    max-height: 100%;
+    border-radius: 10px;
+    background: #202836;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
 .play-game-stack {
-    flex: 1;
+    flex: 1 1 auto;
     min-width: 0;
     min-height: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
 }
 
 .play-game-inner {
@@ -448,11 +477,11 @@ body.light-play .stat-btn#btnDislike .stat-count {
 .play-below {
     flex: 0 0 auto;
     flex-shrink: 0;
-    padding: 10px var(--play-gutter-x) max(24px, env(safe-area-inset-bottom, 0px));
+    padding: 10px var(--play-ad-edge) max(24px, env(safe-area-inset-bottom, 0px));
     width: 100%;
-    max-width: var(--play-content-max);
+    max-width: none;
     box-sizing: border-box;
-    align-self: center;
+    align-self: stretch;
     position: relative;
     z-index: 1;
 }
@@ -473,7 +502,7 @@ body.light-play .stat-btn#btnDislike .stat-count {
     font-size: 15px;
     color: var(--text);
     margin: 0 auto 10px;
-    padding: 0 var(--play-gutter-x);
+    padding: 0 8px;
     width: 100%;
     letter-spacing: 0.02em;
     box-sizing: border-box;
@@ -483,26 +512,25 @@ body.light-play .stat-btn#btnDislike .stat-count {
 .more-games-row {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
     align-items: flex-start;
-    align-content: flex-start;
-    gap: 10px;
-    row-gap: 12px;
+    gap: 5px;
     width: 100%;
     margin: 0 auto;
-    padding: 0 var(--play-gutter-x) 6px;
+    padding: 0 10px 6px;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .more-game-card {
     position: relative;
     overflow: hidden;
     container-type: inline-size;
-    flex: 0 0 104px;
-    width: 104px;
-    min-width: 104px;
-    max-width: 104px;
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    max-width: none;
     aspect-ratio: 1;
     border-radius: var(--card-radius);
     background-color: var(--bg-elevated);
@@ -657,11 +685,6 @@ body.light-play .play-game-about__keys-tip {
 }
 
 @media (max-width: 720px) {
-    .play-stage-row {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
     .play-game-stack {
         width: 100%;
         align-items: stretch;
@@ -681,7 +704,7 @@ body.light-play .play-game-about__keys-tip {
     }
 
     .more-game-card {
-        flex: 0 1 calc((100% - 10px) / 2);
+        flex: 1 1 0;
         width: auto;
         min-width: 0;
         max-width: none;
@@ -707,6 +730,7 @@ body.light-play .play-game-about__keys-tip {
         width: 100%;
     }
 }
+
 </style>
 </head>
 <body>
@@ -755,6 +779,7 @@ body.light-play .play-game-about__keys-tip {
     </header>
     <div class="play-stage-wrap">
         <div class="play-stage-row" id="playStageRow">
+            <aside class="play-side-ad" aria-hidden="true"></aside>
             <div class="play-game-stack">
                 <div class="play-game-inner">
                     <div class="game-frame-shell">
@@ -790,6 +815,7 @@ body.light-play .play-game-about__keys-tip {
                     </div>
                 </div>
             </div>
+            <aside class="play-side-ad" aria-hidden="true"></aside>
         </div>
     </div>
 
@@ -1416,7 +1442,7 @@ function fillPlayingAbout() {
 
 fillPlayingAbout();
 
-const GAMES_PER_MORE_ROW = 8;
+const GAMES_PER_MORE_ROW = 10;
 const MORE_GAME_ROWS = 3;
 const MORE_GAMES_TOTAL = GAMES_PER_MORE_ROW * MORE_GAME_ROWS;
 
@@ -1485,6 +1511,66 @@ moreRows.forEach((rowEl, rowIndex) => {
     const slice = picked.slice(start, start + GAMES_PER_MORE_ROW);
     slice.forEach(g => rowEl.appendChild(makeMoreGameCard(g)));
 });
+
+(function keepSideAdsWhenPossible() {
+    const stageRow = document.getElementById("playStageRow");
+    if (!stageRow) {
+        return;
+    }
+    const gameStack = stageRow.querySelector(".play-game-stack");
+    const ads = Array.from(stageRow.querySelectorAll(".play-side-ad"));
+    if (!gameStack || ads.length !== 2) {
+        return;
+    }
+
+    const AD_SLOT_W = 150;
+    const MIN_GAME_W = 420;
+    const HYST = 48;
+
+    function parsePx(value) {
+        const n = Number.parseFloat(String(value || "").trim());
+        return Number.isFinite(n) ? n : 0;
+    }
+
+    function syncAdVisibility() {
+        const stageStyle = window.getComputedStyle(stageRow);
+        const gap = parsePx(stageStyle.columnGap || stageStyle.gap) || 16;
+
+        const stageWidth = stageRow.getBoundingClientRect().width || 0;
+        const minStageForAds = AD_SLOT_W * 2 + gap * 2 + MIN_GAME_W;
+        const showStageForAds = minStageForAds + HYST;
+
+        const adsCurrentlyHidden = stageRow.classList.contains("play-stage-row--hide-ads");
+
+        if (adsCurrentlyHidden && stageWidth > 0 && stageWidth < showStageForAds) {
+            return;
+        }
+
+        if (stageWidth > 0 && stageWidth < minStageForAds) {
+            stageRow.classList.add("play-stage-row--hide-ads");
+            return;
+        }
+
+        stageRow.classList.remove("play-stage-row--hide-ads");
+
+        const gameWidth = gameStack.getBoundingClientRect().width || 0;
+        const adTotalWidth = ads.reduce((sum, ad) => sum + (ad.getBoundingClientRect().width || 0), 0);
+
+        const adsDominateGame = gameWidth > 0 && adTotalWidth > (2 / 3) * gameWidth;
+        const gameTooNarrowWithRails = gameWidth > 0 && gameWidth < MIN_GAME_W;
+
+        const shouldHide = gameWidth <= 0 || adsDominateGame || gameTooNarrowWithRails;
+        stageRow.classList.toggle("play-stage-row--hide-ads", shouldHide);
+    }
+
+    syncAdVisibility();
+    window.addEventListener("resize", syncAdVisibility);
+    if (typeof ResizeObserver !== "undefined") {
+        const ro = new ResizeObserver(syncAdVisibility);
+        ro.observe(stageRow);
+        ro.observe(gameStack);
+    }
+})();
 
 if (localStorage.getItem(THEME_KEY) === "light") {
     document.body.classList.add("light-play");

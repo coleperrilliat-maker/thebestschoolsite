@@ -466,6 +466,15 @@ body.light-play .play-action-bar {
     background: rgba(255, 106, 0, 0.14);
 }
 
+.stat-btn#btnLike svg,
+.stat-btn#btnLike svg path {
+    transition: fill 0.15s ease, stroke 0.15s ease, color 0.15s ease;
+}
+
+.stat-btn#btnLike.is-liked {
+    color: #ff6a00 !important;
+}
+
 .stat-btn#btnLike .stat-count,
 .stat-btn#btnDislike .stat-count {
     color: var(--bar-text);
@@ -1146,20 +1155,11 @@ function refreshCounts() {
         return;
     }
     const s = getStats();
-    likeEl.textContent = formatCount(s.likes);
+    /* Like count is driven by Supabase (script before </body>); keep dislikes local. */
     dislikeEl.textContent = formatCount(s.dislikes);
 }
 
-const btnLike = document.getElementById("btnLike");
 const btnDislike = document.getElementById("btnDislike");
-if (btnLike) {
-    btnLike.addEventListener("click", () => {
-        const s = getStats();
-        s.likes += 1;
-        setStats(s);
-        refreshCounts();
-    });
-}
 if (btnDislike) {
     btnDislike.addEventListener("click", () => {
         const s = getStats();
@@ -1587,6 +1587,114 @@ moreRows.forEach((rowEl, rowIndex) => {
 if (localStorage.getItem(THEME_KEY) === "light") {
     document.body.classList.add("light-play");
 }
+</script>
+
+<!-- Supabase client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function () {
+  const SUPABASE_URL = 'https://cheymdspanxzjjtzppat.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_tAcqEpAgeI5NFhqg9AoH5Q_LtUdFt27';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Persistent device id (per browser)
+  function getDeviceId() {
+    let id = localStorage.getItem('tubzi_device_id');
+    if (!id) {
+      id = 'dev_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('tubzi_device_id', id);
+    }
+    return id;
+  }
+
+  // Pull the game key from ?game=... (fallback to pathname)
+  function getGameKey() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('game') || window.location.pathname;
+  }
+
+  const gameKey = getGameKey();
+  const deviceId = getDeviceId();
+
+  const likeBtn   = document.getElementById('btnLike');
+  const likeCount = document.getElementById('likeCount');
+  if (!likeBtn || !likeCount) return;
+
+  // --- Visual states ---
+  const ORANGE = '#ff6a00';
+
+  function setLikedVisual(liked) {
+    const svg  = likeBtn.querySelector('svg');
+    const path = likeBtn.querySelector('svg path');
+    if (liked) {
+      likeBtn.classList.add('is-liked');
+      likeBtn.setAttribute('aria-pressed', 'true');
+      if (svg)  svg.setAttribute('fill', ORANGE);
+      if (path) path.setAttribute('stroke', ORANGE);
+      likeBtn.style.color = ORANGE;
+    } else {
+      likeBtn.classList.remove('is-liked');
+      likeBtn.setAttribute('aria-pressed', 'false');
+      if (svg)  svg.setAttribute('fill', 'none');
+      if (path) path.setAttribute('stroke', 'currentColor');
+      likeBtn.style.color = '';
+    }
+  }
+
+  // --- Initial load: count + whether this device liked it ---
+  async function loadInitialState() {
+    const [{ data: likeRow }, { data: deviceRow }] = await Promise.all([
+      sb.from('game_likes')
+        .select('like_count')
+        .eq('game_key', gameKey)
+        .maybeSingle(),
+      sb.from('game_device_likes')
+        .select('game_key')
+        .eq('game_key', gameKey)
+        .eq('device_id', deviceId)
+        .maybeSingle()
+    ]);
+
+    likeCount.textContent = (likeRow && likeRow.like_count) || 0;
+    setLikedVisual(!!deviceRow);
+  }
+
+  // --- Toggle on click ---
+  let busy = false;
+  likeBtn.addEventListener('click', async () => {
+    if (busy) return;
+    busy = true;
+    likeBtn.disabled = true;
+
+    // Optimistic update
+    const wasLiked = likeBtn.classList.contains('is-liked');
+    const currentCount = parseInt(likeCount.textContent, 10) || 0;
+    setLikedVisual(!wasLiked);
+    likeCount.textContent = wasLiked
+      ? Math.max(currentCount - 1, 0)
+      : currentCount + 1;
+
+    const { data, error } = await sb.rpc('toggle_game_like', {
+      p_game_key: gameKey,
+      p_device_id: deviceId
+    });
+
+    if (error) {
+      console.error('toggle_game_like error', error);
+      // revert
+      setLikedVisual(wasLiked);
+      likeCount.textContent = currentCount;
+    } else if (data) {
+      setLikedVisual(!!data.liked);
+      likeCount.textContent = data.like_count;
+    }
+
+    busy = false;
+    likeBtn.disabled = false;
+  });
+
+  loadInitialState();
+})();
 </script>
 </body>
 </html>

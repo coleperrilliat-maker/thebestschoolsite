@@ -467,11 +467,17 @@ body.light-play .play-action-bar {
 }
 
 .stat-btn#btnLike svg,
-.stat-btn#btnLike svg path {
+.stat-btn#btnLike svg path,
+.stat-btn#btnDislike svg,
+.stat-btn#btnDislike svg path {
     transition: fill 0.15s ease, stroke 0.15s ease, color 0.15s ease;
 }
 
 .stat-btn#btnLike.is-liked {
+    color: #ff6a00 !important;
+}
+
+.stat-btn#btnDislike[data-on="1"] {
     color: #ff6a00 !important;
 }
 
@@ -816,7 +822,7 @@ body.light-play .play-game-about__keys-tip {
                                 </svg>
                                 <span class="stat-count" id="likeCount">0</span>
                             </button>
-                            <button type="button" class="stat-btn" id="btnDislike" aria-label="Dislike">
+                            <button type="button" class="stat-btn" id="btnDislike" aria-label="Dislike" aria-pressed="false" data-on="0">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 15v4a3 3 0 003 3l4-9V2H5.72a2 2 0 00-2 1.7l-1.38 9a2 2 0 002 2.3zm7-13h2.67A2.31 2.31 0 0122 4v7a2.31 2.31 0 01-2.33 2H17"/>
                                 </svg>
@@ -919,7 +925,6 @@ body.light-play .play-game-about__keys-tip {
 <script src="js/tubzi-hover-preview.js"></script>
 <script src="js/tubzi-tally-issue.js"></script>
 <script>
-const VOTE_KEY = "tubzi-game-votes";
 const THEME_KEY = "tubzi-theme";
 
 /* Slug must match real filenames in /games (see yohoio, OvOgame). */
@@ -944,7 +949,8 @@ const GAME_FILE_SLUG = {
     dogeminer2: "doge-miner-2",
     dunkshot: "dunk-shot",
     extremerun3d: "extreme-run-3d",
-    goingballs: "going-balls"
+    goingballs: "going-balls",
+    deathrun3d: "deathrun"
 };
 
 function fileSlugFromGameName(name) {
@@ -964,7 +970,8 @@ const GAME_IMAGE_SLUG = {
     dogeminer2: "doge-miner-2",
     dunkshot: "dunk-shot",
     extremerun3d: "extreme-run-3d",
-    goingballs: "going-balls"
+    goingballs: "going-balls",
+    deathrun3d: "deathrun"
 };
 
 function imageSlugFromGameName(name) {
@@ -1002,7 +1009,7 @@ let PLAY_GAME_NAMES = [
     "1v1 lol", "shell shockers", "slope", "retro bowl", "bitlife", "drivemad", "crossyroad", "drift boss", "basketball stars", "8 ball classic",
     "aquapark io", "tiny fishing", "monkey mart", "elastic man", "snow rider 3d", "basketball random", "stick man hook", "soccerrandom", "volleyrandom",
     "get away shoot out", "funny shooter", "time shooter", "house of hazards", "rag doll archers", "level devil", "jetpackjoyride", "block blast",
-    "attack hole", "bowmasters", "bank robbery", "bank robbery 2", "bank robbery 3", "bacon may die", "bob the robber 2", "basket battle", "Race Survival: Arena King", "gobble", "tung tung obby", "vex", "escape road", "escape road 2", "crazy cars", "2048", "adventurecapitalist", "ahoysurvival",
+    "attack hole", "bowmasters", "bank robbery", "bank robbery 2", "bank robbery 3", "bacon may die", "bob the robber 2", "basket battle", "Race Survival: Arena King", "gobble", "tung tung obby", "vex", "escape road 2", "Death Run 3D", "Driven Wild", "Dune Dash", "Find the Alien", "Fort Zone", "Snowball io", "crazy cars", "2048", "adventurecapitalist", "ahoysurvival",
     "asmallworldcup", "backrooms", "baldisbasics", "basketballbros", "basketrandom", "boxingrandom", "btd 1", "btd 2", "btd 3", "btd 4", "btd 5",
     "crazycattle 3 d", "ducklife 1", "dumbwaystodie", "fallguys", "fisquarium", "fivenightsatepsteins", "fnaf 1", "fnaf 2", "fnaf 3", "fnaf 4",
     "geometry dash meltdown", "geometry dash subzero", "geometry dash world", "granny", "happywheels", "helixjump", "hole io", "idlebreakout",
@@ -1109,67 +1116,6 @@ const dashRandom = document.getElementById("dashRandom");
 if (dashRandom) {
     dashRandom.addEventListener("click", goRandomGame);
 }
-
-function voteKey() {
-    return gameFile || "unknown";
-}
-
-function readVotes() {
-    try {
-        return JSON.parse(localStorage.getItem(VOTE_KEY) || "{}");
-    } catch {
-        return {};
-    }
-}
-
-function writeVotes(obj) {
-    localStorage.setItem(VOTE_KEY, JSON.stringify(obj));
-}
-
-function getStats() {
-    const all = readVotes();
-    const k = voteKey();
-    return all[k] || { likes: 0, dislikes: 0 };
-}
-
-function setStats(s) {
-    const all = readVotes();
-    all[voteKey()] = s;
-    writeVotes(all);
-}
-
-function formatCount(n) {
-    if (n >= 1e6) {
-        return (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M";
-    }
-    if (n >= 1e3) {
-        return (n / 1e3).toFixed(1).replace(/\.0$/, "") + "k";
-    }
-    return String(n);
-}
-
-function refreshCounts() {
-    const likeEl = document.getElementById("likeCount");
-    const dislikeEl = document.getElementById("dislikeCount");
-    if (!likeEl || !dislikeEl) {
-        return;
-    }
-    const s = getStats();
-    /* Like count is driven by Supabase (script before </body>); keep dislikes local. */
-    dislikeEl.textContent = formatCount(s.dislikes);
-}
-
-const btnDislike = document.getElementById("btnDislike");
-if (btnDislike) {
-    btnDislike.addEventListener("click", () => {
-        const s = getStats();
-        s.dislikes += 1;
-        setStats(s);
-        refreshCounts();
-    });
-}
-
-refreshCounts();
 
 function toggleFullscreen() {
     const fs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
@@ -1618,6 +1564,8 @@ if (localStorage.getItem(THEME_KEY) === "light") {
 
   const likeBtn   = document.getElementById('btnLike');
   const likeCount = document.getElementById('likeCount');
+  const dislikeBtn   = document.getElementById('btnDislike');
+  const dislikeCount = document.getElementById('dislikeCount');
   if (!likeBtn || !likeCount) return;
 
   // --- Visual states ---
@@ -1638,6 +1586,25 @@ if (localStorage.getItem(THEME_KEY) === "light") {
       if (svg)  svg.setAttribute('fill', 'none');
       if (path) path.setAttribute('stroke', 'currentColor');
       likeBtn.style.color = '';
+    }
+  }
+
+  function setDislikedVisual(on) {
+    if (!dislikeBtn) return;
+    const svg  = dislikeBtn.querySelector('svg');
+    const path = dislikeBtn.querySelector('svg path');
+    if (on) {
+      if (svg)  svg.setAttribute('fill', ORANGE);
+      if (path) path.setAttribute('stroke', ORANGE);
+      dislikeBtn.style.color = ORANGE;
+      dislikeBtn.dataset.on = '1';
+      dislikeBtn.setAttribute('aria-pressed', 'true');
+    } else {
+      if (svg)  svg.setAttribute('fill', 'none');
+      if (path) path.setAttribute('stroke', 'currentColor');
+      dislikeBtn.style.color = '';
+      dislikeBtn.dataset.on = '0';
+      dislikeBtn.setAttribute('aria-pressed', 'false');
     }
   }
 
@@ -1687,11 +1654,70 @@ if (localStorage.getItem(THEME_KEY) === "light") {
     } else if (data) {
       setLikedVisual(!!data.liked);
       likeCount.textContent = data.like_count;
+      if (typeof setDislikedVisual === 'function' && dislikeCount) {
+        setDislikedVisual(!!data.disliked);
+        dislikeCount.textContent = data.dislike_count;
+      }
     }
 
     busy = false;
     likeBtn.disabled = false;
   });
+
+  // --- Dislike button wiring ---
+  if (dislikeBtn && dislikeCount) {
+    (async () => {
+      const [countRes, mineRes] = await Promise.all([
+        sb.from('game_dislikes')
+          .select('dislike_count')
+          .eq('game_key', gameKey)
+          .maybeSingle(),
+        sb.from('game_device_dislikes')
+          .select('game_key')
+          .eq('game_key', gameKey)
+          .eq('device_id', deviceId)
+          .maybeSingle(),
+      ]);
+      dislikeCount.textContent = (countRes.data && countRes.data.dislike_count) || 0;
+      setDislikedVisual(!!mineRes.data);
+    })();
+
+    let dislikeBusy = false;
+    dislikeBtn.addEventListener('click', async () => {
+      if (dislikeBusy) return;
+      dislikeBusy = true;
+      dislikeBtn.disabled = true;
+
+      const wasDisliked  = dislikeBtn.dataset.on === '1';
+      const currentCount = parseInt(dislikeCount.textContent, 10) || 0;
+
+      setDislikedVisual(!wasDisliked);
+      dislikeCount.textContent = wasDisliked
+        ? Math.max(0, currentCount - 1)
+        : currentCount + 1;
+
+      const { data, error } = await sb.rpc('toggle_game_dislike', {
+        p_game_key:  gameKey,
+        p_device_id: deviceId,
+      });
+
+      if (error) {
+        console.error('toggle_game_dislike error', error);
+        setDislikedVisual(wasDisliked);
+        dislikeCount.textContent = currentCount;
+      } else if (data) {
+        setDislikedVisual(!!data.disliked);
+        dislikeCount.textContent = data.dislike_count;
+        if (typeof setLikedVisual === 'function' && typeof likeCount !== 'undefined' && likeCount) {
+          setLikedVisual(!!data.liked);
+          likeCount.textContent = data.like_count;
+        }
+      }
+
+      dislikeBusy = false;
+      dislikeBtn.disabled = false;
+    });
+  }
 
   loadInitialState();
 })();

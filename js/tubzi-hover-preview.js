@@ -42,7 +42,7 @@
         eggycar: "videos/hover_eggycar.mp4",
         elasticman: "videos/hover_elasticman.mp4",
         elytraflight: "videos/hover_elytraflight.mp4",
-        escaperoad: "videos/hover_escaperoad.mp4",
+        escaperoad2: "videos/hover_escaperoad.mp4",
         fallguys: "videos/hover_fallguys.mp4",
         fivenightsatfreddys: "videos/hover_fivenightsatfreddys.mp4",
         fivenightsatyoshis: "videos/hover_fivenightsatyoshis.mp4",

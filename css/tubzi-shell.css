@@ -18,7 +18,8 @@
     --accent-green-hover: #16a34a;
     --card-radius: 18px;
     --rail-width: 276px;
-    --site-header-height: 88px;
+    /* Must clear absolute header: padding + inner row (search / buttons). */
+    --site-header-height: 72px;
     /* Fluid gutters: always a small inset on phones, wider as viewport grows (capped on ultra-wide). */
     --tubzi-gutter-x: clamp(12px, 4vw + 8px, 88px);
     --tubzi-gutter-games-x: clamp(14px, 6vw + 10px, 220px);
@@ -80,7 +81,7 @@ body {
     flex-shrink: 0;
     background: var(--header-bg);
     border-bottom: 1px solid var(--header-border);
-    padding: 14px var(--tubzi-gutter-x);
+    padding: 8px var(--tubzi-gutter-x);
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
@@ -309,9 +310,9 @@ body.light .rail-nav-item.is-active {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
     flex-wrap: nowrap;
-    min-height: 54px;
+    min-height: 46px;
 }
 
 .logo-brand {
@@ -353,7 +354,7 @@ body.light .logo-icon {
 .logo-text {
     font-family: "Fredoka", system-ui, sans-serif;
     font-size: clamp(1.8rem, 4.5vw, 2.4rem);
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.02em;
     line-height: 1;
     color: var(--brand);
@@ -394,7 +395,7 @@ body.light .logo-text {
 
 .search-wrap svg {
     position: absolute;
-    left: 18px;
+    left: 14px;
     top: 50%;
     transform: translateY(-50%);
     width: 20px;
@@ -405,7 +406,7 @@ body.light .logo-text {
 
 #search {
     width: 100%;
-    padding: 13px 18px 13px 52px;
+    padding: 9px 14px 9px 44px;
     border-radius: 999px;
     border: 3px solid var(--search-border);
     background: var(--search-bg);
@@ -428,8 +429,8 @@ body.light .logo-text {
 
 .theme-icon-btn {
     flex-shrink: 0;
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
     border-radius: 14px;
     border: 3px solid var(--btn-border);
     background: var(--btn-bg);
@@ -471,14 +472,14 @@ body.light .theme-icon-btn .icon-moon {
 .hdr-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 11px 17px;
-    border-radius: 12px;
+    gap: 5px;
+    padding: 7px 12px;
+    border-radius: 10px;
     border: 3px solid var(--btn-border);
     background: var(--btn-bg);
     color: var(--text);
     font-family: "Fredoka", system-ui, sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.02em;
     cursor: pointer;
@@ -584,27 +585,27 @@ body[data-tubzi-page="category"] .hdr-btn-random {
 
 @media (max-width: 640px) {
     .site-header {
-        padding: 12px var(--tubzi-gutter-x);
+        padding: 8px var(--tubzi-gutter-x);
     }
 
     .header-inner {
-        gap: 10px;
-        min-height: 48px;
+        gap: 8px;
+        min-height: 44px;
     }
 
     .hdr-btn {
-        padding: 9px 12px;
+        padding: 7px 10px;
         font-size: 13px;
     }
 
     #search {
         font-size: 15px;
-        padding: 11px 15px 11px 46px;
+        padding: 9px 12px 9px 42px;
     }
 
     .theme-icon-btn {
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
     }
 
     .rail-icon {

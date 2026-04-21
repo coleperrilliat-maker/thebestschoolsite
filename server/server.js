@@ -12,7 +12,7 @@ app.get("/health", (req, res) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Public assets — path.join(__dirname, "public") matches express.static("public") when run from server/, but works from any cwd.
+// Public assets: path.join(__dirname, "public") matches express.static("public") when run from server/, but works from any cwd.
 app.use(express.static(path.join(__dirname, "public")));
 
 // SPA fallback: anything else that isn’t a real file or /health gets index.html

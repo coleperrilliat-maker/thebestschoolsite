@@ -79,7 +79,7 @@
     function openPop() {
         var g = currentGameName();
         if (titleEl) {
-            titleEl.textContent = "Report an issue — " + g;
+            titleEl.textContent = "Report an issue: " + g;
         }
         iframe.removeAttribute("src");
         iframe.setAttribute("data-tally-src", issueEmbedUrl());

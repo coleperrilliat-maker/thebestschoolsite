@@ -1,4 +1,4 @@
-/* Browse by category — homepage, full-width grid (no sidebar) */
+/* Browse by category: homepage, full-width grid (no sidebar) */
 
 /* Keep in sync with tubzi-shell.css :root (play.html loads this file but not the shell). */
 :root {
@@ -6,10 +6,10 @@
     --tubzi-gutter-games-x: clamp(14px, 6vw + 10px, 220px);
 }
 
-/* Survey CTA — between game grid and category browse */
+/* Survey CTA: between game grid and category browse */
 .survey-cta-wrap {
     width: 100%;
-    padding: 0 0 28px;
+    padding: 0 0 18px;
     box-sizing: border-box;
 }
 
@@ -25,8 +25,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    padding: 20px max(18px, var(--tubzi-gutter-x));
+    gap: 16px;
+    padding: 14px max(16px, var(--tubzi-gutter-x));
     border-radius: 18px;
     background: linear-gradient(165deg, #2a1f18 0%, #1a1512 100%);
     border: 3px solid rgba(255, 106, 0, 0.85);
@@ -404,7 +404,7 @@ body.light-play .tally-mini-browser__url {
     }
 }
 
-/* Brand / ads promo — below category browse (compact strip) */
+/* Brand / ads promo: below category browse (compact strip) */
 .home-promo-wrap {
     width: 100%;
     padding: 0 0 24px;
@@ -725,7 +725,7 @@ body.light .welcome-first-card {
 }
 
 .welcome-first-card__title {
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-family: "Fredoka", system-ui, sans-serif;
     font-weight: 600;
     font-size: 1.2rem;
     margin: 0 0 14px;

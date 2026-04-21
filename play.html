@@ -15,8 +15,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Play browser games on TubZi with full-screen controls, game guides, and quick access to more popular picks.">
 <meta property="og:description" content="Play browser games on TubZi with guides, tips, and instant access to more games.">
-<meta property="og:title" content="Play — TubZi">
-<title>Play — TubZi</title>
+<meta property="og:title" content="Play | TubZi">
+<title>Play | TubZi</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 28'%3E%3Cellipse cx='17' cy='14' rx='13' ry='10' fill='%23ff6a00'/%3E%3Cpolygon points='29,14 39,8 39,20' fill='%23ff6a00'/%3E%3Ccircle cx='13' cy='13' r='2.2' fill='%23ffffff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -131,11 +131,11 @@ body.is-fullscreen .play-side-ad {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
     width: 100%;
     box-sizing: border-box;
-    padding: 8px var(--play-gutter-x);
+    padding: 5px var(--play-gutter-x);
     background: var(--bar-bg-solid);
     border: none;
     border-radius: 0;
@@ -151,8 +151,8 @@ body.light-play .play-dashboard {
 .play-dash-btn {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 7px 12px;
+    gap: 8px;
+    padding: 5px 10px;
     border-radius: 8px;
     font-family: "Fredoka", system-ui, sans-serif;
     font-weight: 600;
@@ -196,7 +196,7 @@ button.play-dash-btn {
     background: var(--play-btn-solid);
     color: var(--play-btn-fg);
     font-weight: 700;
-    padding: 7px 12px;
+    padding: 5px 10px;
     border: none;
     border-radius: 8px;
 }
@@ -246,7 +246,7 @@ button.play-dash-btn {
 .play-dash-nav {
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 5px;
     flex-wrap: wrap;
 }
 
@@ -255,7 +255,7 @@ button.play-dash-btn {
     display: flex;
     flex-direction: column;
     min-height: 0;
-    padding: 8px var(--play-ad-edge) 0;
+    padding: 5px var(--play-ad-edge) 0;
     width: 100%;
     max-width: none;
     margin: 0;
@@ -333,6 +333,13 @@ button.play-dash-btn {
     width: 100%;
     border: none;
     display: block;
+}
+
+/* 247 Blackjack embed: hide default focus ring (often reads as orange) at the frame edge. */
+#gameFrame.game-frame--flat-chrome:focus,
+#gameFrame.game-frame--flat-chrome:focus-visible {
+    outline: none;
+    box-shadow: none;
 }
 
 .play-action-bar {
@@ -477,7 +484,7 @@ body.light-play .stat-btn#btnDislike .stat-count {
 .play-below {
     flex: 0 0 auto;
     flex-shrink: 0;
-    padding: 10px var(--play-ad-edge) max(24px, env(safe-area-inset-bottom, 0px));
+    padding: 6px var(--play-ad-edge) max(18px, env(safe-area-inset-bottom, 0px));
     width: 100%;
     max-width: none;
     box-sizing: border-box;
@@ -490,7 +497,7 @@ body.light-play .stat-btn#btnDislike .stat-count {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     width: 100%;
     position: relative;
     isolation: isolate;
@@ -501,7 +508,7 @@ body.light-play .stat-btn#btnDislike .stat-count {
     font-weight: 600;
     font-size: 15px;
     color: var(--text);
-    margin: 0 auto 10px;
+    margin: 0 auto 6px;
     padding: 0 8px;
     width: 100%;
     letter-spacing: 0.02em;
@@ -557,8 +564,8 @@ body.light-play .more-game-card {
 }
 
 .play-game-about {
-    margin-top: 28px;
-    padding: 18px var(--play-gutter-x) 0;
+    margin-top: 18px;
+    padding: 12px var(--play-gutter-x) 0;
     border-top: 1px solid rgba(255, 255, 255, 0.12);
     text-align: left;
     width: 100%;
@@ -1050,6 +1057,11 @@ const gameName = (() => {
 
 const iframe = document.getElementById("gameFrame");
 iframe.src = gameFile;
+if (/\/247blackjack\.html$/i.test(String(gameFile || ""))) {
+    iframe.classList.add("game-frame--flat-chrome");
+} else {
+    iframe.classList.remove("game-frame--flat-chrome");
+}
 
 document.getElementById("actionTitle").textContent = gameName;
 
@@ -1264,15 +1276,15 @@ const GENRE_LONG_FALLBACK = {
         "Expect responsive movement, short time-to-engagement, and rounds that reward reading enemy tells rather than grinding stats. Most browser action titles on TubZi emphasize readable hitboxes and restart-friendly checkpoints so you can improve quickly between attempts.",
     io: "Expect drop-in style pacing where leaderboards, map control, or elimination chains matter more than long tutorials. These games shine when you learn spawn timings, safe rotations, and when to reset after a bad fight.",
     driving:
-        "Expect arcade physics—big air, forgiving resets, and tracks that reward clean racing lines more than simulation tuning. Mastery usually comes from memorizing corner entries, boost placement, and how each vehicle’s weight transfers on landings.",
+        "Expect arcade physics: big air, forgiving resets, and tracks that reward clean racing lines more than simulation tuning. Mastery usually comes from memorizing corner entries, boost placement, and how each vehicle’s weight transfers on landings.",
     puzzle:
         "Expect rules you can explain in one sentence but depth that unfolds across dozens of stages. Good puzzle design here means fair failure: when you miss, you understand why and adjust the next attempt without guesswork.",
     sports:
-        "Expect simplified controls that still respect timing—release points on shots, contest windows on defense, and momentum swings that keep matches dramatic. Sessions are built to finish before the bell rings in real life.",
+        "Expect simplified controls that still respect timing for release points on shots, contest windows on defense, and momentum swings that keep matches dramatic. Sessions are built to finish before the bell rings in real life.",
     casual:
         "Expect low-friction loops you can pause anytime: incremental upgrades, cozy management, or toy-like interactions that do not demand twitch reflexes. These titles are ideal when you want progress without pressure.",
     horror:
-        "Expect sound design and lighting to carry tension as much as jump scares. Stealth, resource limits, and restricted vision are common—headphones help, and playing in a well-lit room is smart if you are sensitive to frights.",
+        "Expect sound design and lighting to carry tension as much as jump scares. Stealth, resource limits, and restricted vision are common. Headphones help, and playing in a well-lit room is smart if you are sensitive to frights.",
     platformer:
         "Expect jump arcs, enemy patterns, and level geometry that teach you one new trick per world. Checkpoints and generous retries keep the focus on mastery rather than punishment."
 };
@@ -1352,7 +1364,7 @@ function longAboutFallback(displayTitle, genreRaw) {
         `On TubZi, ${displayTitle} is grouped as a ${genreLabel.toLowerCase()} experience: ${pick(
             [
                 "it is meant to be easy to start in one click and deep enough to revisit later the same day.",
-                "the focus is on readable feedback—so you always know what to try differently after a loss.",
+                "the focus is on readable feedback, so you always know what to try differently after a loss.",
                 "sessions are sized for school breaks: enough meat for twenty minutes, not a fifty-gig install."
             ],
             "hook"

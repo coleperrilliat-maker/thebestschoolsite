@@ -1,4 +1,4 @@
-TubZi — edge security headers (reverse proxy / CDN)
+TubZi: edge security headers (reverse proxy / CDN)
 ====================================================
 
 Your repo includes _headers for hosts that honor it (Cloudflare Pages, Netlify).

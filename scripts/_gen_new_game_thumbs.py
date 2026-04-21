@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "images"
 
-# (image stem, lines to draw — short lines read better at card size)
+# (image stem, lines to draw: short lines read better at card size)
 GAMES: list[tuple[str, list[str]]] = [
     ("aquaparkio", ["Aquapark", ".io"]),
     ("basketballstars", ["Basketball", "Stars"]),

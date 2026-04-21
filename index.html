@@ -28,7 +28,7 @@
 
 <style>
 .container {
-    padding: 28px var(--tubzi-gutter-x) 48px;
+    padding: 12px var(--tubzi-gutter-x) 28px;
     max-width: 1180px;
     margin: 0 auto;
     width: 100%;
@@ -53,9 +53,66 @@
 
 .games-toolbar {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    margin: 0 0 14px;
+    gap: 12px;
+    margin: 0 0 10px;
+    flex-wrap: nowrap;
+}
+
+.games-category-bar {
+    display: flex;
+    gap: 8px;
+    flex: 1 1 auto;
+    overflow-x: auto;
+    padding: 0;
+    margin: 0;
+    scrollbar-width: none;
+}
+
+.games-category-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.games-cat-btn {
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: #262c3f;
+    color: #d7ddf0;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-family: "Fredoka", system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.games-cat-btn:hover {
+    background: #313953;
+}
+
+.games-cat-btn.is-active {
+    background: #ff6a00;
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.24);
+}
+
+body.light .games-cat-btn {
+    background: #edf1fb;
+    color: #2d3548;
+    border-color: #ccd4e6;
+}
+
+body.light .games-cat-btn:hover {
+    background: #e4eaf8;
+}
+
+body.light .games-cat-btn.is-active {
+    background: #ff6a00;
+    color: #fff;
+    border-color: #e55f00;
 }
 
 .games-sort-wrap {
@@ -67,6 +124,22 @@
     background: transparent;
     border: none;
     min-width: 132px;
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+
+@media (max-width: 900px) {
+    .games-toolbar {
+        flex-wrap: wrap;
+    }
+    .games-category-bar {
+        order: 2;
+        flex-basis: 100%;
+        padding-top: 4px;
+    }
+    .games-sort-wrap {
+        order: 1;
+    }
 }
 
 body.light .games-sort-wrap {
@@ -86,7 +159,7 @@ body.light .games-sort-wrap {
 .games-sort-select {
     width: 100%;
     accent-color: #ff6a00;
-    /* Orange ring only while focused (click / keyboard)—not when idle */
+    /* Orange ring only while focused (click / keyboard), not when idle */
     border: 2px solid transparent;
     border-radius: 10px;
     padding: 10px 34px 10px 12px;
@@ -126,9 +199,9 @@ body.light .games-sort-select:focus-visible {
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
     grid-auto-flow: dense;
-    gap: 20px;
+    gap: 14px;
 }
 
 .grid.grid--visual-layout {
@@ -140,14 +213,14 @@ body.light .games-sort-select:focus-visible {
 .show-all-games-wrap {
     display: flex;
     justify-content: center;
-    padding: 0 0 16px;
+    padding: 0 0 10px;
 }
 
 .show-all-games-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 14px 28px;
+    padding: 10px 22px;
     border-radius: 999px;
     font-family: "Fredoka", system-ui, sans-serif;
     font-weight: 700;
@@ -206,7 +279,7 @@ body.light .show-all-games-btn:active {
 .games-divider {
     border: none;
     height: 2px;
-    margin: 32px 0 28px;
+    margin: 20px 0 18px;
     border-radius: 999px;
     background: linear-gradient(
         90deg,
@@ -278,9 +351,23 @@ body.light .card:hover {
         0 5px 0 rgba(30, 35, 50, 0.12);
 }
 
+.grid-empty {
+    padding: 16px 12px;
+    color: var(--text-muted);
+    font-size: 14px;
+    border: 1px dashed rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+body.light .grid-empty {
+    border-color: rgba(26, 39, 68, 0.18);
+    background: rgba(26, 39, 68, 0.04);
+}
+
 .home-about-wrap {
     width: min(1180px, 100%);
-    margin: 24px auto 12px;
+    margin: 14px auto 10px;
     padding: 0 16px;
 }
 
@@ -433,8 +520,8 @@ body.light .home-about-list {
             <main class="site-main">
         <div class="container" id="gamesSection">
             <div class="games-toolbar">
+                <div class="games-category-bar" id="gamesCategoryBar" aria-label="Game categories"></div>
                 <div class="games-sort-wrap">
-                    <label class="games-sort-label" for="gamesSort">Sort</label>
                     <select id="gamesSort" class="games-sort-select" aria-label="Sort games">
                         <option value="popular">Popular</option>
                         <option value="alphabetical">Alphabetical</option>
@@ -451,7 +538,7 @@ body.light .home-about-list {
                 <div class="survey-cta" role="region" aria-labelledby="surveyCtaHeading">
                     <div class="survey-cta__copy">
                         <h2 class="survey-cta__headline" id="surveyCtaHeading">What game should we add next?</h2>
-                        <p class="survey-cta__sub">One quick answer is all it takes—we use your ideas to grow TubZi’s lineup.</p>
+                        <p class="survey-cta__sub">One quick answer is all it takes. We use your ideas to grow TubZi’s lineup.</p>
                     </div>
                     <button type="button" class="survey-cta__btn" id="btnOpenTallyRequest" aria-haspopup="dialog" aria-controls="tallyGameRequestDialog">
                         Suggest a game →
@@ -529,7 +616,7 @@ body.light .home-about-list {
         <section class="home-browse-wrap home-browse-wrap--after-survey" aria-labelledby="homeBrowseHeading">
             <div class="home-browse-inner">
                 <h2 class="home-browse-heading" id="homeBrowseHeading">Browse by category</h2>
-                <p class="home-browse-sub">Jump straight into the kind of games you want to play—everything runs in your browser.</p>
+                <p class="home-browse-sub">Jump straight into the kind of games you want to play, and everything runs in your browser.</p>
                 <div class="home-browse-grid home-browse-grid--3">
                     <a class="home-browse-card" href="index.html?genre=action">
                         <div class="home-browse-card-thumb" style="background-image: url('images/ultrakill.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
@@ -584,7 +671,7 @@ body.light .home-about-list {
                         <div class="home-browse-card-thumb" style="background-image: url('images/slope.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
                         <div>
                             <h3 class="home-browse-card-title">No download games</h3>
-                            <p class="home-browse-card-desc">Instant play—no install needed.</p>
+                            <p class="home-browse-card-desc">Instant play, no install needed.</p>
                         </div>
                     </a>
                     <a class="home-browse-card" href="index.html?genre=puzzle">
@@ -658,7 +745,7 @@ body.light .home-about-list {
         </nav>
 
         <hr class="site-footer__rule" aria-hidden="true">
-        <p class="site-footer__legal">© 2026 TubZi — Free browser games. All rights reserved.</p>
+        <p class="site-footer__legal">© 2026 TubZi. Free browser games. All rights reserved.</p>
     </div>
             </footer>
         </div>
@@ -679,7 +766,7 @@ body.light .home-about-list {
             Click a game to play in your browser. Use search or <strong>Random</strong>, or scroll to browse categories.
         </p>
         <p class="welcome-first-card__text">
-            <strong>Suggest a game</strong> if we’re missing one—we read every submission.
+            <strong>Suggest a game</strong> if we’re missing one. We read every submission.
         </p>
         <p class="welcome-first-card__text">
             Join <a class="welcome-first-card__link" href="https://discord.gg/nj5YYgKBap" target="_blank" rel="noopener noreferrer">Discord</a> for updates and backup links.
@@ -740,7 +827,7 @@ body.light .home-about-list {
                 <span class="tally-mini-browser__dot tally-mini-browser__dot--y"></span>
                 <span class="tally-mini-browser__dot tally-mini-browser__dot--g"></span>
             </span>
-            <span class="tally-mini-browser__title" id="tallyMiniBrowserTitle">TubZi — Request a game</span>
+            <span class="tally-mini-browser__title" id="tallyMiniBrowserTitle">TubZi: Request a game</span>
             <button type="button" class="tally-mini-browser__close" data-tally-close aria-label="Close form">×</button>
         </div>
         <div class="tally-mini-browser__urlbar" aria-hidden="true">
@@ -1005,7 +1092,10 @@ function sortGameList(list, useVisualLayout) {
 }
 
 let activeGenre = "all";
+let activeCategory = "home";
 const SORT_MODE_KEY = "tubzi-home-sort";
+const RECENTLY_PLAYED_KEY = "tubzi-recently-played-v1";
+const RECENTLY_PLAYED_MAX = 20;
 const ALLOWED_SORTS = new Set(["popular", "alphabetical", "newly-added"]);
 let activeSort = localStorage.getItem(SORT_MODE_KEY) || "popular";
 if (!ALLOWED_SORTS.has(activeSort)) {
@@ -1016,7 +1106,135 @@ const grid = document.getElementById("grid");
 const search = document.getElementById("search");
 const themeBtn = document.getElementById("themeBtn");
 const gamesSort = document.getElementById("gamesSort");
+const gamesCategoryBar = document.getElementById("gamesCategoryBar");
 const THEME_KEY = "tubzi-theme";
+const CATEGORY_ROWS = [
+    { id: "home", label: "Home" },
+    { id: "recent", label: "Recently Played" },
+    { id: "vehicle", label: "Vehicle Games" },
+    { id: "gun", label: "Gun Games" },
+    { id: "brain", label: "Brain Games" },
+    { id: "simulation", label: "Simulation" },
+    { id: "multiplayer", label: "Multiplayer" },
+    { id: "sports", label: "Sports" },
+    { id: "horror", label: "Horror" },
+    { id: "platformer", label: "Platformer" },
+    { id: "casual", label: "Casual" }
+];
+
+function gameKey(name) {
+    return String(name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function getRecentlyPlayedKeys() {
+    try {
+        const raw = JSON.parse(localStorage.getItem(RECENTLY_PLAYED_KEY) || "[]");
+        if (!Array.isArray(raw)) {
+            return [];
+        }
+        return raw.map(gameKey).filter(Boolean);
+    } catch {
+        return [];
+    }
+}
+
+function saveRecentlyPlayedKeys(keys) {
+    try {
+        localStorage.setItem(RECENTLY_PLAYED_KEY, JSON.stringify(keys.slice(0, RECENTLY_PLAYED_MAX)));
+    } catch (err) {
+        /* ignore storage failures */
+    }
+}
+
+function pushRecentlyPlayed(gameName) {
+    const key = gameKey(gameName);
+    if (!key) {
+        return;
+    }
+    const existing = getRecentlyPlayedKeys().filter(k => k !== key);
+    existing.unshift(key);
+    saveRecentlyPlayedKeys(existing);
+}
+
+function hasAnyKeyword(name, list) {
+    const n = String(name || "").toLowerCase();
+    return list.some(k => n.includes(k));
+}
+
+function categoryMatches(game, categoryId, recentSet) {
+    if (categoryId === "home") {
+        return true;
+    }
+    if (categoryId === "recent") {
+        return recentSet.has(gameKey(game.name));
+    }
+    if (categoryId === "vehicle") {
+        return game.genre === "driving" || hasAnyKeyword(game.name, ["car", "moto", "bike", "race", "drift", "flight", "truck", "ride"]);
+    }
+    if (categoryId === "gun") {
+        return hasAnyKeyword(game.name, ["shooter", "gun", "sniper", "shell shockers", "ultrakill", "half life", "bank robbery", "1v1", "brotato", "repo"]);
+    }
+    if (categoryId === "brain") {
+        return game.genre === "puzzle" || hasAnyKeyword(game.name, ["wordle", "2048", "alchemy", "block", "sudoku"]);
+    }
+    if (categoryId === "simulation") {
+        return hasAnyKeyword(game.name, ["simulator", "bitlife", "capitalist", "mart", "fishing", "tycoon", "raft", "farming"]);
+    }
+    if (categoryId === "multiplayer") {
+        return game.genre === "io" || hasAnyKeyword(game.name, ["1v1", "among us", "shell shockers", "smash karts", "random"]);
+    }
+    if (categoryId === "sports") {
+        return game.genre === "sports";
+    }
+    if (categoryId === "horror") {
+        return game.genre === "horror" || hasAnyKeyword(game.name, ["fnaf", "granny", "horror", "scary", "neighbor", "backrooms"]);
+    }
+    if (categoryId === "platformer") {
+        return game.genre === "platformer" || hasAnyKeyword(game.name, ["mario", "vex", "run ", "geometry"]);
+    }
+    if (categoryId === "casual") {
+        return game.genre === "casual";
+    }
+    if (categoryId === "action" || categoryId === "io") {
+        return game.genre === categoryId;
+    }
+    return true;
+}
+
+function setActiveCategory(categoryId) {
+    activeCategory = categoryId;
+    if (categoryId === "home" || categoryId === "recent") {
+        activeGenre = "all";
+    }
+    updateCategoryButtons();
+    render(search.value);
+}
+
+function buildCategoryBar() {
+    if (!gamesCategoryBar) {
+        return;
+    }
+    gamesCategoryBar.innerHTML = "";
+    CATEGORY_ROWS.forEach(row => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "games-cat-btn";
+        btn.dataset.categoryId = row.id;
+        btn.textContent = row.label;
+        btn.addEventListener("click", () => setActiveCategory(row.id));
+        gamesCategoryBar.appendChild(btn);
+    });
+    updateCategoryButtons();
+}
+
+function updateCategoryButtons() {
+    if (!gamesCategoryBar) {
+        return;
+    }
+    gamesCategoryBar.querySelectorAll(".games-cat-btn").forEach(btn => {
+        btn.classList.toggle("is-active", btn.dataset.categoryId === activeCategory);
+    });
+}
 
 function applyTheme(mode) {
     const isLight = mode === "light";
@@ -1106,14 +1324,23 @@ function buildRailNav() {
         btn.addEventListener("click", () => {
             if (item.id === "home") {
                 activeGenre = "all";
+                activeCategory = "home";
                 search.value = "";
                 render("");
                 window.scrollTo({ top: 0, behavior: "smooth" });
             } else if (item.genre) {
                 activeGenre = item.genre;
+                if (item.genre === "driving") {
+                    activeCategory = "vehicle";
+                } else if (item.genre === "puzzle") {
+                    activeCategory = "brain";
+                } else {
+                    activeCategory = item.genre;
+                }
                 render(search.value);
                 document.getElementById("gamesSection")?.scrollIntoView({ behavior: "smooth" });
             }
+            updateCategoryButtons();
             updateRailActive();
         });
 
@@ -1158,9 +1385,12 @@ function updateGamesSectionHeading(rawFilter) {
     const trimmed = String(rawFilter || "").trim();
     const hasSearch = trimmed.length > 0;
     const genreRow = RAIL_NAV_STRUCTURE.find(r => r.kind === "item" && r.genre === activeGenre);
+    const catRow = CATEGORY_ROWS.find(r => r.id === activeCategory);
 
     let heading;
-    if (activeGenre === "all") {
+    if (activeCategory === "recent") {
+        heading = hasSearch ? "Recently played · search" : "Recently played";
+    } else if (activeCategory === "home" || activeGenre === "all") {
         if (hasSearch) {
             const display = trimmed.length > 48 ? `${trimmed.slice(0, 45)}…` : trimmed;
             heading = `Search: ${display}`;
@@ -1168,15 +1398,15 @@ function updateGamesSectionHeading(rawFilter) {
             heading = "Popular picks";
         }
     } else if (hasSearch) {
-        heading = `${(genreRow && genreRow.label) || "Games"} · search`;
+        heading = `${(catRow && catRow.label) || (genreRow && genreRow.label) || "Games"} · search`;
     } else {
-        heading = (genreRow && genreRow.label) || "Games";
+        heading = (catRow && catRow.label) || (genreRow && genreRow.label) || "Games";
     }
 
-    if (activeGenre === "all" && !hasSearch) {
+    if ((activeCategory === "home" || activeGenre === "all") && !hasSearch) {
         document.title = DEFAULT_INDEX_DOC_TITLE;
     } else {
-        document.title = `${heading} — TubZi`;
+        document.title = `${heading} | TubZi`;
     }
 }
 
@@ -1184,13 +1414,27 @@ function render(filter = "") {
     grid.innerHTML = "";
 
     const q = filter.toLowerCase().trim();
+    const recentKeys = getRecentlyPlayedKeys();
+    const recentSet = new Set(recentKeys);
     const matchedBase = games
-        .filter(gameMatches)
+        .filter(g => categoryMatches(g, activeCategory, recentSet))
         .filter(g => g.name.toLowerCase().includes(q));
+    let orderedBase = matchedBase;
+    if (activeCategory === "recent") {
+        const orderMap = new Map(recentKeys.map((k, i) => [k, i]));
+        orderedBase = [...matchedBase].sort((a, b) => {
+            const da = orderMap.has(gameKey(a.name)) ? orderMap.get(gameKey(a.name)) : 99_999;
+            const db = orderMap.has(gameKey(b.name)) ? orderMap.get(gameKey(b.name)) : 99_999;
+            return da - db;
+        });
+    }
+    const visualHasLargeTiles =
+        !!(LAYOUT_TILES && Object.values(LAYOUT_TILES).some(t => (Number(t && t.spanW) > 1) || (Number(t && t.spanH) > 1)));
     const useVisualLayout =
         activeSort === "popular" &&
-        activeGenre === "all" &&
+        activeCategory === "home" &&
         LAYOUT_TILES &&
+        visualHasLargeTiles &&
         typeof TUBZI_LAYOUT !== "undefined" &&
         TUBZI_LAYOUT.sortGamesForVisualRender;
 
@@ -1202,7 +1446,7 @@ function render(filter = "") {
         grid.style.gridTemplateColumns = "";
     }
 
-    const matched = sortGameList(matchedBase, useVisualLayout);
+    const matched = activeCategory === "recent" ? orderedBase : sortGameList(orderedBase, useVisualLayout);
 
     let toShow = matched;
 
@@ -1213,19 +1457,25 @@ function render(filter = "") {
             : 0;
     const useFeaturedPokiPattern =
         !useVisualLayout &&
-        activeSort === "popular" &&
-        activeGenre === "all" &&
+        activeCategory === "home" &&
         !q &&
         typeof TUBZI_LAYOUT !== "undefined" &&
         TUBZI_LAYOUT.applyTileLevelToCard;
     // Staggered "featured" cadence similar to Poki-style hero tiles.
     // Includes a safety guard so two large cards are never consecutive.
-    const FEATURED_STEPS = [0, 3, 7, 11, 15, 19, 23, 27, 31, 35, 39];
-    const featuredIndexSet = new Set(FEATURED_STEPS);
+    const featuredSteps = [];
+    if (useFeaturedPokiPattern) {
+        const featuredIndexMax = Math.max(0, toShow.length - 1);
+        for (let fi = 0; fi <= featuredIndexMax; fi += 3) {
+            featuredSteps.push(fi);
+        }
+    }
+    const featuredIndexSet = new Set(featuredSteps);
     const forcedFeaturedKeys = new Set([
         "ultrakill",
         "fallguys",
         "motox3m",
+        "gtavicecity",
         "spacewaves",
         "bankrobbery",
         "basketballbros",
@@ -1290,6 +1540,7 @@ function render(filter = "") {
             tubziAttachHoverGamePreview(div, layoutKey);
 
             const goPlay = () => {
+                pushRecentlyPlayed(game.name);
                 openGameWithHeadsUp(`play.html?game=${game.file}&name=${encodeURIComponent(game.name)}`);
             };
 
@@ -1304,6 +1555,16 @@ function render(filter = "") {
             grid.appendChild(div);
         });
 
+    if (!toShow.length) {
+        const empty = document.createElement("div");
+        empty.className = "grid-empty";
+        empty.textContent =
+            activeCategory === "recent"
+                ? "No recently played games yet. Open any game and it will appear here."
+                : "No games match this category yet.";
+        grid.appendChild(empty);
+    }
+
     updateGamesSectionHeading(filter);
     updateRailActive();
 }
@@ -1313,7 +1574,7 @@ window.addEventListener("resize", () => {
     clearTimeout(homePreviewResizeTimer);
     homePreviewResizeTimer = setTimeout(() => {
         const q = (search && search.value) || "";
-        if (activeGenre === "all" && !String(q).trim()) {
+        if (activeCategory === "home" && !String(q).trim()) {
             render(q);
         }
     }, 160);
@@ -1327,6 +1588,13 @@ search.addEventListener("input", e => {
     const genreParam = new URLSearchParams(window.location.search).get("genre");
     if (genreParam && ["io", "sports", "driving", "action", "puzzle", "casual"].includes(genreParam)) {
         activeGenre = genreParam;
+        if (genreParam === "driving") {
+            activeCategory = "vehicle";
+        } else if (genreParam === "puzzle") {
+            activeCategory = "brain";
+        } else {
+            activeCategory = genreParam;
+        }
         requestAnimationFrame(() => {
             document.getElementById("gamesSection")?.scrollIntoView({ behavior: "smooth" });
         });
@@ -1341,6 +1609,7 @@ search.addEventListener("input", e => {
 })();
 
 buildRailNav();
+buildCategoryBar();
 render();
 
 document.addEventListener("click", e => {

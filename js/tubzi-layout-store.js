@@ -7,7 +7,7 @@
     var LAYOUT_VERSION = 4;
     var TILE_LEVEL_MIN = 1;
     var TILE_LEVEL_MAX = 15;
-    /** “Normal” cell — same as old level 4 */
+    /** “Normal” cell, same as old level 4 */
     var TILE_LEVEL_DEFAULT = 8;
     var DEFAULT_BOARD_COLS = 12;
     var MAX_SPAN = 6;
@@ -280,6 +280,48 @@
                 }
             });
         }
+
+        /**
+         * Site-side boost: keep GTA Vice City near the top and visually large when a v3+ tile map exists.
+         * This does not mutate localStorage; it only adjusts the merged runtime view.
+         */
+        (function boostGtaViceCity() {
+            var heroKey = normName("GTA Vice City");
+            if (!heroKey) {
+                return;
+            }
+
+            if (tiles && tiles[heroKey]) {
+                tiles[heroKey] = clampTileSpec(
+                    {
+                        row: 0,
+                        col: 0,
+                        spanW: 3,
+                        spanH: 3,
+                        bgX: tiles[heroKey].bgX,
+                        bgY: tiles[heroKey].bgY
+                    },
+                    boardCols
+                );
+                return;
+            }
+
+            if (!tiles) {
+                sizes[heroKey] = TILE_LEVEL_MAX;
+            }
+        })();
+
+        (function boostGtaPopularityIndex() {
+            var heroKey = normName("GTA Vice City");
+            if (!heroKey || !index || !index.set) {
+                return;
+            }
+            var cur = index.has(heroKey) ? index.get(heroKey) : null;
+            var forced = -1;
+            if (cur == null || cur > forced) {
+                index.set(heroKey, forced);
+            }
+        })();
         return {
             index: index,
             sizes: sizes,

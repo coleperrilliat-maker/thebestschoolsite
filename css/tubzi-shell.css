@@ -18,6 +18,8 @@
     --accent-green-hover: #16a34a;
     --card-radius: 18px;
     --rail-width: 276px;
+    --rail-width-collapsed: 72px;
+    --tubchat-dock-width: clamp(320px, 26vw, 430px);
     /* Must clear absolute header: padding + inner row (search / buttons). */
     --site-header-height: 72px;
     /* Fluid gutters: always a small inset on phones, wider as viewport grows (capped on ultra-wide). */
@@ -61,15 +63,104 @@ body {
     flex-direction: column;
 }
 
+body.tubchat-dock-open .app-shell {
+    margin-left: var(--tubchat-dock-width);
+}
+
+body[data-tubzi-page="home"].tubchat-dock-open .app-shell {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+body[data-tubzi-page="home"].tubchat-dock-open .game-rail {
+    display: none;
+}
+
+body[data-tubzi-page="home"].tubchat-dock-open .app-content {
+    grid-column: 1 / -1;
+}
+
+.tubchat-dock {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--tubchat-dock-width);
+    height: 100dvh;
+    z-index: 520;
+    background: var(--header-bg);
+    border-right: 1px solid var(--header-border);
+    box-shadow: none;
+    transform: translateX(calc(-1 * var(--tubchat-dock-width)));
+    transition: transform 0.22s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+body.tubchat-dock-open .tubchat-dock {
+    transform: translateX(0);
+}
+
+.tubchat-dock__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: var(--site-header-height);
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--header-border);
+}
+
+.tubchat-dock__title {
+    font-family: "Fredoka", system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.02em;
+}
+
+.tubchat-dock__close {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    border: 2px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--text);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.tubchat-dock__frame-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.tubchat-dock__frame {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: #000;
+}
+
 /* Main column only (rail hidden); header absolutely spans full width on top */
 .app-shell {
     flex: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: var(--rail-width-collapsed) minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
     min-height: 0;
     min-width: 0;
     position: relative;
+    transition: margin-left 0.22s ease;
+}
+
+/* Prevent one-frame overlap/flicker while restoring Tubchat open state on navigation. */
+body.tubchat-no-anim .app-shell,
+body.tubchat-no-anim .app-content,
+body.tubchat-no-anim .game-rail,
+body.tubchat-no-anim .tubchat-dock {
+    transition: none !important;
 }
 
 .site-header {
@@ -92,14 +183,15 @@ body.light .site-header {
 }
 
 .game-rail {
-    display: none !important;
+    display: flex;
     grid-column: 1 / 2;
     grid-row: 1 / -1;
     flex-direction: column;
-    min-height: 0;
+    min-height: 100dvh;
     min-width: 0;
-    width: 100%;
-    max-width: var(--rail-width);
+    height: 100dvh;
+    width: var(--rail-width-collapsed);
+    max-width: none;
     padding-top: var(--site-header-height);
     box-sizing: border-box;
     background: var(--header-bg);
@@ -108,10 +200,28 @@ body.light .site-header {
     box-shadow: none;
     z-index: 200;
     overflow: hidden;
+    transition: width 0.2s ease, box-shadow 0.2s ease;
 }
 
 body.light .game-rail {
     box-shadow: none;
+}
+
+.game-rail:hover,
+.game-rail:focus-within {
+    width: var(--rail-width);
+    box-shadow: 10px 0 28px rgba(0, 0, 0, 0.28);
+}
+
+body.light .game-rail:hover,
+body.light .game-rail:focus-within {
+    box-shadow: 10px 0 24px rgba(16, 24, 40, 0.16);
+}
+
+body.tubchat-dock-open .game-rail,
+body.tubchat-dock-open .game-rail:hover,
+body.tubchat-dock-open .game-rail:focus-within {
+    box-shadow: none !important;
 }
 
 .game-rail-inner {
@@ -119,8 +229,10 @@ body.light .game-rail {
     flex-direction: column;
     flex: 1;
     min-height: 0;
+    height: calc(100dvh - var(--site-header-height));
     position: relative;
     padding: 12px 0 14px;
+    width: 100%;
 }
 
 .game-rail-top {
@@ -138,10 +250,12 @@ body.light .game-rail {
 .game-rail-scroll {
     flex: 1;
     min-height: 0;
+    max-height: 100%;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     padding: 0 8px 8px;
     scrollbar-width: thin;
@@ -163,8 +277,12 @@ body.light .game-rail {
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--text-muted);
-    opacity: 0.85;
+    color: rgba(244, 244, 248, 0.9);
+    display: none;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.15s ease, max-height 0.15s ease, padding 0.15s ease;
 }
 
 .rail-section-label:first-child {
@@ -178,12 +296,19 @@ body.light .game-rail {
     opacity: 0.75;
 }
 
+.game-rail:hover .rail-section-label,
+.game-rail:focus-within .rail-section-label {
+    display: block;
+    opacity: 1;
+    max-height: 56px;
+}
+
 .rail-nav-item--compact {
     margin: 1px 2px;
     padding: 5px 10px;
     gap: 8px;
     font-size: 12px;
-    border-radius: 10px;
+    border-radius: 4px;
 }
 
 .rail-nav-item--compact .rail-icon {
@@ -214,12 +339,13 @@ body.light .game-rail {
 .rail-nav-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    width: calc(100% - 4px);
-    margin: 3px 2px;
-    padding: 8px 12px;
+    justify-content: center;
+    gap: 0;
+    width: calc(100% - 12px);
+    margin: 3px 6px;
+    padding: 10px 8px;
     border: none;
-    border-radius: 14px;
+    border-radius: 4px;
     background: transparent;
     cursor: pointer;
     font-family: "Fredoka", system-ui, sans-serif;
@@ -227,16 +353,30 @@ body.light .game-rail {
     font-weight: 700;
     letter-spacing: 0.02em;
     text-align: left;
-    color: var(--text-muted);
+    color: rgba(244, 244, 248, 0.92);
     transition:
         background 0.18s ease,
         color 0.18s ease,
-        box-shadow 0.18s ease;
+        box-shadow 0.18s ease,
+        width 0.18s ease,
+        margin 0.18s ease,
+        padding 0.18s ease,
+        gap 0.18s ease,
+        justify-content 0.18s ease;
 }
 
 .rail-nav-item:hover {
     background: var(--btn-bg-hover);
     color: var(--text);
+}
+
+.game-rail:hover .rail-nav-item,
+.game-rail:focus-within .rail-nav-item {
+    justify-content: flex-start;
+    gap: 10px;
+    width: calc(100% - 10px);
+    margin: 3px 5px;
+    padding: 9px 12px;
 }
 
 .rail-nav-item.is-active {
@@ -247,6 +387,18 @@ body.light .game-rail {
 
 body.light .rail-nav-item.is-active {
     box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.4);
+}
+
+body.light .rail-section-label {
+    color: rgba(26, 28, 44, 0.84);
+}
+
+body.light .rail-nav-item {
+    color: #1a1c2c;
+}
+
+body.light .rail-label {
+    text-shadow: none;
 }
 
 .rail-icon {
@@ -269,17 +421,28 @@ body.light .rail-nav-item.is-active {
 .rail-label {
     display: block;
     font-family: "Fredoka", system-ui, sans-serif;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.02em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     min-width: 0;
+    max-width: 0;
+    opacity: 0;
+    flex: 0 0 auto;
+    transition: max-width 0.18s ease, opacity 0.15s ease;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.22);
+}
+
+.game-rail:hover .rail-label,
+.game-rail:focus-within .rail-label {
+    max-width: 220px;
+    opacity: 1;
     flex: 1;
 }
 
 .app-content {
-    grid-column: 1 / -1;
+    grid-column: 2 / -1;
     grid-row: 1 / -1;
     min-width: 0;
     min-height: 0;
@@ -534,10 +697,20 @@ body[data-tubzi-page="category"] .hdr-btn-random {
 @media (max-width: 900px) {
     :root {
         --rail-width: 220px;
+        --rail-width-collapsed: 64px;
     }
 }
 
 @media (max-width: 720px) {
+    body.tubchat-dock-open .app-shell {
+        margin-left: 0;
+    }
+
+    .tubchat-dock {
+        width: min(94vw, 430px);
+        transform: translateX(-100%);
+    }
+
     .app-shell {
         display: flex;
         flex-direction: column;
@@ -563,6 +736,33 @@ body[data-tubzi-page="category"] .hdr-btn-random {
         border-right: none;
         border-bottom: 1px solid var(--header-border);
         max-height: min(42vh, 320px);
+        overflow: hidden;
+        box-shadow: none;
+    }
+
+    .game-rail:hover,
+    .game-rail:focus-within {
+        width: 100%;
+        box-shadow: none;
+    }
+
+    .rail-section-label {
+        opacity: 0.85;
+        max-height: 40px;
+    }
+
+    .rail-nav-item {
+        justify-content: flex-start;
+        gap: 10px;
+        width: calc(100% - 4px);
+        margin: 3px 2px;
+        padding: 8px 12px;
+    }
+
+    .rail-label {
+        max-width: 220px;
+        opacity: 1;
+        flex: 1;
     }
 
     .game-rail-inner {

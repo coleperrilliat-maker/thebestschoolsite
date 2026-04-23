@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#0a0a0b">
+<title>TubChat — Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #f97316;
+  --accent-dim: rgba(249,115,22,.14);
+  --bg: #1b1b2f;
+  --surface: #232338;
+  --topbar-bg: #232338;
+  --bubble-them: #2b2b44;
+  --border: rgba(255,255,255,.07);
+  --text: #f4f4f5;
+  --text-2: #a1a1aa;
+  --text-3: #52525b;
+  --composer-bg: #232338;
+  --safe-t: max(0px, env(safe-area-inset-top));
+  --safe-b: max(0px, env(safe-area-inset-bottom));
+  --phone-w: 440px;
+  --r: 11px;
+}
+
+html[data-theme="light"] {
+  --accent: #ff6a00;
+  --accent-dim: rgba(255,106,0,.14);
+  --bg: #eef1f8;
+  --surface: #ffffff;
+  --topbar-bg: #ffffff;
+  --border: rgba(26,28,44,.12);
+  --text: #1a1c2c;
+  --text-2: #5c6070;
+  --text-3: #8b909f;
+  --composer-bg: #ffffff;
+}
+*, *::before, *::after {
+  margin: 0; padding: 0; box-sizing: border-box;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+html, body { height: 100%; }
+body {
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.shell {
+  width: 100%;
+  max-width: var(--phone-w);
+  height: 100dvh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+
+/* Topbar */
+.topbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: calc(var(--safe-t) + 10px) 16px 10px;
+  background: var(--topbar-bg);
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+.leave-btn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.leave-btn:hover {
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  border-color: rgba(255,255,255,.18);
+}
+.room-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 0;
+}
+.room-prefix {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+  flex-shrink: 0;
+}
+.room-code {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: .04em;
+  background: rgba(255,255,255,.06);
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+.topbar-spacer { width: 68px; flex-shrink: 0; }
+
+/* Messages */
+.messages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.1) transparent;
+}
+.messages::-webkit-scrollbar { width: 4px; }
+.messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
+
+html[data-theme="light"] .messages {
+  scrollbar-color: rgba(26,28,44,.18) transparent;
+}
+html[data-theme="light"] .messages::-webkit-scrollbar-thumb {
+  background: rgba(26,28,44,.18);
+}
+
+/* Message bubbles */
+.msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 75%;
+  gap: 5px;
+}
+.msg.me {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+.msg.them {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+.msg .meta {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+  color: var(--text-3);
+}
+.msg .meta .time {
+  font-size: 10px;
+  color: var(--text-3);
+  font-weight: 400;
+}
+.msg .txt {
+  padding: 9px 13px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+  max-width: 100%;
+}
+.msg.me .txt {
+  background: var(--accent);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.msg.them .txt {
+  background: #f4f4f5;
+  color: #18181b;
+  border-bottom-left-radius: 4px;
+}
+
+html[data-theme="light"] .msg.them .txt {
+  background: #f4f6ff;
+  color: #1a1c2c;
+  border: 1px solid rgba(26,28,44,.12);
+}
+html[data-theme="light"] .composer input {
+  background: rgba(26,28,44,.04);
+}
+html[data-theme="light"] .composer input:focus {
+  background: rgba(255,106,0,.06);
+}
+
+/* Composer */
+.composer {
+  flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 12px calc(var(--safe-b) + 10px);
+  background: var(--composer-bg);
+  border-top: 1px solid var(--border);
+}
+.composer input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--text);
+  background: rgba(255,255,255,.05);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+.composer input:focus {
+  border-color: var(--accent);
+  background: rgba(249,115,22,.04);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+.composer input::placeholder { color: var(--text-3); }
+.send-btn {
+  flex-shrink: 0;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 22px;
+  cursor: pointer;
+  transition: background .15s, transform .1s, opacity .15s;
+}
+.send-btn:hover { background: #ea6c0a; }
+.send-btn:active { transform: scale(.97); }
+.send-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Hidden banner (kept for JS compat) */
+.banner { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <button type="button" id="leaveBtn" class="leave-btn">Leave</button>
+    <div class="room-info">
+      <span class="room-prefix">Room</span>
+      <span class="room-code" id="activeLabel">—</span>
+    </div>
+    <div class="topbar-spacer"></div>
+  </div>
+
+  <p class="banner" id="syncNote"></p>
+  <div class="messages" id="messages" aria-live="polite"></div>
+
+  <form class="composer" id="chatForm" autocomplete="off">
+    <label for="msgInput" class="sr-only">Message</label>
+    <input type="text" id="msgInput" maxlength="500"
+           placeholder="Message..." enterkeyhint="send">
+    <button type="submit" class="send-btn" id="sendBtn">Send</button>
+  </form>
+</div>
+
+<script>
+(function () {
+    function normalizeTheme(raw) {
+        return raw === "light" ? "light" : "dark";
+    }
+
+    function applyTubziTheme(mode) {
+        const theme = normalizeTheme(mode);
+        document.documentElement.dataset.theme = theme;
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) {
+            meta.setAttribute("content", theme === "light" ? "#eef1f8" : "#0a0a0b");
+        }
+    }
+
+    function themeFromUrl() {
+        try {
+            const p = new URLSearchParams(window.location.search).get("tubzi_theme");
+            return p ? normalizeTheme(p) : null;
+        } catch (err) {
+            return null;
+        }
+    }
+
+    const initial = themeFromUrl() || "dark";
+    applyTubziTheme(initial);
+
+    window.addEventListener("message", function (e) {
+        if (!e || !e.data || typeof e.data !== "object") {
+            return;
+        }
+        if (e.data.type !== "tubzi-theme") {
+            return;
+        }
+        applyTubziTheme(e.data.mode);
+    });
+
+    window.__TUBZI_THEME__ = {
+        get() {
+            return document.documentElement.dataset.theme || "dark";
+        },
+        withThemeUrl(url) {
+            try {
+                const u = new URL(url, window.location.href);
+                u.searchParams.set("tubzi_theme", window.__TUBZI_THEME__.get());
+                return u.pathname + u.search + u.hash;
+            } catch (err) {
+                return url;
+            }
+        }
+    };
+
+    function notifyHostChatUrl() {
+        try {
+            const url = window.location.pathname + window.location.search + window.location.hash;
+            window.parent.postMessage({ type: "tubzi-chat-url", url }, "*");
+        } catch (err) {
+            /* ignore cross-window failures */
+        }
+    }
+
+    notifyHostChatUrl();
+    window.addEventListener("popstate", notifyHostChatUrl);
+    window.addEventListener("hashchange", notifyHostChatUrl);
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+const HOME=window.__TUBZI_THEME__.withThemeUrl("index.html");
+const user=(localStorage.getItem("tubzi_username")||"").trim();
+const code=(localStorage.getItem("tubzi_roomCode")||"").trim().toUpperCase();
+let roomId=(localStorage.getItem("tubzi_roomId")||"").trim();
+if(!user||!code){ location.replace(HOME); return; }
+document.getElementById("activeLabel").textContent=code;
+const SUPABASE_URL="https://gvvowenjfiiruyzncigb.supabase.co";
+const SUPABASE_KEY="sb_publishable_noeSDPOFwrIUXBpBiisrQg_tHtnN8aR";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{ realtime:{params:{eventsPerSecond:10}} });
+let roomSub=null;
+function storageKey(){ return "tubzi_room_msgs_"+(roomId||code); }
+function readMessages(){ try{ const raw=localStorage.getItem(storageKey()); const arr=raw?JSON.parse(raw):[]; return Array.isArray(arr)?arr:[]; }catch(_){ return[]; } }
+function writeMessages(list){ localStorage.setItem(storageKey(),JSON.stringify(list.slice(-200))); }
+function mapRow(row){ return { id:row.id||String(Date.now())+Math.random().toString(16).slice(2), user:row.username||row.user||"user", text:row.content||row.text||"", ts:row.created_at?new Date(row.created_at).getTime():(row.ts||Date.now()) }; }
+function escapeHtml(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function formatTime(ts){ try{ const d=new Date(ts); return d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}); }catch(_){ return""; } }
+function render(list){ const el=document.getElementById("messages"); el.innerHTML=list.map(function(m){ const cls=m.user===user?"msg me":"msg them"; const hue=(String(m.user||"").split("").reduce((a,c)=>a+c.charCodeAt(0),0)%360); const nameColor='hsl('+hue+' 85% 68%)'; const meta='<div class="meta"><span style="color:'+nameColor+'">'+escapeHtml(m.user)+'</span><span class="time">'+formatTime(m.ts)+'</span></div>'; return '<div class="'+cls+'"><div class="txt">'+escapeHtml(m.text)+'</div>'+meta+'</div>'; }).join(""); el.scrollTop=el.scrollHeight; }
+function appendLocalMessage(text){ const list=readMessages(); list.push({id:String(Date.now())+Math.random().toString(16).slice(2),user:user,text:text.trim(),ts:Date.now()}); writeMessages(list); render(list); }
+async function ensureAuth(){ const sess=await sb.auth.getSession(); if(sess.data.session)return; await sb.auth.signInAnonymously(); }
+function mapError(message){ const m=String(message||""); if(m.includes("rate_limited"))return"Slow down a bit."; if(m.includes("message_too_long"))return"Message too long (500 max)."; if(m.includes("room_not_found"))return"Room not found."; if(m.includes("room_full"))return"Room is full (25 max)."; return m||"Something went wrong."; }
+async function resolveRoomId(){ if(roomId)return roomId; const joined=await sb.rpc("join_room",{p_code:code,p_username:user}); if(joined.error)throw joined.error; if(Array.isArray(joined.data)&&joined.data[0]&&joined.data[0].room_id) roomId=String(joined.data[0].room_id); else if(joined.data&&joined.data.room_id) roomId=String(joined.data.room_id); else if(typeof joined.data==="string") roomId=joined.data; if(!roomId)throw new Error("Unable to resolve room."); localStorage.setItem("tubzi_roomId",roomId); return roomId; }
+async function loadHistory(){ const res=await sb.from("messages").select("id,username,content,created_at").eq("room_id",roomId).order("created_at",{ascending:true}).limit(200); if(res.error)throw res.error; const mapped=(res.data||[]).map(mapRow); writeMessages(mapped); render(mapped); }
+function subscribeMessages(){ if(roomSub)sb.removeChannel(roomSub); roomSub=sb.channel("msgs-"+roomId).on("postgres_changes",{event:"INSERT",schema:"public",table:"messages",filter:"room_id=eq."+roomId},function(payload){ const incoming=mapRow(payload.new||{}); const current=readMessages(); if(current.some(m=>String(m.id)===String(incoming.id)))return; current.push(incoming); writeMessages(current); render(current); }).subscribe(); }
+async function sendMessage(text){ if(!navigator.onLine){ appendLocalMessage(text); return; } const out=await sb.rpc("send_message",{p_room:roomId,p_content:text}); if(out.error)throw out.error; }
+document.getElementById("leaveBtn").addEventListener("click",function(){ localStorage.removeItem("tubzi_username"); localStorage.removeItem("tubzi_roomCode"); localStorage.removeItem("tubzi_roomId"); if(roomId) sb.rpc("leave_room",{p_room:roomId}); if(roomSub) sb.removeChannel(roomSub); location.href=HOME; });
+document.getElementById("chatForm").addEventListener("submit",async function(e){ e.preventDefault(); const input=document.getElementById("msgInput"); const v=input.value.trim(); if(!v)return; input.value=""; try{ await sendMessage(v); } catch(err){ alert(mapError(err&&err.message)); appendLocalMessage(v); } input.focus(); });
+window.addEventListener("online",function(){ loadHistory().catch(function(){}); });
+(async function boot(){ try{ await ensureAuth(); await resolveRoomId(); render(readMessages()); await loadHistory(); subscribeMessages(); document.getElementById("msgInput").focus(); }catch(err){ alert(mapError(err&&err.message)); location.replace(HOME); }})();
+})();
+</script>
+</body>
+</html>

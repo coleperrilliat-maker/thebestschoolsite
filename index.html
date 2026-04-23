@@ -515,6 +515,12 @@ body.light .home-about-list {
         </div>
     </header>
 
+    <aside class="game-rail" aria-label="Navigation">
+        <div class="game-rail-inner">
+            <nav class="game-rail-scroll" id="gameRailNav"></nav>
+        </div>
+    </aside>
+
     <div class="app-content">
         <div class="app-scroll">
             <main class="site-main">
@@ -752,6 +758,23 @@ body.light .home-about-list {
     </div>
 </div>
 
+<aside class="tubchat-dock" id="tubchatDock" aria-label="Tubchat panel">
+    <div class="tubchat-dock__bar">
+        <span class="tubchat-dock__title">Tubchat</span>
+        <button type="button" class="tubchat-dock__close" id="tubchatDockClose" aria-label="Close Tubchat">×</button>
+    </div>
+    <div class="tubchat-dock__frame-wrap">
+        <iframe
+            class="tubchat-dock__frame"
+            id="tubchatDockFrame"
+            title="Tubchat"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="clipboard-read; clipboard-write"
+        ></iframe>
+    </div>
+</aside>
+
 <div id="welcomeFirstLayer" class="welcome-first-layer" hidden>
     <div class="welcome-first-layer__backdrop" data-welcome-dismiss tabindex="-1" aria-hidden="true"></div>
     <div
@@ -846,7 +869,7 @@ body.light .home-about-list {
     </div>
 </div>
 
-<script src="js/tubzi-rail-data.js?v=4"></script>
+<script src="js/tubzi-rail-data.js?v=5"></script>
 <script src="js/tubzi-game-entries.js"></script>
 <script src="js/tubzi-layout-store.js"></script>
 <script src="js/tubzi-hover-preview.js"></script>
@@ -1107,19 +1130,28 @@ const search = document.getElementById("search");
 const themeBtn = document.getElementById("themeBtn");
 const gamesSort = document.getElementById("gamesSort");
 const gamesCategoryBar = document.getElementById("gamesCategoryBar");
+const tubchatDock = document.getElementById("tubchatDock");
+const tubchatDockClose = document.getElementById("tubchatDockClose");
+const tubchatDockFrame = document.getElementById("tubchatDockFrame");
+const TUBCHAT_DOCK_STATE_KEY = "tubzi_tubchat_dock_open";
+const TUBCHAT_EMBED_URL = "tubchat/index.html";
 const THEME_KEY = "tubzi-theme";
 const CATEGORY_ROWS = [
-    { id: "home", label: "Home" },
-    { id: "recent", label: "Recently Played" },
-    { id: "vehicle", label: "Vehicle Games" },
-    { id: "gun", label: "Gun Games" },
-    { id: "brain", label: "Brain Games" },
-    { id: "simulation", label: "Simulation" },
-    { id: "multiplayer", label: "Multiplayer" },
-    { id: "sports", label: "Sports" },
-    { id: "horror", label: "Horror" },
-    { id: "platformer", label: "Platformer" },
-    { id: "casual", label: "Casual" }
+    { id: "action-games", label: "Action Games" },
+    { id: "racing-games", label: "Racing Games" },
+    { id: "shooting-games", label: "Shooting Games" },
+    { id: "sports-games", label: "Sports Games" },
+    { id: "multiplayer-games", label: "Multiplayer Games" },
+    { id: "io-games", label: "IO Games" },
+    { id: "puzzle-games", label: "Puzzle Games" },
+    { id: "adventure-games", label: "Adventure Games" },
+    { id: "arcade-games", label: "Arcade Games" },
+    { id: "clicker-idle-games", label: "Clicker / Idle Games" },
+    { id: "horror-games", label: "Horror Games" },
+    { id: "platformer-games", label: "Platformer Games" },
+    { id: "strategy-games", label: "Strategy Games" },
+    { id: "simulation-games", label: "Simulation Games" },
+    { id: "skill-parkour-games", label: "Skill / Parkour Games" }
 ];
 
 function gameKey(name) {
@@ -1168,44 +1200,57 @@ function categoryMatches(game, categoryId, recentSet) {
     if (categoryId === "recent") {
         return recentSet.has(gameKey(game.name));
     }
-    if (categoryId === "vehicle") {
+    if (categoryId === "action-games") {
+        return game.genre === "action";
+    }
+    if (categoryId === "racing-games") {
         return game.genre === "driving" || hasAnyKeyword(game.name, ["car", "moto", "bike", "race", "drift", "flight", "truck", "ride"]);
     }
-    if (categoryId === "gun") {
+    if (categoryId === "shooting-games") {
         return hasAnyKeyword(game.name, ["shooter", "gun", "sniper", "shell shockers", "ultrakill", "half life", "bank robbery", "1v1", "brotato", "repo"]);
     }
-    if (categoryId === "brain") {
-        return game.genre === "puzzle" || hasAnyKeyword(game.name, ["wordle", "2048", "alchemy", "block", "sudoku"]);
-    }
-    if (categoryId === "simulation") {
-        return hasAnyKeyword(game.name, ["simulator", "bitlife", "capitalist", "mart", "fishing", "tycoon", "raft", "farming"]);
-    }
-    if (categoryId === "multiplayer") {
-        return game.genre === "io" || hasAnyKeyword(game.name, ["1v1", "among us", "shell shockers", "smash karts", "random"]);
-    }
-    if (categoryId === "sports") {
+    if (categoryId === "sports-games") {
         return game.genre === "sports";
     }
-    if (categoryId === "horror") {
+    if (categoryId === "multiplayer-games") {
+        return game.genre === "io" || hasAnyKeyword(game.name, ["1v1", "among us", "shell shockers", "smash karts", "random", "multiplayer", "bros"]);
+    }
+    if (categoryId === "io-games") {
+        return game.genre === "io";
+    }
+    if (categoryId === "puzzle-games") {
+        return game.genre === "puzzle" || hasAnyKeyword(game.name, ["wordle", "2048", "alchemy", "block", "sudoku"]);
+    }
+    if (categoryId === "adventure-games") {
+        return hasAnyKeyword(game.name, ["adventure", "terraria", "minecraft", "raft", "temple run", "run ", "parkour", "escape", "quest"]);
+    }
+    if (categoryId === "arcade-games") {
+        return game.genre === "casual" || hasAnyKeyword(game.name, ["arcade", "dash", "snake", "runner", "random", "tetris"]);
+    }
+    if (categoryId === "clicker-idle-games") {
+        return hasAnyKeyword(game.name, ["clicker", "idle", "capitalist", "miner", "mart", "simulator", "incremental"]);
+    }
+    if (categoryId === "horror-games") {
         return game.genre === "horror" || hasAnyKeyword(game.name, ["fnaf", "granny", "horror", "scary", "neighbor", "backrooms"]);
     }
-    if (categoryId === "platformer") {
+    if (categoryId === "platformer-games") {
         return game.genre === "platformer" || hasAnyKeyword(game.name, ["mario", "vex", "run ", "geometry"]);
     }
-    if (categoryId === "casual") {
-        return game.genre === "casual";
+    if (categoryId === "strategy-games") {
+        return hasAnyKeyword(game.name, ["btd", "plantsvszombies", "chess", "strategy", "tower", "defense"]);
     }
-    if (categoryId === "action" || categoryId === "io") {
-        return game.genre === categoryId;
+    if (categoryId === "simulation-games") {
+        return hasAnyKeyword(game.name, ["simulator", "bitlife", "capitalist", "mart", "fishing", "tycoon", "raft", "farming"]);
+    }
+    if (categoryId === "skill-parkour-games") {
+        return hasAnyKeyword(game.name, ["parkour", "vex", "run ", "x3m", "slope", "hook", "dreadhead", "geometry"]);
     }
     return true;
 }
 
 function setActiveCategory(categoryId) {
     activeCategory = categoryId;
-    if (categoryId === "home" || categoryId === "recent") {
-        activeGenre = "all";
-    }
+    activeGenre = "all";
     updateCategoryButtons();
     render(search.value);
 }
@@ -1240,6 +1285,64 @@ function applyTheme(mode) {
     const isLight = mode === "light";
     document.body.classList.toggle("light", isLight);
     localStorage.setItem(THEME_KEY, mode);
+    syncTubchatThemeToChild();
+}
+
+function isTubchatDockOpen() {
+    return document.body.classList.contains("tubchat-dock-open");
+}
+
+function getTubchatThemeMode() {
+    return document.body.classList.contains("light") ? "light" : "dark";
+}
+
+
+function getTubchatInitialPath() {
+    try {
+        const hasRoom = !!localStorage.getItem("tubzi_roomId");
+        const hasCode = !!localStorage.getItem("tubzi_roomCode");
+        const hasUser = !!localStorage.getItem("tubzi_username");
+        if (hasRoom && hasCode && hasUser) {
+            return "tubchat/room.html";
+        }
+    } catch (err) {
+        /* ignore storage failures */
+    }
+    return TUBCHAT_EMBED_URL;
+}
+
+
+function setTubchatDockOpen(open) {
+    if (!tubchatDock) {
+        return;
+    }
+    if (open && tubchatDockFrame && !tubchatDockFrame.src) {
+        const theme = getTubchatThemeMode();
+        tubchatDockFrame.src = `${getTubchatInitialPath()}?tubzi_theme=${encodeURIComponent(theme)}`;
+    }
+    document.body.classList.toggle("tubchat-dock-open", !!open);
+    try {
+        localStorage.setItem(TUBCHAT_DOCK_STATE_KEY, open ? "1" : "0");
+    } catch (err) {
+        /* ignore storage failures */
+    }
+    syncTubchatThemeToChild();
+}
+
+function toggleTubchatDock() {
+    setTubchatDockOpen(!isTubchatDockOpen());
+}
+
+function syncTubchatThemeToChild() {
+    if (!tubchatDockFrame || !tubchatDockFrame.contentWindow) {
+        return;
+    }
+    const mode = getTubchatThemeMode();
+    try {
+        tubchatDockFrame.contentWindow.postMessage({ type: "tubzi-theme", mode }, "*");
+    } catch (err) {
+        /* ignore postMessage failures */
+    }
 }
 
 const saved = localStorage.getItem(THEME_KEY);
@@ -1253,6 +1356,13 @@ themeBtn.addEventListener("click", () => {
     const next = document.body.classList.contains("light") ? "dark" : "light";
     applyTheme(next);
 });
+
+if (tubchatDockFrame) {
+    tubchatDockFrame.addEventListener("load", () => {
+        syncTubchatThemeToChild();
+    });
+}
+
 
 document.getElementById("btnRandom").addEventListener("click", () => {
     const game = games[Math.floor(Math.random() * games.length)];
@@ -1328,12 +1438,17 @@ function buildRailNav() {
                 search.value = "";
                 render("");
                 window.scrollTo({ top: 0, behavior: "smooth" });
+            } else if (item.action === "tubchat") {
+                toggleTubchatDock();
+            } else if (item.categoryId) {
+                setActiveCategory(item.categoryId);
+                document.getElementById("gamesSection")?.scrollIntoView({ behavior: "smooth" });
             } else if (item.genre) {
                 activeGenre = item.genre;
                 if (item.genre === "driving") {
-                    activeCategory = "vehicle";
+                    activeCategory = "racing-games";
                 } else if (item.genre === "puzzle") {
-                    activeCategory = "brain";
+                    activeCategory = "puzzle-games";
                 } else {
                     activeCategory = item.genre;
                 }
@@ -1348,6 +1463,19 @@ function buildRailNav() {
     });
 
     updateRailActive();
+}
+
+function setupRailAutoResetScroll() {
+    const rail = document.querySelector(".game-rail");
+    const railScroll = document.getElementById("gameRailNav");
+    if (!rail || !railScroll) {
+        return;
+    }
+    const reset = () => {
+        railScroll.scrollTo({ top: 0, behavior: "auto" });
+    };
+    rail.addEventListener("mouseleave", reset);
+    rail.addEventListener("pointerleave", reset);
 }
 
 function updateRailActive() {
@@ -1365,6 +1493,10 @@ function updateRailActive() {
             }
         } else if (item.id === "home") {
             on = activeGenre === "all" && !searchTrimmed;
+        } else if (item.action === "tubchat") {
+            on = isTubchatDockOpen();
+        } else if (item.categoryId) {
+            on = activeCategory === item.categoryId;
         } else if (item.genre) {
             on = activeGenre === item.genre;
         }
@@ -1390,7 +1522,7 @@ function updateGamesSectionHeading(rawFilter) {
     let heading;
     if (activeCategory === "recent") {
         heading = hasSearch ? "Recently played · search" : "Recently played";
-    } else if (activeCategory === "home" || activeGenre === "all") {
+    } else if (activeCategory === "home") {
         if (hasSearch) {
             const display = trimmed.length > 48 ? `${trimmed.slice(0, 45)}…` : trimmed;
             heading = `Search: ${display}`;
@@ -1403,7 +1535,7 @@ function updateGamesSectionHeading(rawFilter) {
         heading = (catRow && catRow.label) || (genreRow && genreRow.label) || "Games";
     }
 
-    if ((activeCategory === "home" || activeGenre === "all") && !hasSearch) {
+    if (activeCategory === "home" && !hasSearch) {
         document.title = DEFAULT_INDEX_DOC_TITLE;
     } else {
         document.title = `${heading} | TubZi`;
@@ -1586,15 +1718,17 @@ search.addEventListener("input", e => {
 
 (function initGenreFromUrl() {
     const genreParam = new URLSearchParams(window.location.search).get("genre");
+    const genreToCategory = {
+        io: "io-games",
+        sports: "sports-games",
+        driving: "racing-games",
+        action: "action-games",
+        puzzle: "puzzle-games",
+        casual: "arcade-games"
+    };
     if (genreParam && ["io", "sports", "driving", "action", "puzzle", "casual"].includes(genreParam)) {
         activeGenre = genreParam;
-        if (genreParam === "driving") {
-            activeCategory = "vehicle";
-        } else if (genreParam === "puzzle") {
-            activeCategory = "brain";
-        } else {
-            activeCategory = genreParam;
-        }
+        activeCategory = genreToCategory[genreParam] || "home";
         requestAnimationFrame(() => {
             document.getElementById("gamesSection")?.scrollIntoView({ behavior: "smooth" });
         });
@@ -1609,8 +1743,26 @@ search.addEventListener("input", e => {
 })();
 
 buildRailNav();
+setupRailAutoResetScroll();
 buildCategoryBar();
 render();
+document.body.classList.add("tubchat-no-anim");
+try {
+    if (localStorage.getItem(TUBCHAT_DOCK_STATE_KEY) === "1") {
+        setTubchatDockOpen(true);
+    }
+} catch (err) {
+    /* ignore storage failures */
+}
+requestAnimationFrame(() => {
+    document.body.classList.remove("tubchat-no-anim");
+});
+if (tubchatDockClose) {
+    tubchatDockClose.addEventListener("click", () => {
+        setTubchatDockOpen(false);
+        updateRailActive();
+    });
+}
 
 document.addEventListener("click", e => {
     const link = e.target.closest("a[href]");

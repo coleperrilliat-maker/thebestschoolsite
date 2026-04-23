@@ -331,7 +331,24 @@ body.light .card::after {
     </div>
 </div>
 
-<script src="js/tubzi-rail-data.js?v=2"></script>
+<aside class="tubchat-dock" id="tubchatDock" aria-label="Tubchat panel">
+    <div class="tubchat-dock__bar">
+        <span class="tubchat-dock__title">Tubchat</span>
+        <button type="button" class="tubchat-dock__close" id="tubchatDockClose" aria-label="Close Tubchat">×</button>
+    </div>
+    <div class="tubchat-dock__frame-wrap">
+        <iframe
+            class="tubchat-dock__frame"
+            id="tubchatDockFrame"
+            title="Tubchat"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="clipboard-read; clipboard-write"
+        ></iframe>
+    </div>
+</aside>
+
+<script src="js/tubzi-rail-data.js?v=3"></script>
 <script src="js/tubzi-game-entries.js"></script>
 <script src="js/tubzi-hover-preview.js"></script>
 <script>
@@ -463,11 +480,74 @@ const grid = document.getElementById("grid");
 const search = document.getElementById("search");
 const themeBtn = document.getElementById("themeBtn");
 const THEME_KEY = "tubzi-theme";
+const tubchatDock = document.getElementById("tubchatDock");
+const tubchatDockClose = document.getElementById("tubchatDockClose");
+const tubchatDockFrame = document.getElementById("tubchatDockFrame");
+const TUBCHAT_DOCK_STATE_KEY = "tubzi_tubchat_dock_open";
+const TUBCHAT_EMBED_URL = "tubchat/index.html";
+
+function isTubchatDockOpen() {
+    return document.body.classList.contains("tubchat-dock-open");
+}
+
+function getTubchatThemeMode() {
+    return document.body.classList.contains("light") ? "light" : "dark";
+}
+
+
+function getTubchatInitialPath() {
+    try {
+        const hasRoom = !!localStorage.getItem("tubzi_roomId");
+        const hasCode = !!localStorage.getItem("tubzi_roomCode");
+        const hasUser = !!localStorage.getItem("tubzi_username");
+        if (hasRoom && hasCode && hasUser) {
+            return "tubchat/room.html";
+        }
+    } catch (err) {
+        /* ignore storage failures */
+    }
+    return TUBCHAT_EMBED_URL;
+}
+
+
+function setTubchatDockOpen(open) {
+    if (!tubchatDock) {
+        return;
+    }
+    if (open && tubchatDockFrame && !tubchatDockFrame.src) {
+        const theme = getTubchatThemeMode();
+        tubchatDockFrame.src = `${getTubchatInitialPath()}?tubzi_theme=${encodeURIComponent(theme)}`;
+    }
+    document.body.classList.toggle("tubchat-dock-open", !!open);
+    try {
+        localStorage.setItem(TUBCHAT_DOCK_STATE_KEY, open ? "1" : "0");
+    } catch (err) {
+        /* ignore storage failures */
+    }
+    syncTubchatThemeToChild();
+}
+
+function toggleTubchatDock() {
+    setTubchatDockOpen(!isTubchatDockOpen());
+}
+
+function syncTubchatThemeToChild() {
+    if (!tubchatDockFrame || !tubchatDockFrame.contentWindow) {
+        return;
+    }
+    const mode = getTubchatThemeMode();
+    try {
+        tubchatDockFrame.contentWindow.postMessage({ type: "tubzi-theme", mode }, "*");
+    } catch (err) {
+        /* ignore postMessage failures */
+    }
+}
 
 function applyTheme(mode) {
     const isLight = mode === "light";
     document.body.classList.toggle("light", isLight);
     localStorage.setItem(THEME_KEY, mode);
+    syncTubchatThemeToChild();
 }
 
 const saved = localStorage.getItem(THEME_KEY);
@@ -481,6 +561,13 @@ themeBtn.addEventListener("click", () => {
     const next = document.body.classList.contains("light") ? "dark" : "light";
     applyTheme(next);
 });
+
+if (tubchatDockFrame) {
+    tubchatDockFrame.addEventListener("load", () => {
+        syncTubchatThemeToChild();
+    });
+}
+
 
 document.getElementById("btnRandom").addEventListener("click", () => {
     const game = games[Math.floor(Math.random() * games.length)];
@@ -544,6 +631,8 @@ function buildRailNav() {
                 search.value = "";
                 render("");
                 window.scrollTo({ top: 0, behavior: "smooth" });
+            } else if (item.action === "tubchat") {
+                toggleTubchatDock();
             } else if (item.genre) {
                 activeGenre = item.genre;
                 render(search.value);
@@ -556,6 +645,19 @@ function buildRailNav() {
     });
 
     updateRailActive();
+}
+
+function setupRailAutoResetScroll() {
+    const rail = document.querySelector(".game-rail");
+    const railScroll = document.getElementById("gameRailNav");
+    if (!rail || !railScroll) {
+        return;
+    }
+    const reset = () => {
+        railScroll.scrollTo({ top: 0, behavior: "auto" });
+    };
+    rail.addEventListener("mouseleave", reset);
+    rail.addEventListener("pointerleave", reset);
 }
 
 function updateRailActive() {
@@ -573,6 +675,8 @@ function updateRailActive() {
             }
         } else if (item.id === "home") {
             on = activeGenre === "all" && !isAllGamesPage() && !searchTrimmed;
+        } else if (item.action === "tubchat") {
+            on = isTubchatDockOpen();
         } else if (item.genre) {
             on = activeGenre === item.genre;
         }
@@ -712,7 +816,21 @@ search.addEventListener("input", e => {
 })();
 
 buildRailNav();
+setupRailAutoResetScroll();
 render();
+try {
+    if (localStorage.getItem(TUBCHAT_DOCK_STATE_KEY) === "1") {
+        setTubchatDockOpen(true);
+    }
+} catch (err) {
+    /* ignore storage failures */
+}
+if (tubchatDockClose) {
+    tubchatDockClose.addEventListener("click", () => {
+        setTubchatDockOpen(false);
+        updateRailActive();
+    });
+}
 
 </script>
 

@@ -468,6 +468,10 @@ body.light .home-about-list {
                     <input id="search" type="search" placeholder="What do you want to play?" autocomplete="off">
                 </div>
             </div>
+            <div class="auth-profile-wrap">
+                <button type="button" class="auth-profile-btn" id="authProfileBtn" aria-label="Open account menu"></button>
+                <div class="auth-popover" id="authPopover" hidden></div>
+            </div>
             <button type="button" class="hdr-btn hdr-btn-random" id="btnRandom">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
@@ -595,117 +599,68 @@ body.light .home-about-list {
             <div class="home-browse-inner">
                 <h2 class="home-browse-heading" id="homeBrowseHeading">Browse by category</h2>
                 <p class="home-browse-sub">Large tiles jump to the same sections as the sidebar. Every link opens the matching game grid on TubZi.</p>
-                <div class="home-browse-grid home-browse-grid--sections" role="navigation" aria-label="Game categories">
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=action-games">
+                <div class="home-browse-grid home-browse-grid--3" role="navigation" aria-label="Game categories">
+                    <a class="home-browse-card" href="index.html?category=action-games">
                         <div class="home-browse-card-thumb" style="background-image: url('images/ultrakill.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
+                        <div >
                             <h3 class="home-browse-card-title">Action</h3>
                             <p class="home-browse-card-desc">Fast combat, reflex challenges, and intense levels.</p>
                         </div>
                     </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=racing-games">
+                    <a class="home-browse-card" href="index.html?category=racing-games">
                         <div class="home-browse-card-thumb" style="background-image: url('images/motox3m.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
+                        <div >
                             <h3 class="home-browse-card-title">Racing &amp; driving</h3>
                             <p class="home-browse-card-desc">Cars, bikes, drift runs, and stunt tracks.</p>
                         </div>
                     </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=shooting-games">
+                    <a class="home-browse-card" href="index.html?category=shooting-games">
                         <div class="home-browse-card-thumb" style="background-image: url('images/shellshockers.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
+                        <div >
                             <h3 class="home-browse-card-title">Shooting</h3>
                             <p class="home-browse-card-desc">Aim-heavy arena games and shooters.</p>
                         </div>
                     </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=sports-games">
+                    <a class="home-browse-card" href="index.html?category=sports-games">
                         <div class="home-browse-card-thumb" style="background-image: url('images/retrobowl.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
+                        <div >
                             <h3 class="home-browse-card-title">Sports</h3>
                             <p class="home-browse-card-desc">Ball games, courts, and stadium-style fun.</p>
                         </div>
                     </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=multiplayer-games">
+                    <a class="home-browse-card" href="index.html?category=multiplayer-games">
                         <div class="home-browse-card-thumb" style="background-image: url('images/amongus.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
+                        <div >
                             <h3 class="home-browse-card-title">Multiplayer</h3>
                             <p class="home-browse-card-desc">Party modes, lobbies, and online brawls.</p>
                         </div>
                     </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=io-games">
+                    <a class="home-browse-card" href="index.html?category=io-games">
                         <div class="home-browse-card-thumb" style="background-image: url('images/aquaparkio.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
+                        <div >
                             <h3 class="home-browse-card-title">IO games</h3>
                             <p class="home-browse-card-desc">Quick rounds and competitive leaderboards.</p>
                         </div>
                     </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=puzzle-games">
+                    <a class="home-browse-card" href="index.html?category=puzzle-games">
                         <div class="home-browse-card-thumb" style="background-image: url('images/2048.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
+                        <div >
                             <h3 class="home-browse-card-title">Puzzle</h3>
                             <p class="home-browse-card-desc">Logic, word games, and brain teasers.</p>
                         </div>
                     </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=adventure-games">
+                    <a class="home-browse-card" href="index.html?category=adventure-games">
                         <div class="home-browse-card-thumb" style="background-image: url('images/minecraft.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
+                        <div >
                             <h3 class="home-browse-card-title">Adventure</h3>
                             <p class="home-browse-card-desc">Exploration, quests, and survival-style worlds.</p>
                         </div>
                     </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=arcade-games">
+                    <a class="home-browse-card" href="index.html?category=arcade-games">
                         <div class="home-browse-card-thumb" style="background-image: url('images/geometrydash.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
+                        <div >
                             <h3 class="home-browse-card-title">Arcade</h3>
                             <p class="home-browse-card-desc">Pick-up-and-play classics and endless runners.</p>
-                        </div>
-                    </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=clicker-idle-games">
-                        <div class="home-browse-card-thumb" style="background-image: url('images/doge-miner.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
-                            <h3 class="home-browse-card-title">Clicker &amp; idle</h3>
-                            <p class="home-browse-card-desc">Incremental progress and chill loops.</p>
-                        </div>
-                    </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=horror-games">
-                        <div class="home-browse-card-thumb" style="background-image: url('images/fnaf1.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
-                            <h3 class="home-browse-card-title">Horror</h3>
-                            <p class="home-browse-card-desc">Jump scares, stealth, and spooky atmospheres.</p>
-                        </div>
-                    </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=platformer-games">
-                        <div class="home-browse-card-thumb" style="background-image: url('images/supermariobros.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
-                            <h3 class="home-browse-card-title">Platformer</h3>
-                            <p class="home-browse-card-desc">Jumps, pits, and precision level design.</p>
-                        </div>
-                    </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=strategy-games">
-                        <div class="home-browse-card-thumb" style="background-image: url('images/plantsvszombies.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
-                            <h3 class="home-browse-card-title">Strategy</h3>
-                            <p class="home-browse-card-desc">Tower defense, planning, and slow-burn wins.</p>
-                        </div>
-                    </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=simulation-games">
-                        <div class="home-browse-card-thumb" style="background-image: url('images/bitlife.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
-                            <h3 class="home-browse-card-title">Simulation</h3>
-                            <p class="home-browse-card-desc">Life sims, tycoons, and sandbox systems.</p>
-                        </div>
-                    </a>
-                    <a class="home-browse-card home-browse-card--big" href="index.html?category=skill-parkour-games">
-                        <div class="home-browse-card-thumb" style="background-image: url('images/slope.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
-                            <h3 class="home-browse-card-title">Skill &amp; parkour</h3>
-                            <p class="home-browse-card-desc">Timing, momentum, and obstacle mastery.</p>
-                        </div>
-                    </a>
-                    <a class="home-browse-card home-browse-card--big" href="all-games.html">
-                        <div class="home-browse-card-thumb" style="background-image: url('images/subwaysurfers.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
-                        <div class="home-browse-card-body">
-                            <h3 class="home-browse-card-title">All games</h3>
-                            <p class="home-browse-card-desc">Full A–Z list with search and filters.</p>
                         </div>
                     </a>
                 </div>
@@ -894,6 +849,8 @@ body.light .home-about-list {
 <script src="js/tubzi-game-entries.js?v=9"></script>
 <script src="js/tubzi-layout-store.js"></script>
 <script src="js/tubzi-hover-preview.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script type="module" src="js/tubzi-auth.js"></script>
 <script>
 
 const ICONS = window.TUBZI_RAIL.icons;
@@ -922,74 +879,7 @@ function openGameWithHeadsUp(targetHref) {
     if (!targetHref) {
         return;
     }
-
-    try {
-        if (window.localStorage.getItem(GAME_HEADSUP_SEEN_KEY) === "1") {
-            window.location.href = targetHref;
-            return;
-        }
-    } catch (err) {
-        window.location.href = targetHref;
-        return;
-    }
-
-    const layer = document.getElementById("gameHeadsUpLayer");
-    const continueBtn = document.getElementById("gameHeadsUpContinue");
-    if (!layer || !continueBtn) {
-        window.location.href = targetHref;
-        return;
-    }
-
-    let previousOverflow = document.body.style.overflow;
-
-    const cleanup = () => {
-        layer.querySelectorAll("[data-game-headsup-dismiss]").forEach(el => {
-            el.removeEventListener("click", dismissOnly);
-        });
-        continueBtn.removeEventListener("click", continueToGame);
-        document.removeEventListener("keydown", handleEsc);
-    };
-
-    const close = () => {
-        layer.hidden = true;
-        document.body.style.overflow = previousOverflow;
-        cleanup();
-    };
-
-    const markSeen = () => {
-        try {
-            window.localStorage.setItem(GAME_HEADSUP_SEEN_KEY, "1");
-        } catch (err) {
-            /* ignore storage failures */
-        }
-    };
-
-    const continueToGame = () => {
-        markSeen();
-        close();
-        window.location.href = targetHref;
-    };
-
-    const dismissOnly = () => {
-        close();
-    };
-
-    const handleEsc = e => {
-        if (e.key === "Escape" && !layer.hidden) {
-            dismissOnly();
-        }
-    };
-
-    layer.querySelectorAll("[data-game-headsup-dismiss]").forEach(el => {
-        el.addEventListener("click", dismissOnly);
-    });
-    continueBtn.addEventListener("click", continueToGame);
-    document.addEventListener("keydown", handleEsc);
-
-    layer.hidden = false;
-    previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    requestAnimationFrame(() => continueBtn.focus());
+    window.location.href = targetHref;
 }
 
 function railItemById(id) {
@@ -1795,6 +1685,7 @@ function render(filter = "") {
     }
     const featuredIndexSet = new Set(featuredSteps);
     const forcedFeaturedKeys = new Set([
+        "magetoweridledefense",
         "ultrakill",
         "fallguys",
         "motox3m",
@@ -1975,21 +1866,7 @@ if (tubchatDockClose) {
     });
 }
 
-document.addEventListener("click", e => {
-    const link = e.target.closest("a[href]");
-    if (!link) {
-        return;
-    }
-    const target = getHeadsUpTargetFromHref(link.getAttribute("href"));
-    if (!target) {
-        return;
-    }
-    e.preventDefault();
-    openGameWithHeadsUp(target);
-});
-
 </script>
-<script src="js/tubzi-welcome-first-visit.js" defer></script>
 <script src="js/tubzi-tally-request.js" defer></script>
 
 </body>

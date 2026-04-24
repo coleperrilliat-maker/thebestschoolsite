@@ -18,7 +18,6 @@
     --accent-green-hover: #16a34a;
     --card-radius: 18px;
     --rail-width: 276px;
-    --rail-width-collapsed: 72px;
     --tubchat-dock-width: clamp(320px, 26vw, 430px);
     /* Must clear absolute header: padding + inner row (search / buttons). */
     --site-header-height: 72px;
@@ -147,10 +146,12 @@ body.tubchat-dock-open .tubchat-dock {
 .app-shell {
     flex: 1;
     display: grid;
-    grid-template-columns: var(--rail-width-collapsed) minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr);
+    grid-template-columns: var(--rail-width) minmax(0, 1fr);
+    /* Let the row grow with the taller column so the rail never needs its own scrollbar. */
+    grid-template-rows: auto;
     min-height: 0;
     min-width: 0;
+    overflow: visible;
     position: relative;
     transition: margin-left 0.22s ease;
 }
@@ -164,11 +165,11 @@ body.tubchat-no-anim .tubchat-dock {
 }
 
 .site-header {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     right: 0;
-    z-index: 400;
+    z-index: 480;
     flex-shrink: 0;
     background: var(--header-bg);
     border-bottom: 1px solid var(--header-border);
@@ -182,15 +183,21 @@ body.light .site-header {
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
 }
 
+/* Keep fixed top header clear of the open Tubchat dock. */
+body.tubchat-dock-open .site-header {
+    left: var(--tubchat-dock-width);
+}
+
 .game-rail {
     display: flex;
     grid-column: 1 / 2;
     grid-row: 1 / -1;
     flex-direction: column;
+    align-self: start;
     min-height: 100dvh;
     min-width: 0;
-    height: 100dvh;
-    width: var(--rail-width-collapsed);
+    height: auto;
+    width: var(--rail-width);
     max-width: none;
     padding-top: var(--site-header-height);
     box-sizing: border-box;
@@ -199,37 +206,23 @@ body.light .site-header {
     border-radius: 0;
     box-shadow: none;
     z-index: 200;
-    overflow: hidden;
-    transition: width 0.2s ease, box-shadow 0.2s ease;
+    overflow: visible;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 body.light .game-rail {
     box-shadow: none;
 }
 
-.game-rail:hover,
-.game-rail:focus-within {
-    width: var(--rail-width);
-    box-shadow: 10px 0 28px rgba(0, 0, 0, 0.28);
-}
-
-body.light .game-rail:hover,
-body.light .game-rail:focus-within {
-    box-shadow: 10px 0 24px rgba(16, 24, 40, 0.16);
-}
-
-body.tubchat-dock-open .game-rail,
-body.tubchat-dock-open .game-rail:hover,
-body.tubchat-dock-open .game-rail:focus-within {
+body.tubchat-dock-open .game-rail {
     box-shadow: none !important;
 }
 
 .game-rail-inner {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    flex: 0 0 auto;
     min-height: 0;
-    height: calc(100dvh - var(--site-header-height));
     position: relative;
     padding: 12px 0 14px;
     width: 100%;
@@ -240,7 +233,7 @@ body.tubchat-dock-open .game-rail:focus-within {
     padding: 4px 14px 12px;
     margin: 0 10px 8px;
     border-bottom: 1px solid var(--header-border);
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -248,41 +241,25 @@ body.tubchat-dock-open .game-rail:focus-within {
 }
 
 .game-rail-scroll {
-    flex: 1;
-    min-height: 0;
-    max-height: 100%;
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
+    overflow: visible;
     padding: 0 8px 8px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--btn-border) transparent;
-}
-
-.game-rail-scroll::-webkit-scrollbar {
-    width: 5px;
-}
-
-.game-rail-scroll::-webkit-scrollbar-thumb {
-    background: var(--btn-border);
-    border-radius: 4px;
 }
 
 .rail-section-label {
     padding: 14px 12px 6px;
     font-size: 10px;
     font-weight: 700;
+    font-family: Arial, Helvetica, sans-serif;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: rgba(244, 244, 248, 0.9);
-    display: none;
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: opacity 0.15s ease, max-height 0.15s ease, padding 0.15s ease;
+    display: block;
+    opacity: 1;
+    max-height: none;
+    overflow: visible;
 }
 
 .rail-section-label:first-child {
@@ -294,13 +271,6 @@ body.tubchat-dock-open .game-rail:focus-within {
     font-size: 9px;
     letter-spacing: 0.1em;
     opacity: 0.75;
-}
-
-.game-rail:hover .rail-section-label,
-.game-rail:focus-within .rail-section-label {
-    display: block;
-    opacity: 1;
-    max-height: 56px;
 }
 
 .rail-nav-item--compact {
@@ -339,16 +309,16 @@ body.tubchat-dock-open .game-rail:focus-within {
 .rail-nav-item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0;
-    width: calc(100% - 12px);
-    margin: 3px 6px;
-    padding: 10px 8px;
+    justify-content: flex-start;
+    gap: 10px;
+    width: calc(100% - 10px);
+    margin: 3px 5px;
+    padding: 9px 12px;
     border: none;
     border-radius: 4px;
     background: transparent;
     cursor: pointer;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -357,26 +327,16 @@ body.tubchat-dock-open .game-rail:focus-within {
     transition:
         background 0.18s ease,
         color 0.18s ease,
-        box-shadow 0.18s ease,
-        width 0.18s ease,
-        margin 0.18s ease,
-        padding 0.18s ease,
-        gap 0.18s ease,
-        justify-content 0.18s ease;
+        box-shadow 0.18s ease;
+}
+
+.rail-nav-item.rail-nav-item--no-icon {
+    padding-left: 42px;
 }
 
 .rail-nav-item:hover {
     background: var(--btn-bg-hover);
     color: var(--text);
-}
-
-.game-rail:hover .rail-nav-item,
-.game-rail:focus-within .rail-nav-item {
-    justify-content: flex-start;
-    gap: 10px;
-    width: calc(100% - 10px);
-    margin: 3px 5px;
-    padding: 9px 12px;
 }
 
 .rail-nav-item.is-active {
@@ -420,25 +380,17 @@ body.light .rail-label {
 
 .rail-label {
     display: block;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
     letter-spacing: 0.02em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     min-width: 0;
-    max-width: 0;
-    opacity: 0;
-    flex: 0 0 auto;
-    transition: max-width 0.18s ease, opacity 0.15s ease;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.22);
-}
-
-.game-rail:hover .rail-label,
-.game-rail:focus-within .rail-label {
     max-width: 220px;
     opacity: 1;
     flex: 1;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.22);
 }
 
 .app-content {
@@ -697,7 +649,6 @@ body[data-tubzi-page="category"] .hdr-btn-random {
 @media (max-width: 900px) {
     :root {
         --rail-width: 220px;
-        --rail-width-collapsed: 64px;
     }
 }
 
@@ -726,6 +677,10 @@ body[data-tubzi-page="category"] .hdr-btn-random {
         order: 1;
     }
 
+    body.tubchat-dock-open .site-header {
+        left: auto;
+    }
+
     .game-rail {
         order: 2;
         grid-column: auto;
@@ -735,20 +690,14 @@ body[data-tubzi-page="category"] .hdr-btn-random {
         padding-top: 0;
         border-right: none;
         border-bottom: 1px solid var(--header-border);
-        max-height: min(42vh, 320px);
-        overflow: hidden;
-        box-shadow: none;
-    }
-
-    .game-rail:hover,
-    .game-rail:focus-within {
-        width: 100%;
+        max-height: none;
+        overflow: visible;
         box-shadow: none;
     }
 
     .rail-section-label {
         opacity: 0.85;
-        max-height: 40px;
+        max-height: none;
     }
 
     .rail-nav-item {
@@ -759,6 +708,10 @@ body[data-tubzi-page="category"] .hdr-btn-random {
         padding: 8px 12px;
     }
 
+    .rail-nav-item.rail-nav-item--no-icon {
+        padding-left: 42px;
+    }
+
     .rail-label {
         max-width: 220px;
         opacity: 1;
@@ -766,7 +719,7 @@ body[data-tubzi-page="category"] .hdr-btn-random {
     }
 
     .game-rail-inner {
-        max-height: min(42vh, 320px);
+        max-height: none;
     }
 
     .app-content {

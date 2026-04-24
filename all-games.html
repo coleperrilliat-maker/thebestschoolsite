@@ -115,7 +115,9 @@ body.light .games-divider {
     );
 }
 
+/* Match index.html game tiles + css/game-tile-hover-preview.css (title strip + hover video). */
 .card {
+    --card-hover-scale: 1.06;
     position: relative;
     overflow: hidden;
     container-type: inline-size;
@@ -124,69 +126,49 @@ body.light .games-divider {
     cursor: pointer;
     background-size: cover;
     background-position: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    box-shadow:
+        0 0 0 3px rgba(0, 0, 0, 0.55),
+        0 5px 0 rgba(0, 0, 0, 0.35),
+        0 8px 18px rgba(0, 0, 0, 0.35);
 }
 
 body.light .card {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow:
+        0 0 0 3px rgba(30, 35, 50, 0.2),
+        0 4px 0 rgba(30, 35, 50, 0.12),
+        0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
 .card:focus-visible {
-    outline: 2px solid var(--brand);
+    outline: 3px solid #fff;
     outline-offset: 3px;
 }
 
 .card:hover {
-    /* Keep all tiles same size (no hover scaling). */
-    transform: none;
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(255, 106, 0, 0.35);
+    transform: scale(var(--card-hover-scale));
+    box-shadow:
+        0 8px 22px rgba(0, 0, 0, 0.35),
+        0 0 0 4px #fff,
+        0 0 0 7px rgba(0, 0, 0, 0.55),
+        0 6px 0 rgba(0, 0, 0, 0.3);
 }
 
 body.light .card:hover {
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-}
-
-.card::after {
-    content: attr(data-game-title);
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 0;
-    padding: 12px;
-    box-sizing: border-box;
-    background: rgba(0, 0, 0, 0.55);
-    color: #fff;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: clamp(0.55rem, calc(94cqw / (4 + var(--title-chars, 12))), 2.85rem);
-    font-weight: 800;
-    line-height: 1.12;
-    letter-spacing: -0.02em;
-    text-align: center;
-    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75), 0 0 2px rgba(0, 0, 0, 0.9);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-.card:hover::after,
-.card:focus-visible::after {
-    opacity: 1;
-}
-
-body.light .card::after {
-    background: rgba(255, 255, 255, 0.78);
-    color: #111;
-    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.95), 0 0 1px rgba(0, 0, 0, 0.15);
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.12),
+        0 0 0 4px #fff,
+        0 0 0 7px rgba(30, 35, 50, 0.35),
+        0 5px 0 rgba(30, 35, 50, 0.12);
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .card::after {
-        transition: none;
+    .card {
+        transition: box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .card:hover {
+        transform: none;
     }
 }
 
@@ -348,8 +330,8 @@ body.light .card::after {
     </div>
 </aside>
 
-<script src="js/tubzi-rail-data.js?v=3"></script>
-<script src="js/tubzi-game-entries.js"></script>
+<script src="js/tubzi-rail-data.js?v=7"></script>
+<script src="js/tubzi-game-entries.js?v=6"></script>
 <script src="js/tubzi-hover-preview.js"></script>
 <script>
 
@@ -408,7 +390,8 @@ const GAME_IMAGE_SLUG = {
     doodlejump: "doodlejump",
     vexx3m: "vexx3m",
     realflightsimulator: "realflightsimulator",
-    tallmanrun: "tallmanrun"
+    tallmanrun: "tallmanrun",
+    magetoweridledefense: "magetoweridle"
 };
 
 function imageSlugFromGameName(name) {
@@ -595,16 +578,18 @@ function buildRailNav() {
         }
 
         const item = row;
-        const paths = ICONS[item.icon] || ICONS.home;
-        const inner = `
-            <svg class="rail-icon" viewBox="0 0 24 24" aria-hidden="true">${paths}</svg>
-            <span class="rail-label">${item.label}</span>
-        `;
+        const iconSvg =
+            item.icon && ICONS[item.icon]
+                ? `<svg class="rail-icon" viewBox="0 0 24 24" aria-hidden="true">${ICONS[item.icon]}</svg>`
+                : "";
+        const inner = `${iconSvg}<span class="rail-label">${item.label}</span>`;
+        const navItemMods =
+            (item.compact ? " rail-nav-item--compact" : "") + (!iconSvg ? " rail-nav-item--no-icon" : "");
 
         if (item.href) {
             const a = document.createElement("a");
             a.href = item.href;
-            a.className = "rail-nav-item" + (item.compact ? " rail-nav-item--compact" : "");
+            a.className = "rail-nav-item" + navItemMods;
             a.dataset.navId = item.id;
             if (item.external) {
                 a.target = "_blank";
@@ -617,7 +602,7 @@ function buildRailNav() {
 
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "rail-nav-item" + (item.compact ? " rail-nav-item--compact" : "");
+        btn.className = "rail-nav-item" + navItemMods;
         btn.dataset.navId = item.id;
         btn.innerHTML = inner;
 
@@ -633,10 +618,12 @@ function buildRailNav() {
                 window.scrollTo({ top: 0, behavior: "smooth" });
             } else if (item.action === "tubchat") {
                 toggleTubchatDock();
+            } else if (item.categoryId) {
+                window.location.href = `index.html?category=${encodeURIComponent(item.categoryId)}`;
             } else if (item.genre) {
                 activeGenre = item.genre;
                 render(search.value);
-                document.getElementById("gamesSection")?.scrollIntoView({ behavior: "smooth" });
+                document.querySelector(".app-scroll")?.scrollTo({ top: 0, behavior: "smooth" });
             }
             updateRailActive();
         });
@@ -645,19 +632,6 @@ function buildRailNav() {
     });
 
     updateRailActive();
-}
-
-function setupRailAutoResetScroll() {
-    const rail = document.querySelector(".game-rail");
-    const railScroll = document.getElementById("gameRailNav");
-    if (!rail || !railScroll) {
-        return;
-    }
-    const reset = () => {
-        railScroll.scrollTo({ top: 0, behavior: "auto" });
-    };
-    rail.addEventListener("mouseleave", reset);
-    rail.addEventListener("pointerleave", reset);
 }
 
 function updateRailActive() {
@@ -677,6 +651,8 @@ function updateRailActive() {
             on = activeGenre === "all" && !isAllGamesPage() && !searchTrimmed;
         } else if (item.action === "tubchat") {
             on = isTubchatDockOpen();
+        } else if (item.categoryId) {
+            on = false;
         } else if (item.genre) {
             on = activeGenre === item.genre;
         }
@@ -703,18 +679,18 @@ function updateGamesSectionHeading(rawFilter) {
     let heading;
     if (activeGenre === "all") {
         if (hasSearch) {
-            const display = trimmed.length > 48 ? `${trimmed.slice(0, 45)}ΓÇª` : trimmed;
+            const display = trimmed.length > 48 ? `${trimmed.slice(0, 45)}…` : trimmed;
             heading = `Search: ${display}`;
         } else {
             heading = "All games";
         }
     } else if (hasSearch) {
-        heading = `${(genreRow && genreRow.label) || "Games"} ┬╖ search`;
+        heading = `${(genreRow && genreRow.label) || "Games"} · search`;
     } else {
         heading = (genreRow && genreRow.label) || "Games";
     }
     el.textContent = heading;
-    document.title = `${heading} ΓÇö TubZi`;
+    document.title = `${heading} — TubZi`;
 }
 
 function render(filter = "") {
@@ -816,7 +792,6 @@ search.addEventListener("input", e => {
 })();
 
 buildRailNav();
-setupRailAutoResetScroll();
 render();
 try {
     if (localStorage.getItem(TUBCHAT_DOCK_STATE_KEY) === "1") {

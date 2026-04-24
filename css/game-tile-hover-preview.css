@@ -5,6 +5,19 @@
     isolation: isolate;
 }
 
+/* Games without a hover clip: dim like preview tiles so every section matches home. */
+.card:not(.card--hover-preview):hover,
+.card:not(.card--hover-preview):focus-within {
+    filter: brightness(0.9) saturate(1.03);
+}
+
+body.light .card:not(.card--hover-preview):hover,
+body.light .card:not(.card--hover-preview):focus-within,
+body.light-play .card:not(.card--hover-preview):hover,
+body.light-play .card:not(.card--hover-preview):focus-within {
+    filter: brightness(0.93) saturate(1.02);
+}
+
 /* Hide inline thumbnail layers while preview video is showing (opacity fade otherwise reveals them). */
 .card--hover-preview:hover,
 .card--hover-preview:focus-within {
@@ -139,6 +152,11 @@ body.light-play .card::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .card:not(.card--hover-preview):hover,
+    .card:not(.card--hover-preview):focus-within {
+        filter: none;
+    }
+
     .card-hover-preview-video {
         display: none !important;
     }

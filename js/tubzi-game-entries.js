@@ -222,6 +222,7 @@ window.TUBZI_GAME_ENTRIES = [
         "geometry dash meltdown",
         "geometry dash subzero",
         "geometry dash world",
+        "Mage Tower Idle Defense",
         "slope",
         "brawl simulator 3d",
         "bowmasters",

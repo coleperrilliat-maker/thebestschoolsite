@@ -331,7 +331,7 @@ body.light .card:hover {
 </aside>
 
 <script src="js/tubzi-rail-data.js?v=7"></script>
-<script src="js/tubzi-game-entries.js?v=6"></script>
+<script src="js/tubzi-game-entries.js?v=9"></script>
 <script src="js/tubzi-hover-preview.js"></script>
 <script>
 
@@ -584,7 +584,8 @@ function buildRailNav() {
                 : "";
         const inner = `${iconSvg}<span class="rail-label">${item.label}</span>`;
         const navItemMods =
-            (item.compact ? " rail-nav-item--compact" : "") + (!iconSvg ? " rail-nav-item--no-icon" : "");
+            (item.compact ? " rail-nav-item--compact" : "") +
+            (!iconSvg ? " rail-nav-item--no-icon" : "");
 
         if (item.href) {
             const a = document.createElement("a");

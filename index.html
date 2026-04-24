@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4769618736904438"
+     crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Browse free browser games on TubZi, including action, puzzle, sports, and school-friendly picks. Play instantly with no download.">
@@ -889,7 +891,7 @@ body.light .home-about-list {
 </div>
 
 <script src="js/tubzi-rail-data.js?v=7"></script>
-<script src="js/tubzi-game-entries.js?v=6"></script>
+<script src="js/tubzi-game-entries.js?v=9"></script>
 <script src="js/tubzi-layout-store.js"></script>
 <script src="js/tubzi-hover-preview.js"></script>
 <script>
@@ -1035,7 +1037,8 @@ const GAME_IMAGE_SLUG = {
     dogeminer2: "doge-miner-2",
     dunkshot: "dunk-shot",
     extremerun3d: "extreme-run-3d",
-    goingballs: "going-balls"
+    goingballs: "going-balls",
+    magetoweridledefense: "magetoweridle"
 };
 
 function imageSlugFromGameName(name) {
@@ -1215,7 +1218,7 @@ const CATEGORY_GAME_OVERRIDES = {
     ],
     "puzzle-games": [
         "2048", "block blast", "block post", "Cut the Rope", "doge miner 2", "Enchain", "Infinite Craft",
-        "little alchemy 2", "plantsvszombies", "Tower Blocks", "wordle", "worlds hardest game"
+        "little alchemy 2", "Mage Tower Idle Defense", "plantsvszombies", "Tower Blocks", "wordle", "worlds hardest game"
     ],
     "platformer-games": [
         "Bad Monday Simulator", "crossyroad", "Death Run 3D", "doodle jump", "Dreadhead Parkour",
@@ -1547,7 +1550,8 @@ function buildRailNav() {
                 : "";
         const inner = `${iconSvg}<span class="rail-label">${item.label}</span>`;
         const navItemMods =
-            (item.compact ? " rail-nav-item--compact" : "") + (!iconSvg ? " rail-nav-item--no-icon" : "");
+            (item.compact ? " rail-nav-item--compact" : "") +
+            (!iconSvg ? " rail-nav-item--no-icon" : "");
 
         if (item.href) {
             const a = document.createElement("a");

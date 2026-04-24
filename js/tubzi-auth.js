@@ -65,14 +65,9 @@ if (!authProfileBtn || !authPopover) {
         return `tubzi_local_stats_${userKey}`;
     }
 
-    function randomInRange(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function getLocalVisualStats(user) {
+    function getLocalStats(user) {
         const fallback = getPlaceholderStats();
         const key = getStatsStorageKey(user);
-        const today = new Date().toISOString().slice(0, 10);
 
         let stats = null;
         try {
@@ -83,16 +78,11 @@ if (!authProfileBtn || !authPopover) {
 
         if (!stats || typeof stats !== "object") {
             stats = {
-                streak: randomInRange(3, 14),
-                xp: randomInRange(600, 3200),
-                gamesToday: randomInRange(1, 6),
-                gamesLifetime: randomInRange(80, 520),
-                lastSeenDate: today
+                streak: fallback.streak,
+                xp: fallback.xp,
+                gamesToday: fallback.gamesToday,
+                gamesLifetime: fallback.gamesLifetime
             };
-        } else if (stats.lastSeenDate !== today) {
-            stats.streak = randomInRange(1, Math.max(1, Number(stats.streak) + 1));
-            stats.gamesToday = randomInRange(1, 4);
-            stats.lastSeenDate = today;
         }
 
         stats.xp = Number(stats.xp) || fallback.xp;
@@ -269,27 +259,27 @@ if (!authProfileBtn || !authPopover) {
     }
 
     function renderAuthCardSignedIn() {
-        const stats = getLocalVisualStats(currentUser);
+        const stats = getLocalStats(currentUser);
         authPopover.innerHTML = `
             <div class="auth-card">
                 <div class="auth-user-name">${getUserDisplayName(currentUser)}</div>
                 <div class="auth-user-email">${currentUser?.email || ""}</div>
                 <div class="auth-stats-grid">
                     <div class="auth-stat-tile">
-                        <div class="auth-stat-label">🔥 Streak</div>
+                        <div class="auth-stat-label">Streak</div>
                         <div class="auth-stat-value">${stats.streak} days</div>
                     </div>
                     <div class="auth-stat-tile">
-                        <div class="auth-stat-label">⭐ XP</div>
-                        <div class="auth-stat-value">${stats.xp.toLocaleString()}</div>
+                        <div class="auth-stat-label">XP</div>
+                        <div class="auth-stat-value">${stats.xp}</div>
                     </div>
                     <div class="auth-stat-tile">
-                        <div class="auth-stat-label">🎮 Played today</div>
+                        <div class="auth-stat-label">Played today</div>
                         <div class="auth-stat-value">${stats.gamesToday}</div>
                     </div>
                     <div class="auth-stat-tile">
-                        <div class="auth-stat-label">🏆 Lifetime plays</div>
-                        <div class="auth-stat-value">${stats.gamesLifetime.toLocaleString()}</div>
+                        <div class="auth-stat-label">Lifetime plays</div>
+                        <div class="auth-stat-value">${stats.gamesLifetime}</div>
                     </div>
                 </div>
                 <button type="button" class="auth-signout-btn" id="authPopoverSignOutBtn">Sign out</button>

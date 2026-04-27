@@ -3,8 +3,14 @@ const { createClient } = require("@supabase/supabase-js");
 const EXPECTED_PROJECT_REF = "cheymdspanxzjjtzppat";
 
 function getSupabaseEnv() {
-    const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-    const anonKey = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+    const url =
+        process.env.SUPABASE_URL ||
+        process.env.NEXT_PUBLIC_SUPABASE_URL ||
+        "https://cheymdspanxzjjtzppat.supabase.co";
+    const anonKey =
+        process.env.SUPABASE_ANON_KEY ||
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+        "sb_publishable_tAcqEpAgeI5NFhqg9AoH5Q_LtUdFt27";
     return { url, anonKey };
 }
 

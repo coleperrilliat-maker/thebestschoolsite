@@ -3,12 +3,23 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const SUPABASE_URL =
     window.__SUPABASE_URL ||
     document.querySelector('meta[name="supabase-url"]')?.content ||
-    "https://gvvowenjfiiruyzncigb.supabase.co";
+    "https://cheymdspanxzjjtzppat.supabase.co";
 
 const SUPABASE_ANON_KEY =
     window.__SUPABASE_ANON_KEY ||
     document.querySelector('meta[name="supabase-anon-key"]')?.content ||
-    "sb_publishable_noeSDPOFwrIUXBpBiisrQg_tHtnN8aR";
+    "sb_publishable_tAcqEpAgeI5NFhqg9AoH5Q_LtUdFt27";
+
+function getStatsApiUrl() {
+    const configuredOrigin =
+        window.__TUBZI_STATS_API_ORIGIN ||
+        window.__TUBZI_PRODUCTION_API__ ||
+        "";
+    if (!configuredOrigin) {
+        return "/api/game-stats/me";
+    }
+    return configuredOrigin.replace(/\/+$/, "") + "/api/game-stats/me";
+}
 
 const PROFILE_ICON = `
 <svg class="auth-profile-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -108,7 +119,7 @@ if (!authProfileBtn || !authPopover) {
                 throw new Error("Missing authenticated session");
             }
 
-            const response = await fetch("/api/game-stats/me", {
+            const response = await fetch(getStatsApiUrl(), {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${accessToken}`

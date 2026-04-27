@@ -650,7 +650,7 @@ body.light .home-about-list {
                         </div>
                     </a>
                     <a class="home-browse-card" href="index.html?category=adventure-games">
-                        <div class="home-browse-card-thumb" style="background-image: url('images/minecraft.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
+                        <div class="home-browse-card-thumb" style="background-image: url('images/eaglercraft.png'), linear-gradient(145deg, #334055, #1a1d2a);" role="presentation"></div>
                         <div >
                             <h3 class="home-browse-card-title">Adventure</h3>
                             <p class="home-browse-card-desc">Exploration, quests, and survival-style worlds.</p>
@@ -694,7 +694,7 @@ body.light .home-about-list {
                 <ul>
                     <li><a href="index.html">New &amp; featured</a></li>
                     <li><a href="play.html?game=games/slope.html&amp;name=Slope">Slope</a></li>
-                    <li><a href="play.html?game=games/minecraft.html&amp;name=Minecraft">Minecraft</a></li>
+                    <li><a href="play.html?game=games/minecraft.html&amp;name=Eaglercraft">Eaglercraft</a></li>
                     <li><a href="play.html?game=games/geometrydash.html&amp;name=Geometry%20Dash">Geometry Dash</a></li>
                     <li><a href="play.html?game=games/tinyfishing.html&amp;name=Tiny%20Fishing">Tiny Fishing</a></li>
                 </ul>
@@ -887,6 +887,7 @@ function railItemById(id) {
 }
 
 const GAME_FILE_SLUG = {
+    eaglercraft: "minecraft",
     yohio: "yohoio",
     "0v0game": "OvOgame",
     fruitninja: "clfruitninja",
@@ -917,6 +918,7 @@ function fileSlugFromGameName(name) {
 }
 
 const GAME_IMAGE_SLUG = {
+    eaglercraft: "eaglercraft",
     "racesurvival:arenaking": "carparking",
     adventuredrivers: "adventure-drivers",
     bouncybasketball: "bouncy-basketball",
@@ -1129,7 +1131,7 @@ const CATEGORY_GAME_OVERRIDES = {
         "tung tung obby", "vex"
     ],
     "simulation-games": [
-        "adventurecapitalist", "bitlife", "blocky snakes", "fisquarium", "minecraft", "melonsandbox",
+        "adventurecapitalist", "bitlife", "blocky snakes", "fisquarium", "eaglercraft", "melonsandbox",
         "not my neighbor", "terraria", "Web Fishing"
     ],
     "clicker-idle-games": [
@@ -1240,7 +1242,7 @@ function categoryMatches(game, categoryId, recentSet) {
         return game.genre === "puzzle" || hasAnyKeyword(game.name, ["wordle", "2048", "alchemy", "block", "sudoku"]);
     }
     if (categoryId === "adventure-games") {
-        return hasAnyKeyword(game.name, ["adventure", "terraria", "minecraft", "raft", "temple run", "parkour", "escape", "quest", "open world", "survival"]);
+        return hasAnyKeyword(game.name, ["adventure", "terraria", "minecraft", "eaglercraft", "raft", "temple run", "parkour", "escape", "quest", "open world", "survival"]);
     }
     if (categoryId === "arcade-games") {
         return game.genre === "casual" || hasAnyKeyword(game.name, ["arcade", "dash", "snake", "runner", "random", "tetris"]);

@@ -277,7 +277,7 @@ body.light .card:hover {
                 <ul>
                     <li><a href="index.html">New &amp; featured</a></li>
                     <li><a href="play.html?game=games/slope.html&amp;name=Slope">Slope</a></li>
-                    <li><a href="play.html?game=games/minecraft.html&amp;name=Minecraft">Minecraft</a></li>
+                    <li><a href="play.html?game=games/minecraft.html&amp;name=Eaglercraft">Eaglercraft</a></li>
                     <li><a href="play.html?game=games/geometrydash.html&amp;name=Geometry%20Dash">Geometry Dash</a></li>
                     <li><a href="play.html?game=games/tinyfishing.html&amp;name=Tiny%20Fishing">Tiny Fishing</a></li>
                 </ul>
@@ -349,6 +349,7 @@ function railItemById(id) {
 }
 
 const GAME_FILE_SLUG = {
+    eaglercraft: "minecraft",
     yohio: "yohoio",
     "0v0game": "OvOgame",
     fruitninja: "clfruitninja",
@@ -378,6 +379,7 @@ function fileSlugFromGameName(name) {
 }
 
 const GAME_IMAGE_SLUG = {
+    eaglercraft: "eaglercraft",
     "racesurvival:arenaking": "carparking",
     adventuredrivers: "adventure-drivers",
     bouncybasketball: "bouncy-basketball",

@@ -70,7 +70,7 @@
         leveldevil: "videos/hover_leveldevil.mp4",
         littlealchemy2: "videos/hover_littlealchemy2.mp4",
         melonsandbox: "videos/hover_melonsandbox.mp4",
-        minecraft: "videos/hover_minecraft.mp4",
+        eaglercraft: "videos/hover_minecraft.mp4",
         moneyrush: "videos/hover_moneyrush.mp4",
         monkeymart: "videos/hover_monkeymart.mp4",
         motox3m: "videos/hover_motox3m.mp4",

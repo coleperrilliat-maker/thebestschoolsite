@@ -1,5 +1,7 @@
 const express = require("express");
 const path = require("path");
+const { createGameStatsRouter } = require("./routes/gameStats");
+const { getSupabaseEnv, warnIfUnexpectedProject } = require("./lib/supabaseServer");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,6 +13,11 @@ app.get("/health", (req, res) => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const { url: supabaseUrl } = getSupabaseEnv();
+warnIfUnexpectedProject(supabaseUrl);
+
+app.use("/api/game-stats", createGameStatsRouter());
 
 // Public assets: path.join(__dirname, "public") matches express.static("public") when run from server/, but works from any cwd.
 app.use(express.static(path.join(__dirname, "public")));

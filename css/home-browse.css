@@ -876,17 +876,31 @@ body.light .welcome-first-card {
 .tubchat-intro-previews {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
+}
+
+.tubchat-intro-preview-card {
+    margin: 0;
+    display: grid;
+    gap: 5px;
 }
 
 .tubchat-intro-preview {
     width: 100%;
-    max-height: 170px;
+    max-height: 110px;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 8px;
     border: 1px solid var(--btn-border);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
     background: var(--card-bg);
+}
+
+.tubchat-intro-preview-caption {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.25;
+    color: var(--text-muted);
+    text-align: center;
 }
 
 @keyframes tubchatIntroPulse {

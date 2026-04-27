@@ -334,9 +334,37 @@ body.light .card:hover {
     </div>
 </aside>
 
+<div id="tubchatIntroLayer" class="welcome-first-layer" hidden>
+    <div class="welcome-first-layer__backdrop" data-tubchat-intro-dismiss tabindex="-1" aria-hidden="true"></div>
+    <div
+        class="welcome-first-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tubchatIntroTitle"
+        aria-describedby="tubchatIntroDesc"
+    >
+        <h2 class="welcome-first-card__title" id="tubchatIntroTitle">New: TubChat is live</h2>
+        <p class="welcome-first-card__text" id="tubchatIntroDesc">
+            TubChat lets you make private room codes and message friends live.
+        </p>
+        <p class="welcome-first-card__text">
+            You can find it in the <strong>left sidebar</strong> as the <strong>Tubchat</strong> button.
+        </p>
+        <div class="tubchat-intro-previews" aria-label="TubChat preview screenshots">
+            <img class="tubchat-intro-preview" src="images/tubchat-intro-1.png" alt="TubChat room code screen preview" loading="lazy" decoding="async">
+            <img class="tubchat-intro-preview" src="images/tubchat-intro-2.png" alt="TubChat live room messages preview" loading="lazy" decoding="async">
+        </div>
+        <div class="welcome-first-card__actions">
+            <button type="button" class="welcome-first-card__btn" id="tubchatIntroShow">Show me</button>
+            <button type="button" class="welcome-first-card__btn welcome-first-card__btn--secondary" id="tubchatIntroDismiss">Maybe later</button>
+        </div>
+    </div>
+</div>
+
 <script src="js/tubzi-rail-data.js?v=7"></script>
 <script src="js/tubzi-game-entries.js?v=9"></script>
 <script src="js/tubzi-hover-preview.js"></script>
+<script src="js/tubzi-tubchat-intro.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script type="module" src="js/tubzi-auth.js"></script>
 <script>

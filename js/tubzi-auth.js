@@ -10,17 +10,6 @@ const SUPABASE_ANON_KEY =
     document.querySelector('meta[name="supabase-anon-key"]')?.content ||
     "sb_publishable_tAcqEpAgeI5NFhqg9AoH5Q_LtUdFt27";
 
-function getStatsApiUrl() {
-    const configuredOrigin =
-        window.__TUBZI_STATS_API_ORIGIN ||
-        window.__TUBZI_PRODUCTION_API__ ||
-        "";
-    if (!configuredOrigin) {
-        return "/api/game-stats/me";
-    }
-    return configuredOrigin.replace(/\/+$/, "") + "/api/game-stats/me";
-}
-
 const PROFILE_ICON = `
 <svg class="auth-profile-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a7.5 7.5 0 0115 0"/>
@@ -54,15 +43,11 @@ if (!authProfileBtn || !authPopover) {
         });
 
     let currentUser = null;
-    let currentSession = null;
     let popoverOpen = false;
     let authMode = "signin";
     let gisReady = false;
-    let statsRequestId = 0;
     let profileStatsState = {
         userId: null,
-        loading: false,
-        error: "",
         stats: null
     };
 
@@ -85,73 +70,50 @@ if (!authProfileBtn || !authPopover) {
             return fallback;
         }
         return {
-            streak: Number(statsRow.current_streak_days) || 0,
-            xp: Number(statsRow.total_xp) || 0,
-            gamesToday: Number(statsRow.games_played_today) || 0,
-            gamesLifetime: Number(statsRow.games_played_total) || 0
+            streak: Math.max(0, Number(statsRow.streak) || 0),
+            xp: Math.max(0, Number(statsRow.xp) || 0),
+            gamesToday: Math.max(0, Number(statsRow.gamesToday) || 0),
+            gamesLifetime: Math.max(0, Number(statsRow.gamesLifetime) || 0)
         };
     }
 
-    async function loadServerStatsForCurrentUser() {
-        if (!currentUser?.id) {
-            return;
-        }
-        const userId = currentUser.id;
-        const requestId = ++statsRequestId;
-        profileStatsState = {
-            userId,
-            loading: true,
-            error: "",
-            stats: profileStatsState.userId === userId ? profileStatsState.stats : null
-        };
-        if (popoverOpen) {
-            renderPopover();
-        }
+    function getTodayIsoDate() {
+        return new Date().toISOString().slice(0, 10);
+    }
 
+    function getStatsStorageKey(userId) {
+        return `tubzi_local_stats_${userId}`;
+    }
+
+    function readLocalStats(userId) {
+        const fallback = getEmptyStats();
+        const key = getStatsStorageKey(userId);
+        let parsed = null;
         try {
-            let accessToken = currentSession?.access_token || "";
-            if (!accessToken) {
-                const { data } = await window.supabase.auth.getSession();
-                currentSession = data?.session || null;
-                accessToken = currentSession?.access_token || "";
-            }
-            if (!accessToken) {
-                throw new Error("Missing authenticated session");
-            }
-
-            const response = await fetch(getStatsApiUrl(), {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
-            const payload = await response.json().catch(() => null);
-            if (!response.ok || !payload?.ok) {
-                throw new Error(payload?.error || "Failed to load game stats");
-            }
-            if (requestId !== statsRequestId) {
-                return;
-            }
-            profileStatsState = {
-                userId,
-                loading: false,
-                error: "",
-                stats: mapStatsRowToUi(payload.stats)
-            };
-        } catch (error) {
-            if (requestId !== statsRequestId) {
-                return;
-            }
-            profileStatsState = {
-                userId,
-                loading: false,
-                error: error?.message || "Failed to load game stats",
-                stats: getEmptyStats()
-            };
+            parsed = JSON.parse(window.localStorage.getItem(key) || "null");
+        } catch (_error) {
+            parsed = null;
         }
 
-        if (popoverOpen && currentUser?.id === userId) {
-            renderPopover();
+        const stats = mapStatsRowToUi(parsed);
+        const today = getTodayIsoDate();
+        const lastPlayedDay = parsed?.lastPlayedDay || "";
+        if (lastPlayedDay !== today) {
+            stats.gamesToday = 0;
+        }
+        return {
+            ...fallback,
+            ...stats,
+            lastPlayedDay: lastPlayedDay || ""
+        };
+    }
+
+    function writeLocalStats(userId, stats) {
+        const key = getStatsStorageKey(userId);
+        try {
+            window.localStorage.setItem(key, JSON.stringify(stats));
+        } catch (_error) {
+            /* ignore storage failures */
         }
     }
 
@@ -315,16 +277,12 @@ if (!authProfileBtn || !authPopover) {
     }
 
     function renderAuthCardSignedIn() {
-        const isStatsLoading = profileStatsState.loading && profileStatsState.userId === currentUser?.id;
         const stats = profileStatsState.userId === currentUser?.id
             ? mapStatsRowToUi(profileStatsState.stats)
             : getEmptyStats();
         const initial = String(getUserDisplayName(currentUser) || "U").trim().charAt(0).toLowerCase() || "u";
-        const streakValue = isStatsLoading ? "..." : stats.streak;
-        const xpValue = isStatsLoading ? "..." : stats.xp;
-        const statsNote = isStatsLoading
-            ? "Loading stats..."
-            : (profileStatsState.error ? "Could not load latest stats" : "");
+        const streakValue = stats.streak;
+        const xpValue = stats.xp;
         authPopover.innerHTML = `
             <div class="auth-card auth-card--profile">
                 <div class="auth-profile-head">
@@ -352,14 +310,13 @@ if (!authProfileBtn || !authPopover) {
                 <div class="auth-stats-mini">
                     <div class="auth-stats-mini-row">
                         <span class="auth-stats-mini-label">Played today</span>
-                        <span class="auth-stats-mini-value">${isStatsLoading ? "..." : stats.gamesToday}</span>
+                        <span class="auth-stats-mini-value">${stats.gamesToday}</span>
                     </div>
                     <div class="auth-stats-mini-row">
                         <span class="auth-stats-mini-label">Lifetime plays</span>
-                        <span class="auth-stats-mini-value">${isStatsLoading ? "..." : stats.gamesLifetime}</span>
+                        <span class="auth-stats-mini-value">${stats.gamesLifetime}</span>
                     </div>
                 </div>
-                ${statsNote ? `<div class="auth-status" style="margin-top:8px;">${statsNote}</div>` : ""}
                 <button type="button" class="auth-signout-btn" id="authPopoverSignOutBtn">Sign out</button>
             </div>
         `;
@@ -402,16 +359,14 @@ if (!authProfileBtn || !authPopover) {
 
     function renderAuthUI(session) {
         const previousUserId = currentUser?.id || null;
-        currentSession = session || null;
         currentUser = session?.user || null;
         const nextUserId = currentUser?.id || null;
         if (!nextUserId) {
-            profileStatsState = { userId: null, loading: false, error: "", stats: null };
+            profileStatsState = { userId: null, stats: null };
         } else if (previousUserId !== nextUserId) {
-            profileStatsState = { userId: nextUserId, loading: false, error: "", stats: null };
-            loadServerStatsForCurrentUser().catch(() => {});
-        } else if (!profileStatsState.stats && !profileStatsState.loading) {
-            loadServerStatsForCurrentUser().catch(() => {});
+            profileStatsState = { userId: nextUserId, stats: readLocalStats(nextUserId) };
+        } else if (!profileStatsState.stats) {
+            profileStatsState = { userId: nextUserId, stats: readLocalStats(nextUserId) };
         }
         renderProfileButton();
         if (popoverOpen) {
@@ -423,6 +378,42 @@ if (!authProfileBtn || !authPopover) {
     window.TubZiAuth.closePopover = closePopover;
     window.TubZiAuth.renderAuthUI = renderAuthUI;
     window.TubZiAuth.renderGoogleButtons = renderGoogleButtons;
+    window.TubZiAuth.getLocalStats = function () {
+        if (!currentUser?.id) {
+            return getEmptyStats();
+        }
+        const stats = readLocalStats(currentUser.id);
+        profileStatsState = { userId: currentUser.id, stats };
+        return mapStatsRowToUi(stats);
+    };
+    window.TubZiAuth.recordGamePlayed = function (xpEarned) {
+        if (!currentUser?.id) {
+            return null;
+        }
+        const xp = Number(xpEarned);
+        const safeXp = Number.isFinite(xp) && xp > 0 ? Math.floor(xp) : 0;
+        const stats = readLocalStats(currentUser.id);
+        const today = getTodayIsoDate();
+        const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+        if (stats.lastPlayedDay === today) {
+            stats.gamesToday += 1;
+        } else if (stats.lastPlayedDay === yesterday) {
+            stats.gamesToday = 1;
+            stats.streak += 1;
+        } else {
+            stats.gamesToday = 1;
+            stats.streak = 1;
+        }
+        stats.lastPlayedDay = today;
+        stats.gamesLifetime += 1;
+        stats.xp += safeXp;
+        writeLocalStats(currentUser.id, stats);
+        profileStatsState = { userId: currentUser.id, stats };
+        if (popoverOpen) {
+            renderPopover();
+        }
+        return mapStatsRowToUi(stats);
+    };
 
     authProfileBtn.addEventListener("click", () => {
         if (popoverOpen) {

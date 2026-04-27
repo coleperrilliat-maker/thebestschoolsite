@@ -3,12 +3,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const SUPABASE_URL =
     window.__SUPABASE_URL ||
     document.querySelector('meta[name="supabase-url"]')?.content ||
-    "https://cheymdspanxzjjtzppat.supabase.co";
+    "https://gvvowenjfiiruyzncigb.supabase.co";
 
 const SUPABASE_ANON_KEY =
     window.__SUPABASE_ANON_KEY ||
     document.querySelector('meta[name="supabase-anon-key"]')?.content ||
-    "sb_publishable_tAcqEpAgeI5NFhqg9AoH5Q_LtUdFt27";
+    "sb_publishable_noeSDPOFwrIUXBpBiisrQg_tHtnN8aR";
 
 const PROFILE_ICON = `
 <svg class="auth-profile-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -46,75 +46,57 @@ if (!authProfileBtn || !authPopover) {
     let popoverOpen = false;
     let authMode = "signin";
     let gisReady = false;
-    let profileStatsState = {
-        userId: null,
-        stats: null
-    };
 
     function getUserDisplayName(user) {
         return user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email || "TubZi Player";
     }
 
-    function getEmptyStats() {
+    function getPlaceholderStats() {
         return {
-            streak: 0,
-            xp: 0,
-            gamesToday: 0,
-            gamesLifetime: 0
+            streak: 7,
+            xp: 1430,
+            gamesToday: 5,
+            gamesLifetime: 268
         };
     }
 
-    function mapStatsRowToUi(statsRow) {
-        const fallback = getEmptyStats();
-        if (!statsRow || typeof statsRow !== "object") {
-            return fallback;
-        }
-        return {
-            streak: Math.max(0, Number(statsRow.streak) || 0),
-            xp: Math.max(0, Number(statsRow.xp) || 0),
-            gamesToday: Math.max(0, Number(statsRow.gamesToday) || 0),
-            gamesLifetime: Math.max(0, Number(statsRow.gamesLifetime) || 0)
-        };
+    function getStatsStorageKey(user) {
+        const userKey = user?.id || user?.email || "guest";
+        return `tubzi_local_stats_${userKey}`;
     }
 
-    function getTodayIsoDate() {
-        return new Date().toISOString().slice(0, 10);
-    }
+    function getLocalStats(user) {
+        const fallback = getPlaceholderStats();
+        const key = getStatsStorageKey(user);
 
-    function getStatsStorageKey(userId) {
-        return `tubzi_local_stats_${userId}`;
-    }
-
-    function readLocalStats(userId) {
-        const fallback = getEmptyStats();
-        const key = getStatsStorageKey(userId);
-        let parsed = null;
+        let stats = null;
         try {
-            parsed = JSON.parse(window.localStorage.getItem(key) || "null");
-        } catch (_error) {
-            parsed = null;
+            stats = JSON.parse(window.localStorage.getItem(key) || "null");
+        } catch (error) {
+            stats = null;
         }
 
-        const stats = mapStatsRowToUi(parsed);
-        const today = getTodayIsoDate();
-        const lastPlayedDay = parsed?.lastPlayedDay || "";
-        if (lastPlayedDay !== today) {
-            stats.gamesToday = 0;
+        if (!stats || typeof stats !== "object") {
+            stats = {
+                streak: fallback.streak,
+                xp: fallback.xp,
+                gamesToday: fallback.gamesToday,
+                gamesLifetime: fallback.gamesLifetime
+            };
         }
-        return {
-            ...fallback,
-            ...stats,
-            lastPlayedDay: lastPlayedDay || ""
-        };
-    }
 
-    function writeLocalStats(userId, stats) {
-        const key = getStatsStorageKey(userId);
+        stats.xp = Number(stats.xp) || fallback.xp;
+        stats.gamesToday = Number(stats.gamesToday) || fallback.gamesToday;
+        stats.gamesLifetime = Number(stats.gamesLifetime) || fallback.gamesLifetime;
+        stats.streak = Number(stats.streak) || fallback.streak;
+
         try {
             window.localStorage.setItem(key, JSON.stringify(stats));
-        } catch (_error) {
+        } catch (error) {
             /* ignore storage failures */
         }
+
+        return stats;
     }
 
     async function onGoogleCredential(res) {
@@ -277,44 +259,27 @@ if (!authProfileBtn || !authPopover) {
     }
 
     function renderAuthCardSignedIn() {
-        const stats = profileStatsState.userId === currentUser?.id
-            ? mapStatsRowToUi(profileStatsState.stats)
-            : getEmptyStats();
-        const initial = String(getUserDisplayName(currentUser) || "U").trim().charAt(0).toLowerCase() || "u";
-        const streakValue = stats.streak;
-        const xpValue = stats.xp;
+        const stats = getLocalStats(currentUser);
         authPopover.innerHTML = `
-            <div class="auth-card auth-card--profile">
-                <div class="auth-profile-head">
-                    ${currentUser?.user_metadata?.avatar_url
-                        ? `<img class="auth-profile-head-avatar-img" src="${currentUser.user_metadata.avatar_url}" alt="Profile avatar" referrerpolicy="no-referrer">`
-                        : `<div class="auth-profile-head-avatar">${initial}</div>`
-                    }
-                    <div class="auth-profile-head-meta">
-                        <div class="auth-user-name">${getUserDisplayName(currentUser)}</div>
-                        <div class="auth-user-email">${currentUser?.email || ""}</div>
-                    </div>
-                </div>
+            <div class="auth-card">
+                <div class="auth-user-name">${getUserDisplayName(currentUser)}</div>
+                <div class="auth-user-email">${currentUser?.email || ""}</div>
                 <div class="auth-stats-grid">
                     <div class="auth-stat-tile">
                         <div class="auth-stat-label">Streak</div>
-                        <div class="auth-stat-value auth-stat-value--streak">🔥 ${streakValue}</div>
-                        <div class="auth-stat-sub">day streak</div>
+                        <div class="auth-stat-value">${stats.streak} days</div>
                     </div>
                     <div class="auth-stat-tile">
                         <div class="auth-stat-label">XP</div>
-                        <div class="auth-stat-value auth-stat-value--xp">⚡ ${xpValue}</div>
-                        <div class="auth-stat-sub">total XP</div>
+                        <div class="auth-stat-value">${stats.xp}</div>
                     </div>
-                </div>
-                <div class="auth-stats-mini">
-                    <div class="auth-stats-mini-row">
-                        <span class="auth-stats-mini-label">Played today</span>
-                        <span class="auth-stats-mini-value">${stats.gamesToday}</span>
+                    <div class="auth-stat-tile">
+                        <div class="auth-stat-label">Played today</div>
+                        <div class="auth-stat-value">${stats.gamesToday}</div>
                     </div>
-                    <div class="auth-stats-mini-row">
-                        <span class="auth-stats-mini-label">Lifetime plays</span>
-                        <span class="auth-stats-mini-value">${stats.gamesLifetime}</span>
+                    <div class="auth-stat-tile">
+                        <div class="auth-stat-label">Lifetime plays</div>
+                        <div class="auth-stat-value">${stats.gamesLifetime}</div>
                     </div>
                 </div>
                 <button type="button" class="auth-signout-btn" id="authPopoverSignOutBtn">Sign out</button>
@@ -358,16 +323,7 @@ if (!authProfileBtn || !authPopover) {
     }
 
     function renderAuthUI(session) {
-        const previousUserId = currentUser?.id || null;
         currentUser = session?.user || null;
-        const nextUserId = currentUser?.id || null;
-        if (!nextUserId) {
-            profileStatsState = { userId: null, stats: null };
-        } else if (previousUserId !== nextUserId) {
-            profileStatsState = { userId: nextUserId, stats: readLocalStats(nextUserId) };
-        } else if (!profileStatsState.stats) {
-            profileStatsState = { userId: nextUserId, stats: readLocalStats(nextUserId) };
-        }
         renderProfileButton();
         if (popoverOpen) {
             renderPopover();
@@ -378,42 +334,6 @@ if (!authProfileBtn || !authPopover) {
     window.TubZiAuth.closePopover = closePopover;
     window.TubZiAuth.renderAuthUI = renderAuthUI;
     window.TubZiAuth.renderGoogleButtons = renderGoogleButtons;
-    window.TubZiAuth.getLocalStats = function () {
-        if (!currentUser?.id) {
-            return getEmptyStats();
-        }
-        const stats = readLocalStats(currentUser.id);
-        profileStatsState = { userId: currentUser.id, stats };
-        return mapStatsRowToUi(stats);
-    };
-    window.TubZiAuth.recordGamePlayed = function (xpEarned) {
-        if (!currentUser?.id) {
-            return null;
-        }
-        const xp = Number(xpEarned);
-        const safeXp = Number.isFinite(xp) && xp > 0 ? Math.floor(xp) : 0;
-        const stats = readLocalStats(currentUser.id);
-        const today = getTodayIsoDate();
-        const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-        if (stats.lastPlayedDay === today) {
-            stats.gamesToday += 1;
-        } else if (stats.lastPlayedDay === yesterday) {
-            stats.gamesToday = 1;
-            stats.streak += 1;
-        } else {
-            stats.gamesToday = 1;
-            stats.streak = 1;
-        }
-        stats.lastPlayedDay = today;
-        stats.gamesLifetime += 1;
-        stats.xp += safeXp;
-        writeLocalStats(currentUser.id, stats);
-        profileStatsState = { userId: currentUser.id, stats };
-        if (popoverOpen) {
-            renderPopover();
-        }
-        return mapStatsRowToUi(stats);
-    };
 
     authProfileBtn.addEventListener("click", () => {
         if (popoverOpen) {

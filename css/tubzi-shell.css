@@ -562,10 +562,10 @@ body.light .logo-text {
     top: calc(100% + 10px);
     right: 0;
     width: min(330px, 94vw);
-    border: 1px solid #e5e7eb;
-    background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 16px 38px rgba(15, 23, 42, 0.18);
+    border: 3px solid var(--btn-border);
+    background: linear-gradient(180deg, #16223a 0%, #0f1a2f 100%);
+    border-radius: 14px;
+    box-shadow: var(--clip-ledge), 0 14px 32px rgba(0, 0, 0, 0.32);
     padding: 14px;
     z-index: 620;
 }
@@ -576,64 +576,23 @@ body.light .logo-text {
 
 .auth-user-name {
     font-family: "Fredoka", system-ui, sans-serif;
-    font-size: 22px;
+    font-size: 16px;
     font-weight: 700;
-    color: #1f2a44;
-    margin-bottom: 2px;
+    color: #f8fafc;
+    margin-bottom: 4px;
 }
 
 .auth-user-email {
     font-family: "Fredoka", system-ui, sans-serif;
     font-size: 13px;
-    color: #64748b;
-    margin-bottom: 0;
+    color: #cbd5e1;
+    margin-bottom: 12px;
     word-break: break-all;
 }
 
 .auth-card {
     display: grid;
-    gap: 14px;
-}
-
-.auth-card--profile .auth-signout-btn {
-    margin-top: 2px;
-}
-
-.auth-profile-head {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.auth-profile-head-meta {
-    min-width: 0;
-}
-
-.auth-profile-head-avatar,
-.auth-profile-head-avatar-img {
-    width: 36px;
-    height: 36px;
-    border-radius: 999px;
-    flex-shrink: 0;
-}
-
-.auth-profile-head-avatar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: "Fredoka", system-ui, sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: #7c3aed;
-    background: #f5f3ff;
-    text-transform: lowercase;
-}
-
-.auth-profile-head-avatar-img {
-    object-fit: cover;
-    display: block;
+    gap: 16px;
 }
 
 .auth-tabs {
@@ -742,103 +701,56 @@ body.light .logo-text {
 
 .auth-signout-btn {
     width: 100%;
-    border: 0;
-    background: transparent;
-    color: #667085;
+    border: 2px solid rgba(148, 163, 184, 0.35);
+    background: rgba(255, 255, 255, 0.06);
+    color: #f8fafc;
     border-radius: 10px;
     padding: 10px 12px;
     font-family: "Fredoka", system-ui, sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     cursor: pointer;
 }
 
 .auth-signout-btn:hover {
-    color: #344054;
-    background: #f8fafc;
+    background: rgba(255, 255, 255, 0.14);
 }
 
 .auth-status {
     min-height: 18px;
     font-family: "Fredoka", system-ui, sans-serif;
     font-size: 12px;
-    color: #64748b;
+    color: #cbd5e1;
     padding-top: 4px;
-    text-align: center;
 }
 
 .auth-stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
 }
 
 .auth-stat-tile {
-    border: 1px solid #eef2f7;
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 10px 10px;
-    text-align: center;
+    border: 2px solid rgba(148, 163, 184, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 8px 9px;
 }
 
 .auth-stat-label {
     font-family: "Fredoka", system-ui, sans-serif;
     font-size: 11px;
-    color: #667085;
+    color: #94a3b8;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    font-weight: 700;
 }
 
 .auth-stat-value {
-    margin-top: 5px;
+    margin-top: 4px;
     font-family: "Fredoka", system-ui, sans-serif;
-    font-size: 32px;
+    font-size: 16px;
     font-weight: 700;
-    color: #101828;
-    line-height: 1;
-}
-
-.auth-stat-value--streak {
-    color: #111827;
-}
-
-.auth-stat-value--xp {
-    color: #7c3aed;
-}
-
-.auth-stat-sub {
-    margin-top: 6px;
-    font-family: "Fredoka", system-ui, sans-serif;
-    font-size: 12px;
-    color: #667085;
-}
-
-.auth-stats-mini {
-    display: grid;
-    gap: 6px;
-    margin-top: -2px;
-}
-
-.auth-stats-mini-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 6px 2px;
-}
-
-.auth-stats-mini-label {
-    font-family: "Fredoka", system-ui, sans-serif;
-    font-size: 12px;
-    color: #667085;
-}
-
-.auth-stats-mini-value {
-    font-family: "Fredoka", system-ui, sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: #1f2937;
+    color: #f8fafc;
 }
 
 .header-search-form {

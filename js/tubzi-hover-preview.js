@@ -115,6 +115,7 @@
         tungtungobby: "videos/hover_tungtungobby.mp4",
         ultrakill: "videos/hover_ultrakill.mp4",
         vex: "videos/hover_vex.mp4",
+        veckio: "videos/hover_veckio.mp4",
         volleyrandom: "videos/hover_volleyrandom.mp4",
         wordle: "videos/hover_wordle.mp4",
         worldshardestgame: "videos/hover_worldshardestgame.mp4",

@@ -14,6 +14,9 @@ window.TUBZI_GAME_ENTRIES = [
     ["Parking Fury 2", "driving"],
     ["Parking Fury 3", "driving"],
     ["Deltarune", "action"],
+    ["Speed Stars", "sports"],
+    ["Basketball Superstars", "sports"],
+    ["Veck io", "io"],
     ["eaglercraft", "casual"],
     ["among us", "io"],
     ["subway surfers", "action"],
@@ -207,6 +210,11 @@ window.TUBZI_GAME_ENTRIES = [
     ["Angry Birds Online", "casual"],
     ["Funny Shooter 2", "action"],
     ["Infinite Craft", "puzzle"],
+    ["OpenGuessr", "puzzle"],
+    ["Harvest io", "io"],
+    ["Haunted School", "horror"],
+    ["Indian Truck Simulator", "driving"],
+    ["Undertale Last Breath", "action"],
 ];
 
 /* First entry = most popular for default grid / admin. Order is applied at load. */
@@ -221,6 +229,7 @@ window.TUBZI_GAME_ENTRIES = [
             .replace(/[^a-z0-9]+/g, "");
     }
     var PRIORITY = [
+        "Veck io",
         "eaglercraft",
         "ultrakill",
         "block blast",
@@ -334,6 +343,8 @@ window.TUBZI_GAME_ENTRIES = [
         "Table Tennis World Tour",
         "FIFA 11",
         "real flight simulator",
+        "Basketball Superstars",
+        "Speed Stars",
         "Deltarune",
         "Recoil",
         "Rise Higher",
@@ -397,6 +408,11 @@ window.TUBZI_GAME_ENTRIES = [
         "Angry Birds Online",
         "Funny Shooter 2",
         "Infinite Craft",
+        "OpenGuessr",
+        "Harvest io",
+        "Haunted School",
+        "Indian Truck Simulator",
+        "Undertale Last Breath",
         "247 blackjack",
         "0v0game",
         "block post",

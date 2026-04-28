@@ -1194,11 +1194,11 @@ const GAME_HTML_STEM_TO_IMAGE_STEM = {
 
 /* Same popularity order as index when a layout is published (tubzi-layout-store). */
 let PLAY_GAME_NAMES = [
-    "eaglercraft", "ultrakill", "block blast", "spacewaves", "cluster truck", "among us", "subway surfers", "geometry dash", "brawl simulator 3d", "steal a brainrot", "rocket league", "moto x3m",
+    "Veck io", "eaglercraft", "ultrakill", "block blast", "spacewaves", "cluster truck", "among us", "subway surfers", "geometry dash", "brawl simulator 3d", "steal a brainrot", "rocket league", "moto x3m",
     "1v1 lol", "shell shockers", "slope", "retro bowl", "bitlife", "drivemad", "crossyroad", "drift boss", "basketball stars", "8 ball classic",
     "aquapark io", "tiny fishing", "monkey mart", "elastic man", "snow rider 3d", "basketball random", "stick man hook", "soccerrandom", "volleyrandom",
     "get away shoot out", "funny shooter", "time shooter", "house of hazards", "rag doll archers", "level devil", "jetpackjoyride", "block blast",
-    "attack hole", "bowmasters", "bank robbery", "bank robbery 2", "bank robbery 3", "bacon may die", "bob the robber 2", "basket battle", "Race Survival: Arena King", "gobble", "tung tung obby", "vex", "Deltarune", "Parking Fury", "Parking Fury 2", "Parking Fury 3", "Rise Higher", "Recoil", "escape road 2", "Death Run 3D", "Driven Wild", "Dune Dash", "Find the Alien", "Fort Zone", "Snowball io", "crazy cars", "2048", "adventurecapitalist", "ahoysurvival",
+    "attack hole", "bowmasters", "bank robbery", "bank robbery 2", "bank robbery 3", "bacon may die", "bob the robber 2", "basket battle", "Race Survival: Arena King", "gobble", "tung tung obby", "vex", "Basketball Superstars", "Speed Stars", "Deltarune", "Parking Fury", "Parking Fury 2", "Parking Fury 3", "Rise Higher", "Recoil", "escape road 2", "Death Run 3D", "Driven Wild", "Dune Dash", "Find the Alien", "Fort Zone", "Snowball io", "crazy cars", "2048", "adventurecapitalist", "ahoysurvival",
     "asmallworldcup", "backrooms", "baldisbasics", "basketballbros", "basketrandom", "boxingrandom", "btd 1", "btd 2", "btd 3", "btd 4", "btd 5",
     "crazycattle 3 d", "ducklife 1", "dumbwaystodie", "fallguys", "fisquarium", "fivenightsatepsteins", "fnaf 1", "fnaf 2", "fnaf 3", "fnaf 4",
     "geometry dash meltdown", "geometry dash subzero", "geometry dash world", "granny", "happywheels", "helixjump", "hole io", "idlebreakout",
@@ -1210,7 +1210,7 @@ let PLAY_GAME_NAMES = [
     "drift hunters", "bad parenting", "247 blackjack",
     "adventure drivers", "bouncy basketball", "clash of vikings", "crazy motorcycle", "crazy plane landing",
     "doge miner", "doge miner 2", "dunk shot", "extreme run 3d", "going balls",
-    "Bad Monday Simulator", "Anton Blast", "FIFA 11", "Gorilla Tag", "Raft", "Getting Over It", "repo", "Super Monkey Ball", "not my neighbor", "Brotato", "i have no mouth", "Apes vs Helium", "Shift at Midnight", "Scary Shawarma", "Scary Teacher 3D", "Tung Tung Horror", "Tralale Escape Tung", "We Become What We Behold", "Web Fishing", "DTA 6", "GTA Vice City", "Zombie Road"
+    "Bad Monday Simulator", "Anton Blast", "FIFA 11", "Gorilla Tag", "Raft", "Getting Over It", "repo", "Super Monkey Ball", "not my neighbor", "Brotato", "i have no mouth", "Apes vs Helium", "Shift at Midnight", "Scary Shawarma", "Scary Teacher 3D", "Tung Tung Horror", "Tralale Escape Tung", "We Become What We Behold", "Web Fishing", "DTA 6", "GTA Vice City", "Zombie Road", "OpenGuessr", "Harvest io", "Haunted School", "Indian Truck Simulator", "Undertale Last Breath"
 ];
 
 if (typeof TUBZI_LAYOUT !== "undefined") {
@@ -1269,6 +1269,62 @@ if (/\/247blackjack\.html$/i.test(String(gameFile || ""))) {
 }
 
 document.getElementById("actionTitle").textContent = gameName;
+
+/* Local game stats tracker: +15 XP per launched game. */
+(function recordLocalPlayStats() {
+    const STORAGE_KEY = "tubzi_local_stats_global";
+    const SESSION_KEY = "tubzi_play_stats_recorded_v1";
+    const XP_PER_PLAY = 15;
+    const playKey = `${gameFile || ""}|${gameName || ""}`;
+
+    try {
+        if (window.sessionStorage.getItem(SESSION_KEY) === playKey) {
+            return;
+        }
+    } catch (err) {
+        /* ignore session storage failures */
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    const fallback = { streak: 0, xp: 0, gamesToday: 0, gamesLifetime: 0, lastPlayedDay: "" };
+
+    let stats = null;
+    try {
+        stats = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    } catch (err) {
+        stats = null;
+    }
+    if (!stats || typeof stats !== "object") {
+        stats = { ...fallback };
+    }
+
+    stats.streak = Math.max(0, Number(stats.streak) || 0);
+    stats.xp = Math.max(0, Number(stats.xp) || 0);
+    stats.gamesToday = Math.max(0, Number(stats.gamesToday) || 0);
+    stats.gamesLifetime = Math.max(0, Number(stats.gamesLifetime) || 0);
+    stats.lastPlayedDay = String(stats.lastPlayedDay || "");
+
+    if (stats.lastPlayedDay === today) {
+        stats.gamesToday += 1;
+    } else if (stats.lastPlayedDay === yesterday) {
+        stats.gamesToday = 1;
+        stats.streak += 1;
+    } else {
+        stats.gamesToday = 1;
+        stats.streak = 1;
+    }
+    stats.gamesLifetime += 1;
+    stats.xp += XP_PER_PLAY;
+    stats.lastPlayedDay = today;
+
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+        window.sessionStorage.setItem(SESSION_KEY, playKey);
+    } catch (err) {
+        /* ignore storage failures */
+    }
+})();
 
 let thumbPath = "";
 const htmlStem = gameFile.replace(/^games\//i, "").replace(/\.html$/i, "").trim();

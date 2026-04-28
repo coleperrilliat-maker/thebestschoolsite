@@ -725,7 +725,7 @@ function updateGamesSectionHeading(rawFilter) {
             const display = trimmed.length > 48 ? `${trimmed.slice(0, 45)}…` : trimmed;
             heading = `Search: ${display}`;
         } else {
-            heading = "All games";
+            heading = `All games (${games.length})`;
         }
     } else if (hasSearch) {
         heading = `${(genreRow && genreRow.label) || "Games"} · search`;

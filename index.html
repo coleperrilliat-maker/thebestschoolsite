@@ -6,9 +6,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Browse free browser games on TubZi, including action, puzzle, sports, and school-friendly picks. Play instantly with no download.">
+<link rel="canonical" href="https://tubzi.com/">
 <meta property="og:description" content="Browse free browser games on TubZi and play instantly with no download.">
 <meta property="og:title" content="TubZi">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://tubzi.com/">
+<meta property="og:site_name" content="TubZi">
+<meta property="og:image" content="https://tubzi.com/images/tubzi-logo.svg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TubZi">
+<meta name="twitter:description" content="Play free browser games instantly on TubZi.">
+<meta name="twitter:image" content="https://tubzi.com/images/tubzi-logo.svg">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-MSRCFHRBDK"></script>
 <script>
@@ -27,6 +35,54 @@
 <link rel="stylesheet" href="css/tubzi-shell.css">
 <link rel="stylesheet" href="css/home-browse.css">
 <link rel="stylesheet" href="css/game-tile-hover-preview.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://tubzi.com/#organization",
+      "name": "TubZi",
+      "url": "https://tubzi.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tubzi.com/images/tubzi-logo.svg"
+      },
+      "sameAs": [
+        "https://www.tiktok.com/@tubzi.io",
+        "https://discord.gg/nj5YYgKBap"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://tubzi.com/#website",
+      "url": "https://tubzi.com/",
+      "name": "TubZi",
+      "publisher": {
+        "@id": "https://tubzi.com/#organization"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://tubzi.com/index.html?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://tubzi.com/#webpage",
+      "url": "https://tubzi.com/",
+      "name": "TubZi",
+      "isPartOf": {
+        "@id": "https://tubzi.com/#website"
+      },
+      "about": {
+        "@id": "https://tubzi.com/#organization"
+      },
+      "description": "Browse free browser games on TubZi, including action, puzzle, sports, and school-friendly picks. Play instantly with no download."
+    }
+  ]
+}
+</script>
 
 <style>
 .container {

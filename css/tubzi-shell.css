@@ -51,6 +51,12 @@ body.light {
     box-sizing: border-box;
 }
 
+*,
+*::before,
+*::after {
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
 body {
     margin: 0;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -110,7 +116,7 @@ body.tubchat-dock-open .tubchat-dock {
 }
 
 .tubchat-dock__title {
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     font-weight: 700;
     color: var(--text);
@@ -493,7 +499,7 @@ body.light .logo-icon {
 }
 
 .logo-text {
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: clamp(1.8rem, 4.5vw, 2.4rem);
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -575,7 +581,7 @@ body.light .logo-text {
 }
 
 .auth-user-name {
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
     font-weight: 700;
     color: #f8fafc;
@@ -583,7 +589,7 @@ body.light .logo-text {
 }
 
 .auth-user-email {
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 13px;
     color: #cbd5e1;
     margin-bottom: 12px;
@@ -610,7 +616,7 @@ body.light .logo-text {
     border-radius: 8px;
     background: transparent;
     color: #94a3b8;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 13px;
     font-weight: 700;
     padding: 10px 10px;
@@ -623,7 +629,7 @@ body.light .logo-text {
 
 .auth-or {
     text-align: center;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     color: #94a3b8;
     font-size: 13px;
     margin: 4px 0 2px;
@@ -656,7 +662,7 @@ body.light .logo-text {
     background: rgba(255, 255, 255, 0.05);
     color: #f8fafc;
     font-size: 16px;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     padding: 12px 14px;
 }
 
@@ -671,7 +677,7 @@ body.light .logo-text {
     border: 2px solid #9a3412;
     background: linear-gradient(180deg, #fb923c 0%, #f97316 100%);
     color: #ffffff;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
     font-weight: 700;
     padding: 12px 14px;
@@ -693,7 +699,7 @@ body.light .logo-text {
     background: transparent;
     color: #cbd5e1;
     text-decoration: underline;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     cursor: pointer;
     padding: 0;
@@ -706,7 +712,7 @@ body.light .logo-text {
     color: #f8fafc;
     border-radius: 10px;
     padding: 10px 12px;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
@@ -718,7 +724,7 @@ body.light .logo-text {
 
 .auth-status {
     min-height: 18px;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
     color: #cbd5e1;
     padding-top: 4px;
@@ -759,7 +765,7 @@ body.light .logo-text {
 }
 
 .auth-stat-label {
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 10px;
     color: #dbe4f3;
     text-transform: uppercase;
@@ -768,7 +774,7 @@ body.light .logo-text {
 
 .auth-stat-value {
     margin-top: 4px;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     font-weight: 700;
     color: #ffffff;
@@ -874,7 +880,7 @@ body.light .theme-icon-btn .icon-moon {
     border: 3px solid var(--btn-border);
     background: var(--btn-bg);
     color: var(--text);
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.02em;

@@ -1,5 +1,11 @@
 /* Full-width footer: dark strip (slightly lifted from main page, not white) */
 
+*,
+*::before,
+*::after {
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
 .site-footer {
     --footer-bg-top: #1e2130;
     --footer-bg-bottom: #23273a;
@@ -85,7 +91,7 @@
 }
 
 .site-footer__cta-title {
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
     font-size: 17px;
     line-height: 1.25;
@@ -98,7 +104,7 @@
 }
 
 .site-footer__cta-sub {
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 600;
     font-size: 14px;
     line-height: 1.45;
@@ -115,7 +121,7 @@
 
 .site-footer__col h3 {
     margin: 0 0 14px;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.04em;

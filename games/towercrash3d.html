@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <base href="https://cdn.jsdelivr.net/gh/bubbls/youtube-playables@main/tower-crash-3d/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <title>Tower Crash 3D</title>
+    <script src="https://cdn.jsdelivr.net/gh/bubbls/youtube-playables@main/ytgame.js"></script>
+    <script>
+        window.ytgame.game.firstFrameReady();
+        window.famobi_gameID = "tower-crash-3d";
+        window.famobi_gameJS = [
+            "playcanvas-stable.min.js",
+            "__settings__.js",
+            "__modules__.js",
+            "__start__.js",
+            "__loading__.js"
+        ];
+        (function (document, url, fgJS, firstJS) {
+            fgJS = document.createElement("script");
+            firstJS = document.getElementsByTagName("script")[0];
+            fgJS.src = url + encodeURIComponent(document.location.href);
+            firstJS.parentNode.insertBefore(fgJS, firstJS);
+        })(document, "html5games/gameapi/v1.js?e=");
+    </script>
+</head>
+<body></body>
+</html>

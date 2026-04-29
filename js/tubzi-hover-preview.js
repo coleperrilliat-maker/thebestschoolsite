@@ -90,6 +90,7 @@
         redball4: "videos/hover_redball4.mp4",
         retrobowl: "videos/hover_retrobowl.mp4",
         retrobowlcollege: "videos/hover_retrobowlcollege.mp4",
+        risehigher: "videos/hover_risehigher.mp4",
         rocketleague: "videos/hover_rocketleague.mp4",
         run1: "videos/hover_run1.mp4",
         run2: "videos/hover_run2.mp4",

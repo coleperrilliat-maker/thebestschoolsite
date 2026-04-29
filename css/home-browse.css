@@ -1,5 +1,11 @@
 /* Browse by category: homepage, full-width grid (no sidebar) */
 
+*,
+*::before,
+*::after {
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
 /* Keep in sync with tubzi-shell.css :root (play.html loads this file but not the shell). */
 :root {
     --tubzi-gutter-x: clamp(12px, 4vw + 8px, 88px);
@@ -42,7 +48,7 @@
 }
 
 .survey-cta__headline {
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
     font-size: clamp(1.05rem, 2.4vw, 1.35rem);
     letter-spacing: 0.02em;
@@ -69,7 +75,7 @@
     justify-content: center;
     padding: 12px 22px;
     border-radius: 14px;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
     font-size: 15px;
     letter-spacing: 0.02em;
@@ -138,7 +144,7 @@ body.light-play .survey-cta__btn {
 
 button.survey-cta__btn {
     font: inherit;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     cursor: pointer;
     border: none;
     margin: 0;
@@ -431,7 +437,7 @@ body.light-play .tally-mini-browser__url {
 }
 
 .home-promo__headline {
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
     font-size: clamp(1.05rem, 2.4vw, 1.35rem);
     letter-spacing: 0.02em;
@@ -458,7 +464,7 @@ body.light-play .tally-mini-browser__url {
     justify-content: center;
     padding: 12px 22px;
     border-radius: 14px;
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
     font-size: 15px;
     letter-spacing: 0.02em;
@@ -536,7 +542,7 @@ body.light .home-promo__btn {
 }
 
 .home-browse-heading {
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
     font-size: 1.35rem;
     letter-spacing: 0.02em;
@@ -637,7 +643,7 @@ body.light .home-browse-card {
 }
 
 .home-browse-card-title {
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
     font-size: 15px;
     margin: 0 0 6px;
@@ -780,7 +786,7 @@ body.light .welcome-first-card {
 }
 
 .welcome-first-card__title {
-    font-family: "Fredoka", system-ui, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 600;
     font-size: 1.2rem;
     margin: 0 0 14px;

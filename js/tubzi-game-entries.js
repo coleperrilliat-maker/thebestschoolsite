@@ -215,6 +215,7 @@ window.TUBZI_GAME_ENTRIES = [
     ["Haunted School", "horror"],
     ["Indian Truck Simulator", "driving"],
     ["Undertale Last Breath", "action"],
+    ["Tower Crash 3D", "casual"],
 ];
 
 /* First entry = most popular for default grid / admin. Order is applied at load. */
@@ -230,6 +231,7 @@ window.TUBZI_GAME_ENTRIES = [
     }
     var PRIORITY = [
         "Veck io",
+        "Tower Crash 3D",
         "eaglercraft",
         "ultrakill",
         "block blast",
@@ -413,6 +415,7 @@ window.TUBZI_GAME_ENTRIES = [
         "Haunted School",
         "Indian Truck Simulator",
         "Undertale Last Breath",
+        "Tower Crash 3D",
         "247 blackjack",
         "0v0game",
         "block post",

@@ -216,6 +216,7 @@ window.TUBZI_GAME_ENTRIES = [
     ["Indian Truck Simulator", "driving"],
     ["Undertale Last Breath", "action"],
     ["Tower Crash 3D", "casual"],
+    ["Plinko", "casual"],
 ];
 
 /* First entry = most popular for default grid / admin. Order is applied at load. */
@@ -416,6 +417,7 @@ window.TUBZI_GAME_ENTRIES = [
         "Indian Truck Simulator",
         "Undertale Last Breath",
         "Tower Crash 3D",
+        "Plinko",
         "247 blackjack",
         "0v0game",
         "block post",

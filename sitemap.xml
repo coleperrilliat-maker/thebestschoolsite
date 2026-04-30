@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://tubzi.com/</loc>
+    <loc>https://tubzi.io/</loc>
   </url>
   <url>
-    <loc>https://tubzi.com/all-games.html</loc>
+    <loc>https://tubzi.io/all-games.html</loc>
   </url>
   <url>
-    <loc>https://tubzi.com/about.html</loc>
+    <loc>https://tubzi.io/play.html</loc>
   </url>
   <url>
-    <loc>https://tubzi.com/contact.html</loc>
+    <loc>https://tubzi.io/about.html</loc>
   </url>
   <url>
-    <loc>https://tubzi.com/privacy.html</loc>
+    <loc>https://tubzi.io/contact.html</loc>
   </url>
   <url>
-    <loc>https://tubzi.com/terms.html</loc>
+    <loc>https://tubzi.io/privacy.html</loc>
   </url>
   <url>
-    <loc>https://tubzi.com/dmca.html</loc>
+    <loc>https://tubzi.io/terms.html</loc>
   </url>
   <url>
-    <loc>https://tubzi.com/blog.html</loc>
+    <loc>https://tubzi.io/dmca.html</loc>
   </url>
   <url>
-    <loc>https://tubzi.com/advertise.html</loc>
+    <loc>https://tubzi.io/blog.html</loc>
   </url>
   <url>
-    <loc>https://tubzi.com/link-hub.html</loc>
+    <loc>https://tubzi.io/advertise.html</loc>
+  </url>
+  <url>
+    <loc>https://tubzi.io/link-hub.html</loc>
   </url>
 </urlset>

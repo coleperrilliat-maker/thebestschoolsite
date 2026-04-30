@@ -1,5 +1,12 @@
 /* Hover video tiles: one-line title; font scales with tile width and name length (--title-chars from JS). */
 
+.card,
+.card:focus,
+.card:focus-visible,
+.card:active {
+    outline: none;
+}
+
 /* Isolate stacking; parent .card:hover uses transform: scale(var(--card-hover-scale)). */
 .card--hover-preview {
     isolation: isolate;

@@ -216,6 +216,11 @@ window.TUBZI_GAME_ENTRIES = [
     ["Indian Truck Simulator", "driving"],
     ["Undertale Last Breath", "action"],
     ["Tower Crash 3D", "casual"],
+    ["Car Ramp vs Police Chase", "driving"],
+    ["Chess Classic", "puzzle"],
+    ["Chicken Scream", "casual"],
+    ["Crazy Chicken 3D", "casual"],
+    ["Escape School Duel", "action"],
     ["Plinko", "casual"],
 ];
 

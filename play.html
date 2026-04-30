@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4769618736904438"
-     crossorigin="anonymous"></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-MSRCFHRBDK"></script>
 <script>
@@ -926,7 +924,7 @@ body.light-play .play-game-about__keys-tip {
             <div class="play-game-stack">
                 <div class="play-game-inner">
                     <div class="game-frame-shell">
-                        <iframe id="gameFrame" title="Game" allowfullscreen></iframe>
+                        <iframe id="gameFrame" title="Game" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-pointer-lock"></iframe>
                     </div>
                     <div class="play-action-bar" id="actionBar">
                         <div class="action-bar-left">
@@ -1272,6 +1270,82 @@ const gameName = (() => {
 
 const iframe = document.getElementById("gameFrame");
 iframe.src = gameFile;
+const AD_BLOCK_HOST_RE = /(doubleclick|googlesyndication|googleadservices|adservice|adsterra|propellerads|popads|taboola|outbrain|mgid|exoclick|adcash)\./i;
+
+function scrubGameAds(frameWindow) {
+    if (!frameWindow || !frameWindow.document) {
+        return;
+    }
+    const doc = frameWindow.document;
+    const selectors = [
+        "ins.adsbygoogle",
+        "iframe[src*='doubleclick']",
+        "iframe[src*='googlesyndication']",
+        "iframe[src*='adservice']",
+        "script[src*='doubleclick']",
+        "script[src*='googlesyndication']",
+        "script[src*='adservice']",
+        ".adsbygoogle",
+        ".adsbox",
+        ".ad-banner",
+        ".ad-container",
+        ".ad-slot",
+        "[id^='google_ads_']",
+        "[id*='adsense']"
+    ];
+
+    selectors.forEach(sel => {
+        doc.querySelectorAll(sel).forEach(node => node.remove());
+    });
+
+    doc.querySelectorAll("iframe, script").forEach(node => {
+        const src = String(node.getAttribute("src") || "");
+        if (src && AD_BLOCK_HOST_RE.test(src)) {
+            node.remove();
+        }
+    });
+
+    doc.querySelectorAll("a[href]").forEach(link => {
+        const href = String(link.getAttribute("href") || "");
+        if (AD_BLOCK_HOST_RE.test(href)) {
+            link.removeAttribute("href");
+            link.setAttribute("aria-disabled", "true");
+            link.style.pointerEvents = "none";
+        }
+    });
+}
+
+function hardenGameWindow(frameWindow) {
+    if (!frameWindow) {
+        return;
+    }
+    try {
+        frameWindow.open = function () {
+            return null;
+        };
+        if (frameWindow.top && frameWindow.top !== frameWindow) {
+            frameWindow.top.open = function () {
+                return null;
+            };
+        }
+    } catch (err) {
+        /* ignore cross-origin override failures */
+    }
+}
+
+iframe.addEventListener("load", () => {
+    try {
+        hardenGameWindow(iframe.contentWindow);
+        scrubGameAds(iframe.contentWindow);
+        const doc = iframe.contentDocument;
+        if (doc && typeof MutationObserver !== "undefined") {
+            const obs = new MutationObserver(() => scrubGameAds(iframe.contentWindow));
+            obs.observe(doc.documentElement || doc.body, { childList: true, subtree: true });
+        }
+    } catch (err) {
+        /* If a game navigates cross-origin, parent page cannot touch its DOM. */
+    }
+});
 if (/\/247blackjack\.html$/i.test(String(gameFile || ""))) {
     iframe.classList.add("game-frame--flat-chrome");
 } else {

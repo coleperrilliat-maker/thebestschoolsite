@@ -37,34 +37,67 @@
   <!--data-checked-head="true"-->
   <!--data-ad-channel="9976299074"-->
 
-  <script async="" data-ad-client="ca-pub-8349441957149316" data-ad-channel="8933845993" data-ad-frequency-hint="60s" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" crossorigin="anonymous">
-  </script>
-
   <script>
     window.adsbygoogle = window.adsbygoogle || [];
     const adBreak = adConfig = function(o) {
-      adsbygoogle.push(o);
-    }
+      if (!o) {
+        return;
+      }
+      if (typeof o.onReady === "function") {
+        o.onReady();
+        return;
+      }
+      window.setTimeout(function() {
+        if (typeof o.beforeReward === "function") {
+          o.beforeReward(function() {
+            if (typeof o.adViewed === "function") {
+              o.adViewed();
+            }
+          });
+          if (typeof o.adBreakDone === "function") {
+            window.setTimeout(function() {
+              o.adBreakDone({ breakStatus: "viewed", type: o.type, name: o.name });
+            }, 0);
+          }
+          return;
+        }
+        try {
+          if (typeof o.beforeAd === "function") {
+            o.beforeAd();
+          }
+        } catch (e) {}
+        try {
+          if (typeof o.afterAd === "function") {
+            o.afterAd();
+          }
+        } catch (e2) {}
+        if (typeof o.adBreakDone === "function") {
+          o.adBreakDone({ breakStatus: "viewed", type: o.type, name: o.name });
+        }
+      }, 0);
+    };
 
     function initSDK() {
-      // Game start logic
       let adConfigPromise =
-        new Promise((resolve, reject) => adConfig({
-          preloadAdBreaks: 'on',
-          onReady: () => resolve(true)
-        }));
+        new Promise(function(resolve) {
+          adConfig({
+            preloadAdBreaks: "on",
+            onReady: function() {
+              resolve(true);
+            }
+          });
+        });
       let timeoutPromise =
-        new Promise((resolve, reject) => {
-          setTimeout(() => {
+        new Promise(function(resolve) {
+          window.setTimeout(function() {
             console.log("Ad timeout");
             resolve(false);
           }, 2000);
         });
-      // Whatever happens first resolves this promise.
       Promise.race([
         adConfigPromise,
         timeoutPromise
-      ]).then((shouldShowPreRoll) => {
+      ]).then(function(shouldShowPreRoll) {
         if (shouldShowPreRoll) {
           showPreRoll();
         } else {
@@ -75,13 +108,12 @@
     }
 
     function showPreRoll() {
-      // Show ad
       adBreak({
-        type: 'start',
+        type: "start",
         adBreakDone: function() {
           console.log("start game called");
           c3_callFunction("startGame");
-        }, // always called, unblocks the game logic
+        }
       });
     }
   </script>

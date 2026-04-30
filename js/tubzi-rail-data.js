@@ -28,13 +28,17 @@ window.TUBZI_RAIL = {
         dmca: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
         tiktok: '<path d="M10 8v8a4 4 0 1 0 4-4"/><path d="M14 4v6.5a5.5 5.5 0 0 0 5.5 5.5"/>',
         discord: '<path d="M7 10c2-1 4-1 6 0"/><path d="M6 8.5 7 18l2.5-2 2.5 2 2.5-2L18 8.5c-1.5-1-3.5-1.5-3.5-1.5S12 8 10 9"/><circle cx="10" cy="13" r="1"/><circle cx="14" cy="13" r="1"/>',
-        external: '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>'
+        external: '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
+        recent: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+        favorite: '<path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.52 4.674a1 1 0 0 0 .95.69h4.914c.969 0 1.371 1.24.588 1.81l-3.975 2.888a1 1 0 0 0-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.975-2.888a1 1 0 0 0-1.176 0l-3.975 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 0 0-.364-1.118L2.077 10.1c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 0 0 .95-.69l1.52-4.674z"/>'
     },
     structure: [
         { kind: "label", text: "Browse" },
         { kind: "item", id: "tubchat-dock", label: "Tubchat", icon: "chat", action: "tubchat" },
         { kind: "item", id: "home", label: "Home", icon: "home", home: true },
         { kind: "item", id: "allgames", label: "All games", icon: "grid", href: "all-games.html" },
+        { kind: "item", id: "recent", label: "Recently Played", icon: "recent", categoryId: "recent" },
+        { kind: "item", id: "favorites", label: "Favorite Games", icon: "favorite", categoryId: "favorites" },
         { kind: "label", text: "Categories" },
         { kind: "item", id: "action-games", label: "Action Games", icon: "action", categoryId: "action-games", genre: "action" },
         { kind: "item", id: "racing-games", label: "Racing Games", icon: "racing", categoryId: "racing-games", genre: "driving" },

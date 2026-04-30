@@ -931,7 +931,7 @@ body.light .home-about-list {
     </div>
 </div>
 
-<script src="js/tubzi-rail-data.js?v=7"></script>
+<script src="js/tubzi-rail-data.js?v=9"></script>
 <script src="js/tubzi-game-entries.js?v=9"></script>
 <script src="js/tubzi-layout-store.js"></script>
 <script src="js/tubzi-hover-preview.js"></script>
@@ -1049,14 +1049,12 @@ const layoutMerged = typeof TUBZI_LAYOUT !== "undefined"
     ? TUBZI_LAYOUT.loadMergedPopularity(games)
     : null;
 
-const POPULARITY_INDEX = layoutMerged
-    ? layoutMerged.index
-    : new Map(
-        POPULARITY_ORDER.map((name, i) => [
-            String(name).toLowerCase().replace(/[^a-z0-9]+/g, ""),
-            i
-        ])
-    );
+const POPULARITY_INDEX = new Map(
+    POPULARITY_ORDER.map((name, i) => [
+        String(name).toLowerCase().replace(/[^a-z0-9]+/g, ""),
+        i
+    ])
+);
 
 const LAYOUT_SIZES = layoutMerged && layoutMerged.sizes ? layoutMerged.sizes : {};
 const LAYOUT_TILES = layoutMerged && layoutMerged.tiles ? layoutMerged.tiles : null;
@@ -1120,6 +1118,7 @@ let activeGenre = "all";
 let activeCategory = "home";
 const SORT_MODE_KEY = "tubzi-home-sort";
 const RECENTLY_PLAYED_KEY = "tubzi-recently-played-v1";
+const FAVORITE_GAMES_KEY = "tubzi-favorite-games-v1";
 const RECENTLY_PLAYED_MAX = 20;
 const ALLOWED_SORTS = new Set(["popular", "alphabetical", "newly-added"]);
 let activeSort = localStorage.getItem(SORT_MODE_KEY) || "popular";
@@ -1139,6 +1138,8 @@ const TUBCHAT_DOCK_STATE_KEY = "tubzi_tubchat_dock_open";
 const TUBCHAT_EMBED_URL = "tubchat/index.html";
 const THEME_KEY = "tubzi-theme";
 const CATEGORY_ROWS = [
+    { id: "recent", label: "Recently played" },
+    { id: "favorites", label: "Favorite games" },
     { id: "action-games", label: "Action Games" },
     { id: "racing-games", label: "Racing Games" },
     { id: "shooting-games", label: "Shooting Games" },
@@ -1274,17 +1275,32 @@ function pushRecentlyPlayed(gameName) {
     saveRecentlyPlayedKeys(existing);
 }
 
+function getFavoriteGameKeys() {
+    try {
+        const raw = JSON.parse(localStorage.getItem(FAVORITE_GAMES_KEY) || "[]");
+        if (!Array.isArray(raw)) {
+            return [];
+        }
+        return raw.map(gameKey).filter(Boolean);
+    } catch {
+        return [];
+    }
+}
+
 function hasAnyKeyword(name, list) {
     const n = String(name || "").toLowerCase();
     return list.some(k => n.includes(k));
 }
 
-function categoryMatches(game, categoryId, recentSet) {
+function categoryMatches(game, categoryId, recentSet, favoriteSet) {
     if (categoryId === "home") {
         return true;
     }
     if (categoryId === "recent") {
         return recentSet.has(gameKey(game.name));
+    }
+    if (categoryId === "favorites") {
+        return favoriteSet.has(gameKey(game.name));
     }
     const overrideSet = CATEGORY_GAME_KEY_OVERRIDES[categoryId];
     if (overrideSet) {
@@ -1712,8 +1728,10 @@ function render(filter = "") {
     const q = filter.toLowerCase().trim();
     const recentKeys = getRecentlyPlayedKeys();
     const recentSet = new Set(recentKeys);
+    const favoriteKeys = getFavoriteGameKeys();
+    const favoriteSet = new Set(favoriteKeys);
     const matchedBase = games
-        .filter(g => categoryMatches(g, activeCategory, recentSet))
+        .filter(g => categoryMatches(g, activeCategory, recentSet, favoriteSet))
         .filter(g => g.name.toLowerCase().includes(q));
     let orderedBase = matchedBase;
     if (activeCategory === "recent") {
@@ -1723,16 +1741,15 @@ function render(filter = "") {
             const db = orderMap.has(gameKey(b.name)) ? orderMap.get(gameKey(b.name)) : 99_999;
             return da - db;
         });
+    } else if (activeCategory === "favorites") {
+        const orderMap = new Map(favoriteKeys.map((k, i) => [k, i]));
+        orderedBase = [...matchedBase].sort((a, b) => {
+            const da = orderMap.has(gameKey(a.name)) ? orderMap.get(gameKey(a.name)) : 99_999;
+            const db = orderMap.has(gameKey(b.name)) ? orderMap.get(gameKey(b.name)) : 99_999;
+            return da - db;
+        });
     }
-    const visualHasLargeTiles =
-        !!(LAYOUT_TILES && Object.values(LAYOUT_TILES).some(t => (Number(t && t.spanW) > 1) || (Number(t && t.spanH) > 1)));
-    const useVisualLayout =
-        activeSort === "popular" &&
-        activeCategory === "home" &&
-        LAYOUT_TILES &&
-        visualHasLargeTiles &&
-        typeof TUBZI_LAYOUT !== "undefined" &&
-        TUBZI_LAYOUT.sortGamesForVisualRender;
+    const useVisualLayout = false;
 
     if (useVisualLayout) {
         grid.classList.add("grid--visual-layout");
@@ -1742,7 +1759,8 @@ function render(filter = "") {
         grid.style.gridTemplateColumns = "";
     }
 
-    const matched = activeCategory === "recent" ? orderedBase : sortGameList(orderedBase, useVisualLayout);
+    const isOrderedCategory = activeCategory === "recent" || activeCategory === "favorites";
+    const matched = isOrderedCategory ? orderedBase : sortGameList(orderedBase, useVisualLayout);
 
     let toShow = matched;
     if (sessionShuffleOrderMap && activeCategory !== "recent") {
@@ -1754,38 +1772,94 @@ function render(filter = "") {
         useVisualLayout && TUBZI_LAYOUT.computeMaxTileRow
             ? TUBZI_LAYOUT.computeMaxTileRow(LAYOUT_TILES)
             : 0;
-    const categoryHasFeaturedTiles =
-        activeCategory === "home" ||
-        (activeCategory !== "recent" && CATEGORY_ROWS.some(r => r.id === activeCategory));
-    const useFeaturedPokiPattern =
+    const useFeaturedPopularOnly =
         !useVisualLayout &&
-        categoryHasFeaturedTiles &&
+        activeSort === "popular" &&
+        activeCategory === "home" &&
         !q &&
         typeof TUBZI_LAYOUT !== "undefined" &&
         TUBZI_LAYOUT.applyTileLevelToCard;
-    // Staggered "featured" cadence similar to Poki-style hero tiles.
-    // Includes a safety guard so two large cards are never consecutive.
-    const featuredSteps = [];
-    if (useFeaturedPokiPattern) {
-        const featuredIndexMax = Math.max(0, toShow.length - 1);
-        for (let fi = 0; fi <= featuredIndexMax; fi += 3) {
-            featuredSteps.push(fi);
-        }
-    }
-    const featuredIndexSet = new Set(featuredSteps);
-    const forcedFeaturedKeys = new Set([
-        "magetoweridledefense",
-        "ultrakill",
-        "fallguys",
-        "motox3m",
-        "gtavicecity",
+    const featuredPopularRanks = new Set([0, 1, 3, 5, 7, 9, 11, 13, 15]);
+    const featuredPopularRankLimit = 30;
+    const forcedFeaturedPopularKeys = new Set([
+        "basketballstars",
+        "crossyroad",
+        "rocketleague",
+        "blockblast",
+        "clashofvikings",
+        "tungtunghorror",
+        "scaryshawarma",
+        "scaryteacher3d",
+        "amongus",
+        "subwaysurfers",
+        "geometrydash",
         "spacewaves",
-        "bankrobbery",
-        "basketballbros",
-        "supermariobros",
+        "ultrakill",
+        "retrobowl",
+        "bitlife",
+        "drivemad",
         "drifthunters",
-        "badparenting",
-        "retrobowlcollege"
+        "basketballbros",
+        "tinyfishing",
+        "motox3m",
+        "happywheels",
+        "templerun2",
+        "smashkarts",
+        "fallguys",
+        "houseofhazards",
+        "bankrobbery",
+        "run3",
+        "fnaf1",
+        "fnaf2",
+        "fnaf3",
+        "fnaf4",
+        "granny",
+        "baldisbasics",
+        "minecraftparkour",
+        "kartbros",
+        "baseballbros",
+        "tabletennisworldtour",
+        "wordle",
+        "plantsvszombies",
+        "btd5",
+        "slicemaster",
+        "doodlejump"
+    ]);
+    function isFoodGame(name, key) {
+        const text = `${String(name || "").toLowerCase()} ${String(key || "").toLowerCase()}`;
+        const foodTokens = [
+            "papa",
+            "pizzeria",
+            "donuteria",
+            "hotdoggeria",
+            "pastaria",
+            "freezeria",
+            "pizza",
+            "burger",
+            "cook",
+            "cooking",
+            "kitchen",
+            "restaurant",
+            "food",
+            "icecream"
+        ];
+        return foodTokens.some(token => text.includes(token));
+    }
+    function scrambledFeatureSlot(popRank, key) {
+        if (popRank == null || popRank < 0 || popRank > 180) {
+            return false;
+        }
+        let hash = 0;
+        const s = String(key || "");
+        for (let i = 0; i < s.length; i++) {
+            hash = (hash * 31 + s.charCodeAt(i)) % 997;
+        }
+        const mix = (popRank * 17 + hash) % 7;
+        return mix === 0 || mix === 2 || mix === 5;
+    }
+    const neverFeaturedPopularKeys = new Set([
+        "magetoweridledefense",
+        "gettingoverit"
     ]);
     let previousWasLarge = false;
 
@@ -1820,17 +1894,30 @@ function render(filter = "") {
                     flowRow += 1;
                 }
             } else {
-                const rawLevel = LAYOUT_SIZES[layoutKey];
+                const allowCustomSizes =
+                    !(activeSort === "popular" && activeCategory === "home" && !q);
+                const rawLevel = allowCustomSizes ? LAYOUT_SIZES[layoutKey] : null;
                 let level =
                     rawLevel != null && rawLevel !== ""
                         ? rawLevel
                         : (typeof TUBZI_LAYOUT !== "undefined" ? TUBZI_LAYOUT.TILE_LEVEL_DEFAULT : 8);
-                if (useFeaturedPokiPattern) {
-                    const forcedKey = String(game.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
-                    const isForcedFeatured = forcedFeaturedKeys.has(forcedKey);
-                    const canBeFeatured = (isForcedFeatured || featuredIndexSet.has(idx)) && !previousWasLarge;
+                if (useFeaturedPopularOnly) {
+                    const isFood = isFoodGame(game.name, layoutKey);
+                    const excluded = neverFeaturedPopularKeys.has(layoutKey);
+                    const popRank = popularityRank(game.name);
+                    const forcedFeatured = !isFood && !excluded && forcedFeaturedPopularKeys.has(layoutKey);
+                    const topRankFeatured =
+                        !isFood &&
+                        !excluded &&
+                        idx < featuredPopularRankLimit &&
+                        featuredPopularRanks.has(idx);
+                    const scrambledFeatured =
+                        !isFood && !excluded && scrambledFeatureSlot(popRank, layoutKey);
+                    const canBeFeatured =
+                        (forcedFeatured || topRankFeatured || scrambledFeatured) &&
+                        !previousWasLarge;
                     if (canBeFeatured) {
-                        // 2x2 full tile for featured picks.
+                        // Only top popular games get featured large tiles.
                         level = 12;
                     }
                     previousWasLarge = canBeFeatured;
@@ -1846,7 +1933,6 @@ function render(filter = "") {
                 pushRecentlyPlayed(game.name);
                 openGameWithHeadsUp(`play.html?game=${game.file}&name=${encodeURIComponent(game.name)}`);
             };
-
             div.addEventListener("click", goPlay);
             div.addEventListener("keydown", e => {
                 if (e.key === "Enter" || e.key === " ") {
@@ -1864,6 +1950,8 @@ function render(filter = "") {
         empty.textContent =
             activeCategory === "recent"
                 ? "No recently played games yet. Open any game and it will appear here."
+                : activeCategory === "favorites"
+                    ? "No favorite games yet. Click the star on any game to add it."
                 : "No games match this category yet.";
         grid.appendChild(empty);
     }

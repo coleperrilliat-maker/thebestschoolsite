@@ -527,23 +527,31 @@ body.light-play .play-action-bar {
 }
 
 .stat-btn#btnLike,
+.stat-btn#btnFavorite,
 .stat-btn#btnDislike,
 .fs-btn {
     background: transparent;
     color: var(--ui-accent);
 }
 
+.stat-btn#btnFavorite:hover,
 .stat-btn#btnLike:hover,
 .stat-btn#btnDislike:hover,
 .fs-btn:hover {
     background: rgba(255, 106, 0, 0.14);
 }
 
+.stat-btn#btnFavorite svg,
+.stat-btn#btnFavorite svg path,
 .stat-btn#btnLike svg,
 .stat-btn#btnLike svg path,
 .stat-btn#btnDislike svg,
 .stat-btn#btnDislike svg path {
     transition: fill 0.15s ease, stroke 0.15s ease, color 0.15s ease;
+}
+
+.stat-btn#btnFavorite.is-favorite {
+    color: #ff6a00 !important;
 }
 
 .stat-btn#btnLike.is-liked {
@@ -929,6 +937,11 @@ body.light-play .play-game-about__keys-tip {
                             </div>
                         </div>
                         <div class="action-bar-right">
+                            <button type="button" class="stat-btn" id="btnFavorite" aria-label="Favorite" aria-pressed="false" title="Add to favorites">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.52 4.674a1 1 0 00.95.69h4.914c.969 0 1.371 1.24.588 1.81l-3.975 2.888a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.975-2.888a1 1 0 00-1.176 0l-3.975 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.077 10.1c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.95-.69l1.52-4.674z"/>
+                                </svg>
+                            </button>
                             <button type="button" class="stat-btn" id="btnLike" aria-label="Like">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/>
@@ -1799,6 +1812,7 @@ if (playTubchatDockClose) {
 (function () {
   const SUPABASE_URL = 'https://cheymdspanxzjjtzppat.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_tAcqEpAgeI5NFhqg9AoH5Q_LtUdFt27';
+  const FAVORITE_GAMES_KEY = "tubzi-favorite-games-v1";
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   // Persistent device id (per browser)
@@ -1825,9 +1839,75 @@ if (playTubchatDockClose) {
   const dislikeBtn   = document.getElementById('btnDislike');
   const dislikeCount = document.getElementById('dislikeCount');
   if (!likeBtn || !likeCount) return;
+  let favoriteBtn = document.getElementById('btnFavorite');
+  if (!favoriteBtn) {
+    const actionBarRight = document.querySelector('.action-bar-right');
+    if (actionBarRight) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'stat-btn';
+      btn.id = 'btnFavorite';
+      btn.setAttribute('aria-label', 'Favorite');
+      btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute('title', 'Add to favorites');
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.52 4.674a1 1 0 00.95.69h4.914c.969 0 1.371 1.24.588 1.81l-3.975 2.888a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.975-2.888a1 1 0 00-1.176 0l-3.975 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.077 10.1c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.95-.69l1.52-4.674z"/></svg>';
+      actionBarRight.insertBefore(btn, likeBtn);
+      favoriteBtn = btn;
+    }
+  }
 
   // --- Visual states ---
   const ORANGE = '#ff6a00';
+  function normName(name) {
+    return String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+  }
+  function favoriteKeyFromGameKey(raw) {
+    const v = String(raw || '');
+    const noQuery = v.split('?')[0].split('#')[0];
+    const base = noQuery.split('/').pop() || noQuery;
+    const noExt = base.replace(/\.[a-z0-9]+$/i, '');
+    return normName(noExt);
+  }
+  function getFavoriteGameKeys() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(FAVORITE_GAMES_KEY) || "[]");
+      if (!Array.isArray(raw)) {
+        return [];
+      }
+      return raw.map(normName).filter(Boolean);
+    } catch {
+      return [];
+    }
+  }
+  function saveFavoriteGameKeys(keys) {
+    try {
+      localStorage.setItem(FAVORITE_GAMES_KEY, JSON.stringify(keys));
+    } catch (err) {
+      /* ignore storage failures */
+    }
+  }
+  function isFavoriteGameKey(key) {
+    if (!key) return false;
+    return getFavoriteGameKeys().includes(key);
+  }
+  function setFavoriteVisual(on) {
+    if (!favoriteBtn) return;
+    const svg = favoriteBtn.querySelector('svg');
+    const path = favoriteBtn.querySelector('svg path');
+    if (on) {
+      favoriteBtn.classList.add('is-favorite');
+      favoriteBtn.setAttribute('aria-pressed', 'true');
+      favoriteBtn.setAttribute('title', 'Remove from favorites');
+      if (svg) svg.setAttribute('fill', ORANGE);
+      if (path) path.setAttribute('stroke', ORANGE);
+    } else {
+      favoriteBtn.classList.remove('is-favorite');
+      favoriteBtn.setAttribute('aria-pressed', 'false');
+      favoriteBtn.setAttribute('title', 'Add to favorites');
+      if (svg) svg.setAttribute('fill', 'none');
+      if (path) path.setAttribute('stroke', 'currentColor');
+    }
+  }
 
   function setLikedVisual(liked) {
     const svg  = likeBtn.querySelector('svg');
@@ -1864,6 +1944,21 @@ if (playTubchatDockClose) {
       dislikeBtn.dataset.on = '0';
       dislikeBtn.setAttribute('aria-pressed', 'false');
     }
+  }
+  const favoriteGameKey = favoriteKeyFromGameKey(gameKey);
+  setFavoriteVisual(isFavoriteGameKey(favoriteGameKey));
+  if (favoriteBtn) {
+    favoriteBtn.addEventListener('click', () => {
+      const key = favoriteGameKey;
+      if (!key) {
+        return;
+      }
+      const current = getFavoriteGameKeys();
+      const without = current.filter((k) => k !== key);
+      const next = without.length === current.length ? [key].concat(without) : without;
+      saveFavoriteGameKeys(next);
+      setFavoriteVisual(next.includes(key));
+    });
   }
 
   // --- Initial load: count + whether this device liked it ---

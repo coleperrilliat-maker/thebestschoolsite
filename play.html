@@ -406,6 +406,45 @@ button.play-dash-btn {
     display: block;
 }
 
+/* Ensure the iframe actually fills the monitor when fullscreen (parent button or in-game FS). */
+.game-frame-shell:-webkit-full-screen,
+.game-frame-shell:fullscreen {
+    width: 100%;
+    height: 100%;
+    width: 100dvw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+    background: #000;
+    margin: 0;
+}
+
+.game-frame-shell:-webkit-full-screen iframe,
+.game-frame-shell:fullscreen iframe {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#gameFrame:-webkit-full-screen,
+#gameFrame:fullscreen {
+    width: 100%;
+    height: 100%;
+    width: 100dvw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+    background: #000;
+}
+
+#gameFrame:-webkit-full-screen:not(.game-frame--flat-chrome),
+#gameFrame:fullscreen:not(.game-frame--flat-chrome) {
+    outline: none;
+}
+
 /* 247 Blackjack embed: hide default focus ring (often reads as orange) at the frame edge. */
 #gameFrame.game-frame--flat-chrome:focus,
 #gameFrame.game-frame--flat-chrome:focus-visible {
@@ -558,6 +597,10 @@ body.light-play .play-action-bar {
 
 .stat-btn#btnDislike[data-on="1"] {
     color: #ff6a00 !important;
+}
+
+.stat-btn#btnDislike .stat-count {
+    display: none;
 }
 
 .stat-btn#btnLike .stat-count,
@@ -924,7 +967,13 @@ body.light-play .play-game-about__keys-tip {
             <div class="play-game-stack">
                 <div class="play-game-inner">
                     <div class="game-frame-shell">
-                        <iframe id="gameFrame" title="Game" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-pointer-lock"></iframe>
+                        <iframe
+                            id="gameFrame"
+                            title="Game"
+                            allowfullscreen
+                            allow="fullscreen *; pointer-lock *"
+                            sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-pointer-lock allow-popups-to-escape-sandbox allow-orientation-lock"
+                        ></iframe>
                     </div>
                     <div class="play-action-bar" id="actionBar">
                         <div class="action-bar-left">
@@ -1447,25 +1496,45 @@ if (dashRandom) {
 }
 
 function toggleFullscreen() {
-    const fs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+    const doc = document;
+    const fs =
+        doc.fullscreenElement ||
+        doc.webkitFullscreenElement ||
+        doc.webkitCurrentFullScreenElement ||
+        doc.msFullscreenElement;
     if (fs) {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
+        const exit =
+            doc.exitFullscreen?.bind(doc) ||
+            doc.webkitExitFullscreen?.bind(doc) ||
+            doc.webkitCancelFullScreen?.bind(doc) ||
+            doc.msExitFullscreen?.bind(doc);
+        if (exit) exit();
         return;
     }
-    const el = document.getElementById("gameFrame");
-    if (el.requestFullscreen) {
-        el.requestFullscreen();
-    } else if (el.webkitRequestFullscreen) {
-        el.webkitRequestFullscreen();
-    } else if (el.msRequestFullscreen) {
-        el.msRequestFullscreen();
+
+    /* Fullscreen the shell first so nested flex keeps the iframe at true viewport height; fall back to the iframe. */
+    const targets = [
+        document.querySelector(".game-frame-shell"),
+        document.getElementById("gameFrame")
+    ].filter(Boolean);
+
+    function requestFs(node) {
+        const req =
+            node.requestFullscreen ||
+            node.webkitRequestFullscreen ||
+            node.webkitRequestFullScreen ||
+            node.msRequestFullscreen;
+        if (!req) {
+            return Promise.reject(new Error("no fullscreen"));
+        }
+        return Promise.resolve(req.call(node));
     }
+
+    let chain = Promise.reject();
+    targets.forEach(t => {
+        chain = chain.catch(() => requestFs(t));
+    });
+    chain.catch(() => {});
 }
 
 document.getElementById("btnFullscreen").addEventListener("click", toggleFullscreen);

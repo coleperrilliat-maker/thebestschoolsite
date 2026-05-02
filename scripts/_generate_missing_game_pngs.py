@@ -26,7 +26,6 @@ IMAGE_SLUG_OVERRIDES: dict[str, str] = {
     "dogeminer2": "doge-miner-2",
     "dunkshot": "dunk-shot",
     "extremerun3d": "extreme-run-3d",
-    "goingballs": "going-balls",
 }
 
 

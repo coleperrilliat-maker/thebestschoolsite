@@ -7,6 +7,8 @@
 }
 
 .site-footer {
+    position: relative;
+    z-index: 1;
     --footer-bg-top: #1e2130;
     --footer-bg-bottom: #23273a;
     --footer-text: #e8e8ef;

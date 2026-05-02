@@ -132,8 +132,6 @@
             "Fall Guys on TubZi captures the battle-royale obstacle-course fantasy: qualify through rounds of races, survival tiles, and team games until one bean crowns. Physics bumps let you grief rivals gently, or accidentally throw yourself off. Grabbing, diving, and timing jumps separate early exits from clutch finishes. It is loud, colorful, and built for just-one-more-show energy. Perfect when you want party chaos without a heavy install.",
         fisquarium:
             "Fishquarium / Fisquarium-style games blend idle aquarium care with economy loops: feed fish, clean tanks, buy decorations, and unlock rare species. Progression gates new biomes or multitank management. The vibe is cozy screensaver with goals. TubZi keeps bubbles floating in a tab. Relaxing pick for low-stress play.",
-        fivenightsatepsteins:
-            "This title parodies survival-horror office shifts with absurd humor layered over camera-monitor gameplay. You watch feeds, close doors, and manage power while joke threats escalate. It is not subtle, expect edgy comedy paired with jump scares. TubZi hosts it for players who know what they are clicking. Approach as parody, not a kids’ game.",
         fnaf1:
             "Five Nights at Freddy’s 1 puts you in a pizzeria security office tracking animatronics through laggy cameras and limited door power. Audio cues matter as much as visuals, listen for movement in adjacent halls. Each night tightens AI patterns until night five and custom night break you. TubZi brings the original scare formula to the browser. Close the doors wisely, juice runs out faster than you think.",
         fnaf2:

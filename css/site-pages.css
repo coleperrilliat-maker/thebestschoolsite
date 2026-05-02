@@ -9,10 +9,25 @@
 :root {
     --page-bg: #f0f3fa;
     --page-card: #ffffff;
+    --page-card-soft: #fafbff;
     --page-text: #1a1c2c;
     --page-muted: #5c6070;
     --page-border: #dde1ed;
     --page-brand: #ff6a00;
+    --page-shadow: 0 4px 20px rgba(15, 19, 32, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --page-bg: #111422;
+        --page-card: #1a1f33;
+        --page-card-soft: #20263d;
+        --page-text: #e9ecf7;
+        --page-muted: #a6b0c8;
+        --page-border: #2c3552;
+        --page-brand: #ff8a3d;
+        --page-shadow: 0 10px 30px rgba(2, 6, 23, 0.45);
+    }
 }
 
 * {
@@ -62,6 +77,9 @@ body {
     font-size: 1.1rem;
     font-weight: 600;
     margin: 28px 0 10px;
+    padding-left: 10px;
+    border-left: 4px solid var(--page-brand);
+    color: #b45309;
 }
 
 .page-shell h3 {
@@ -77,6 +95,17 @@ body {
     color: var(--page-text);
 }
 
+.page-shell a {
+    color: var(--page-brand);
+    text-decoration-color: rgba(255, 106, 0, 0.35);
+    text-underline-offset: 2px;
+}
+
+.page-shell a:hover {
+    color: #ea580c;
+    text-decoration-color: rgba(234, 88, 12, 0.45);
+}
+
 .page-shell .muted {
     color: var(--page-muted);
     font-size: 14px;
@@ -87,7 +116,19 @@ body {
     border: 1px solid var(--page-border);
     border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 4px 20px rgba(15, 19, 32, 0.06);
+    box-shadow: var(--page-shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.page-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ff6a00, #ff8a3d);
 }
 
 .page-shell h2.link-hub-section-title {
@@ -117,7 +158,7 @@ body {
     padding: 16px 18px;
     border-radius: 12px;
     border: 1px solid var(--page-border);
-    background: #fafbff;
+    background: var(--page-card-soft);
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 600;
     font-size: 1.1rem;
@@ -132,6 +173,7 @@ body {
     color: var(--page-brand);
 }
 
+
 .link-hub-link small {
     display: block;
     font-weight: 500;
@@ -139,4 +181,72 @@ body {
     color: var(--page-muted);
     margin-top: 6px;
     letter-spacing: 0.01em;
+}
+
+/* About page accents */
+.about-intro-card {
+    margin: 16px 0 22px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    border: 1px solid #d6deef;
+    background: linear-gradient(145deg, #f6f9ff 0%, #eef4ff 100%);
+}
+
+.about-pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 0 18px;
+}
+
+.about-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    border: 1px solid transparent;
+}
+
+.about-pill--blue {
+    color: #1d4ed8;
+    background: #dbeafe;
+    border-color: #bfdbfe;
+}
+
+.about-pill--green {
+    color: #166534;
+    background: #dcfce7;
+    border-color: #bbf7d0;
+}
+
+.about-pill--purple {
+    color: #6d28d9;
+    background: #ede9fe;
+    border-color: #ddd6fe;
+}
+
+.about-section-title--blue {
+    color: #1d4ed8;
+}
+
+.about-section-title--green {
+    color: #15803d;
+}
+
+.about-section-title--purple {
+    color: #7c3aed;
+}
+
+.about-list {
+    margin: 0 0 14px;
+    padding-left: 20px;
+    color: var(--page-text);
+}
+
+.about-list li + li {
+    margin-top: 6px;
 }

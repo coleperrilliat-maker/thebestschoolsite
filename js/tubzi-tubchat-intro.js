@@ -1,4 +1,6 @@
 (function () {
+    "use strict";
+
     var STORAGE_KEY = "tubzi_tubchat_intro_seen_v1";
     var ALLOWED_PAGES = { home: true, "all-games": true };
     var page = document.body && document.body.getAttribute("data-tubzi-page");
@@ -22,6 +24,13 @@
     var dismissBtn = document.getElementById("tubchatIntroDismiss");
     var showBtn = document.getElementById("tubchatIntroShow");
     var prevOverflow = "";
+
+    function getTubchatTarget() {
+        return (
+            document.querySelector('.rail-nav-item[data-nav-id="tubchat-dock"]') ||
+            document.querySelector('.play-header-btn[data-play-action="tubchat"]')
+        );
+    }
 
     function rememberSeen() {
         try {
@@ -49,9 +58,7 @@
     }
 
     function highlightTubchatButton() {
-        var target =
-            document.querySelector('.rail-nav-item[data-nav-id="tubchat-dock"]') ||
-            document.querySelector('.play-header-btn[data-play-action="tubchat"]');
+        var target = getTubchatTarget();
         if (!target) {
             return;
         }
@@ -63,9 +70,7 @@
 
     function showWhereTubchatIs() {
         close();
-        var target =
-            document.querySelector('.rail-nav-item[data-nav-id="tubchat-dock"]') ||
-            document.querySelector('.play-header-btn[data-play-action="tubchat"]');
+        var target = getTubchatTarget();
         if (target && typeof target.click === "function") {
             target.click();
         }

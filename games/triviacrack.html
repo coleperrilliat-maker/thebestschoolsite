@@ -1,0 +1,56 @@
+<!-- Ultimate Game Stash file-->
+<!-- YouTube Playable: ytgame SDK is a no-op off YouTube — stub API so the game runs in embeds. -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base href="https://cdn.jsdelivr.net/gh/bubbls/youtube-playables@main/trivia-crack/">
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Trivia Crack" />
+    <title>Trivia Crack</title>
+    <script>
+      /* Minimal ytgame shim — real SDK only works on youtube.com; bundle needs these hooks. */
+      (function () {
+        var noop = function () {};
+        window.ytgame = {
+          engagement: {
+            sendScore: noop
+          },
+          game: {
+            firstFrameReady: noop,
+            gameReady: noop,
+            loadData: function () {
+              return Promise.resolve(null);
+            },
+            saveData: function () {
+              return Promise.resolve();
+            }
+          },
+          health: {
+            logError: noop
+          },
+          system: {
+            onAudioEnabledChange: function (cb) {
+              try {
+                if (typeof cb === "function") {
+                  setTimeout(function () {
+                    cb(true);
+                  }, 0);
+                }
+              } catch (e) {}
+              return noop;
+            }
+          }
+        };
+      })();
+    </script>
+    <script defer="defer" src="./static/js/main.d7ebbba0.js"></script>
+    <link href="./static/css/main.8b69b9df.css" rel="stylesheet" />
+  </head>
+  <body>
+    <noscript>Trivia Crack requires JavaScript.</noscript>
+    <div id="root"></div>
+  </body>
+</html>

@@ -1,38 +1,86 @@
 <!DOCTYPE html>
-
-</style><style type="text/css">#button {
-  display:none;
-}
-.imgb_vis {
-  animation: imgb-animation 7s linear;
-}
-@keyframes imgb-animation {
-  10% {
-    transform: translateX(0);
-  }
-  20% {
-    transform: translateX(100px);
-  }
-  90% {
-    transform: translateX(100px);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}</style></head><body class="dark" dir="ltr"><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-MENBM6GSNY"></script><script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-MENBM6GSNY")</script>
-<div class="unity-desktop" id="unity-container">
-    <canvas id="unity-canvas"></canvas>
-</div>
-<div id="loading-cover">
-    <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-            <div id="unity-progress-bar-full" style="width: 23.5423%;"></div>
-        </div>
-        <div class="spinner"></div>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Bank Robbery 2</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/linkd1/g@e079e474647ea113968cdc140ca97380be6409af/BANKROBBERY2/TemplateData/style.css">
+    <style type="text/css">
+        #button {
+            display: none;
+        }
+        .imgb_vis {
+            animation: imgb-animation 7s linear;
+        }
+        @keyframes imgb-animation {
+            10% {
+                transform: translateX(0);
+            }
+            20% {
+                transform: translateX(100px);
+            }
+            90% {
+                transform: translateX(100px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+        #unity-container {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #unity-canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+            outline: none;
+        }
+        #loading-cover {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #231f20;
+        }
+    </style>
+</head>
+<body class="dark" dir="ltr">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MENBM6GSNY"></script>
+    <script>
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        window.dataLayer = window.dataLayer || [];
+        gtag("js", new Date());
+        gtag("config", "G-MENBM6GSNY");
+    </script>
+    <div class="unity-desktop" id="unity-container">
+        <canvas id="unity-canvas"></canvas>
     </div>
-</div>
-<script>
+    <div id="loading-cover">
+        <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+            <div id="unity-progress-bar-empty">
+                <div id="unity-progress-bar-full" style="width: 0%;"></div>
+            </div>
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <script>
     var gameState = {
         isInitialized: false,
         instance: null,
@@ -623,10 +671,6 @@
 
     function StaticRBTDeactivate() {
     }
-
-    document.body.appendChild(script);
-</script>
-
-
-
-</body></html>
+    </script>
+</body>
+</html>

@@ -148,7 +148,7 @@ body.tubchat-dock-open .tubchat-dock {
     background: #000;
 }
 
-/* Main column only (rail hidden); header absolutely spans full width on top */
+/* Sidebar + main column; header fixed across full width */
 .app-shell {
     flex: 1;
     display: grid;
@@ -231,6 +231,151 @@ body.tubchat-dock-open .game-rail {
     position: relative;
     padding: 12px 0 14px;
     width: 100%;
+}
+
+/* Sidebar stats: same vocabulary as Browse / rail-nav (flat, no promo card chrome). */
+.game-rail-stats {
+    flex-shrink: 0;
+    margin: 0 5px;
+    padding: 2px 3px 10px;
+    border-bottom: 1px solid var(--header-border);
+}
+
+.game-rail-stats__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 0 5px 8px;
+    padding: 0 2px;
+}
+
+.game-rail-stats__range-label {
+    font-size: 10px;
+    font-weight: 700;
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.game-rail-stats__select {
+    max-width: 118px;
+    padding: 6px 9px;
+    border-radius: 6px;
+    border: none;
+    background: var(--btn-bg);
+    color: var(--text-muted);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    box-shadow: var(--clip-ledge);
+    transition: background 0.18s ease, color 0.18s ease;
+}
+
+.game-rail-stats__select:hover,
+.game-rail-stats__select:focus {
+    background: var(--btn-bg-hover);
+    color: var(--text);
+    outline: none;
+}
+
+.game-rail-stats__select:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+}
+
+.game-rail-stats__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.game-rail-stats__card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: calc(100% - 10px);
+    margin: 2px 5px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: none;
+    background: transparent;
+}
+
+.game-rail-stats__emoji {
+    flex-shrink: 0;
+    width: 22px;
+    text-align: center;
+    font-size: 17px;
+    line-height: 1;
+}
+
+.game-rail-stats__card-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.game-rail-stats__card-label {
+    font-size: 10px;
+    font-weight: 700;
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    line-height: 1.15;
+}
+
+.game-rail-stats__value-row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+}
+
+.game-rail-stats__value {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: rgba(244, 244, 248, 0.95);
+}
+
+body.light .game-rail-stats__value {
+    color: var(--text);
+}
+
+.game-rail-stats__delta {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.game-rail-stats__delta--up {
+    color: var(--accent-green);
+}
+
+.game-rail-stats__delta--down {
+    color: #f87171;
+}
+
+body.light .game-rail-stats__delta--down {
+    color: #dc2626;
+}
+
+.game-rail-stats__delta--flat {
+    color: var(--text-muted);
+}
+
+.game-rail-stats__card:hover {
+    background: var(--btn-bg-hover);
 }
 
 .auth-google-btn {
@@ -434,6 +579,9 @@ body.light .rail-label {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    /* Stack above .game-rail (200) so the footer / Resources links are never covered by the sidebar */
+    position: relative;
+    z-index: 210;
 }
 
 .app-scroll {
@@ -451,6 +599,7 @@ body.light .rail-label {
 }
 
 .header-inner {
+    position: relative;
     max-width: 1180px;
     margin: 0 auto;
     width: 100%;
@@ -460,6 +609,7 @@ body.light .rail-label {
     gap: 10px;
     flex-wrap: nowrap;
     min-height: 46px;
+    padding-left: 0;
 }
 
 .logo-brand {
@@ -1031,6 +1181,7 @@ body[data-tubzi-page="category"] .hdr-btn-random {
     .header-inner {
         gap: 8px;
         min-height: 44px;
+        padding-left: 0;
     }
 
     .hdr-btn {

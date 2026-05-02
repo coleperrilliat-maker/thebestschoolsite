@@ -1,29 +1,44 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
 <head>
     <base href="https://cdn.jsdelivr.net/gh/cooldude2349/everything@main/parkfury3/">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Parking Fury 3</title>
     <script src="src/School.inlined.js"></script>
     <style type="text/css" media="screen">
-        html, body { height: 100%; background-color: #000000; }
-        body { margin: 0; padding: 0; overflow: hidden; }
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            overflow: hidden;
+        }
+        #gameContainer {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
     </style>
     <meta name="robots" content="noindex,nofollow">
 </head>
 <body>
-<div id="gameContainer">
-<script type="text/javascript">
-window.onload = function() {
-    var game = new Phaser.Game(640, 480, Phaser.CANVAS, '');
-    game.state.add('Boot', ParkingFury.Boot);
-    game.state.add('Preloader', ParkingFury.Preloader);
-    game.state.add('MainMenu', ParkingFury.MainMenu);
-    game.state.add('Game', ParkingFury.Game);
-    game.state.add('BlankState', ParkingFury.BlankState);
-    game.state.start('Boot');
-};
-</script>
-</div>
+    <div id="gameContainer"></div>
+    <script type="text/javascript">
+        window.onload = function () {
+            var game = new Phaser.Game(640, 480, Phaser.CANVAS, "gameContainer");
+            game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+            game.scale.pageAlignHorizontally = true;
+            game.scale.pageAlignVertically = true;
+            game.state.add("Boot", ParkingFury.Boot);
+            game.state.add("Preloader", ParkingFury.Preloader);
+            game.state.add("MainMenu", ParkingFury.MainMenu);
+            game.state.add("Game", ParkingFury.Game);
+            game.state.add("BlankState", ParkingFury.BlankState);
+            game.state.start("Boot");
+        };
+    </script>
 </body>
 </html>

@@ -26,7 +26,6 @@ new_items = [
     ("dumbwaystodie", "puzzle"),
     ("fallguys", "action"),
     ("fisquarium", "puzzle"),
-    ("fivenightsatepsteins", "action"),
     ("fnaf 1", "action"),
     ("fnaf 2", "action"),
     ("fnaf 3", "action"),

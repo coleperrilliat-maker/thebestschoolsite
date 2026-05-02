@@ -24,15 +24,6 @@
 <meta name="twitter:description" content="Play 200+ free browser games instantly on Tubzi.">
 <meta name="twitter:image" content="https://tubzi.io/images/tubzi-logo.png">
 <meta name="twitter:image:alt" content="Tubzi logo">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MSRCFHRBDK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-MSRCFHRBDK');
-</script>
 <title>Tubzi - Free Online Games</title>
 <link rel="stylesheet" href="css/footer.css">
 <link rel="stylesheet" href="css/tubzi-shell.css">
@@ -549,7 +540,7 @@ body.light .home-about-list {
         </div>
     </header>
 
-    <aside class="game-rail" aria-label="Navigation">
+    <aside class="game-rail" id="gameRail" aria-label="Navigation">
         <div class="game-rail-inner">
             <nav class="game-rail-scroll" id="gameRailNav"></nav>
         </div>
@@ -1002,8 +993,12 @@ const GAME_FILE_SLUG = {
     dogeminer2: "doge-miner-2",
     dunkshot: "dunk-shot",
     extremerun3d: "extreme-run-3d",
-    goingballs: "going-balls",
-    magetoweridledefense: "magetoweridle"
+    magetoweridledefense: "magetoweridle",
+    timewarriors: "cltimewarriors",
+    tubejumpers: "cltubejumpers",
+    topspeed3d: "cltopspeedracing3d",
+    toasterball: "cltoasterball",
+    "surviv.io": "survevio"
 };
 
 function fileSlugFromGameName(name) {
@@ -1023,8 +1018,8 @@ const GAME_IMAGE_SLUG = {
     dogeminer2: "doge-miner-2",
     dunkshot: "dunk-shot",
     extremerun3d: "extreme-run-3d",
-    goingballs: "going-balls",
-    magetoweridledefense: "magetoweridle"
+    magetoweridledefense: "magetoweridle",
+    "surviv.io": "survevio"
 };
 
 function imageSlugFromGameName(name) {
@@ -1181,7 +1176,7 @@ const CATEGORY_GAME_OVERRIDES = {
         "adventure drivers", "aquapark io", "Brick Run", "Car Drawing", "Cluster Truck", "crazy cars",
         "crazy motorcycle", "crazy plane landing", "drift boss", "drift hunters", "Drive Russia", "drivemad",
         "Driven Wild", "Dune Dash", "Eagle Ride", "eggy car", "escape road 2", "Funny Mad Racing",
-        "Golf Battle", "going balls", "Kart Bros", "moneyrush", "moto x3m", "moto x3m pool party",
+        "Golf Battle", "Kart Bros", "moneyrush", "moto x3m", "moto x3m pool party",
         "moto x3m spooky land", "moto x3m winter", "polytrack", "Race Survival: Arena King",
         "real flight simulator", "rocket league", "Sky Race 3D", "slope", "smash karts", "smashyroad",
         "snow rider 3d", "Snowball io", "Super Car Rush", "vex x3m"
@@ -1230,10 +1225,10 @@ const CATEGORY_GAME_OVERRIDES = {
         "not my neighbor", "terraria", "Web Fishing"
     ],
     "clicker-idle-games": [
-        "adventurecapitalist", "doge miner", "doge miner 2", "epstein clicker", "idlebreakout", "tiny fishing", "Mage Tower Idle Defense"
+        "adventurecapitalist", "doge miner", "doge miner 2", "idlebreakout", "tiny fishing", "Mage Tower Idle Defense"
     ],
     "horror-games": [
-        "backrooms", "baldisbasics", "five nights at freddys", "Five Nights at Yoshis", "fivenightsatepsteins",
+        "backrooms", "baldisbasics", "five nights at freddys", "Five Nights at Yoshis",
         "fnaf 1", "fnaf 2", "fnaf 3", "fnaf 4", "granny", "not my neighbor", "repo", "Scary Teacher 3D",
         "Shift at Midnight", "Tung Tung Horror"
     ],

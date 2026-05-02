@@ -1,18 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MSRCFHRBDK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-MSRCFHRBDK');
-</script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Permissions-Policy" content="fullscreen=*, pointer-lock=*, autoplay=*">
 <meta name="description" content="Play browser games on TubZi with full-screen controls, game guides, and quick access to more popular picks.">
 <link rel="canonical" href="https://tubzi.io/play.html">
 <link rel="icon" type="image/png" sizes="512x512" href="images/tubzi-logo.png">
@@ -86,6 +77,7 @@ html {
 
 html:has(body.is-fullscreen) {
     height: 100%;
+    min-height: 100dvh;
     overflow: hidden;
 }
 
@@ -117,10 +109,29 @@ body.tubchat-dock-open .play-below {
 }
 
 body.is-fullscreen {
-    background: var(--bg);
+    background: #000;
     height: 100%;
-    min-height: 0;
+    min-height: 100dvh;
+    width: 100%;
+    max-width: 100vw;
     overflow: hidden;
+}
+
+body.is-fullscreen .play-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100vw;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+}
+
+body.is-fullscreen .play-dashboard,
+body.is-fullscreen .play-stage-wrap,
+body.is-fullscreen .play-below {
+    width: 100% !important;
+    max-width: 100vw;
+    padding: 0 !important;
 }
 
 body.is-fullscreen .play-below,
@@ -130,6 +141,35 @@ body.is-fullscreen .play-dashboard {
 
 body.is-fullscreen .play-stage-row {
     gap: 0;
+    width: 100% !important;
+    min-height: 0;
+    flex: 1 1 auto;
+    height: 100%;
+}
+
+body.is-fullscreen .play-game-stack {
+    width: 100% !important;
+    min-height: 0;
+    flex: 1 1 auto;
+    height: 100%;
+}
+
+body.is-fullscreen .play-game-inner {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+    width: 100%;
+    max-width: none;
+}
+
+body.is-fullscreen .play-action-bar {
+    display: none !important;
+}
+
+body.is-fullscreen .game-frame-shell {
+    flex: 1 1 auto;
+    min-height: 0 !important;
+    border-radius: 0;
 }
 
 body.is-fullscreen .play-side-ad {
@@ -420,38 +460,56 @@ button.play-dash-btn {
     display: block;
 }
 
-/* Ensure the iframe actually fills the monitor when fullscreen (parent button or in-game FS). */
+/* Full viewport cover: shell or iframe promoted to fullscreen (TubZi button / browser). */
 .game-frame-shell:-webkit-full-screen,
 .game-frame-shell:fullscreen {
-    width: 100%;
-    height: 100%;
-    width: 100dvw;
-    height: 100dvh;
-    max-width: none;
-    max-height: none;
-    border-radius: 0;
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    width: 100lvw !important;
+    height: 100lvh !important;
+    max-width: none !important;
+    max-height: none !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
     background: #000;
-    margin: 0;
+    box-sizing: border-box;
 }
 
 .game-frame-shell:-webkit-full-screen iframe,
 .game-frame-shell:fullscreen iframe {
-    flex: 1 1 auto;
-    min-height: 0;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    inset: 0;
+    flex: none;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    border: none;
 }
 
 #gameFrame:-webkit-full-screen,
 #gameFrame:fullscreen {
-    width: 100%;
-    height: 100%;
-    width: 100dvw;
-    height: 100dvh;
-    max-width: none;
-    max-height: none;
-    border-radius: 0;
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    width: 100lvw !important;
+    height: 100lvh !important;
+    max-width: none !important;
+    max-height: none !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
     background: #000;
+    box-sizing: border-box;
 }
 
 #gameFrame:-webkit-full-screen:not(.game-frame--flat-chrome),
@@ -580,12 +638,14 @@ body.light-play .play-action-bar {
 .stat-btn#btnLike,
 .stat-btn#btnFavorite,
 .stat-btn#btnDislike,
+.stat-btn#btnCopyGameLink,
 .fs-btn {
     background: transparent;
     color: var(--ui-accent);
 }
 
 .stat-btn#btnFavorite:hover,
+.stat-btn#btnCopyGameLink:hover,
 .stat-btn#btnLike:hover,
 .stat-btn#btnDislike:hover,
 .fs-btn:hover {
@@ -594,11 +654,41 @@ body.light-play .play-action-bar {
 
 .stat-btn#btnFavorite svg,
 .stat-btn#btnFavorite svg path,
+.stat-btn#btnCopyGameLink svg,
+.stat-btn#btnCopyGameLink svg path,
 .stat-btn#btnLike svg,
 .stat-btn#btnLike svg path,
 .stat-btn#btnDislike svg,
 .stat-btn#btnDislike svg path {
     transition: fill 0.15s ease, stroke 0.15s ease, color 0.15s ease;
+}
+
+.stat-btn.stat-btn--copy-link {
+    position: relative;
+    min-width: 42px;
+    min-height: 42px;
+    padding: 6px;
+    justify-content: center;
+}
+
+.stat-btn.stat-btn--copy-link .copy-link-btn__icon {
+    flex-shrink: 0;
+}
+
+.stat-btn.stat-btn--copy-link .copy-link-btn__icon--check {
+    display: none;
+}
+
+.stat-btn.stat-btn--copy-link.is-copied .copy-link-btn__icon--link {
+    display: none;
+}
+
+.stat-btn.stat-btn--copy-link.is-copied .copy-link-btn__icon--check {
+    display: block;
+}
+
+.stat-btn.stat-btn--copy-link.is-copied {
+    color: #ff6a00 !important;
 }
 
 .stat-btn#btnFavorite.is-favorite {
@@ -992,8 +1082,8 @@ body.light-play .play-game-about__keys-tip {
                             id="gameFrame"
                             title="Game"
                             allowfullscreen
-                            allow="fullscreen *; pointer-lock *"
-                            sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-pointer-lock allow-popups-to-escape-sandbox allow-orientation-lock"
+                            allow="fullscreen *; pointer-lock *; autoplay *; xr-spatial-tracking *"
+                            sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-pointer-lock allow-popups-to-escape-sandbox allow-orientation-lock allow-fullscreen allow-presentation"
                         ></iframe>
                     </div>
                     <div class="play-action-bar" id="actionBar">
@@ -1008,6 +1098,14 @@ body.light-play .play-game-about__keys-tip {
                             <button type="button" class="stat-btn" id="btnFavorite" aria-label="Favorite" aria-pressed="false" title="Add to favorites">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.52 4.674a1 1 0 00.95.69h4.914c.969 0 1.371 1.24.588 1.81l-3.975 2.888a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.975-2.888a1 1 0 00-1.176 0l-3.975 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.077 10.1c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.95-.69l1.52-4.674z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="stat-btn stat-btn--copy-link" id="btnCopyGameLink" aria-label="Copy link to this game" title="Copy link to this game">
+                                <svg class="copy-link-btn__icon copy-link-btn__icon--link" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                                </svg>
+                                <svg class="copy-link-btn__icon copy-link-btn__icon--check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                                 </svg>
                             </button>
                             <button type="button" class="stat-btn" id="btnLike" aria-label="Like">
@@ -1214,8 +1312,12 @@ const GAME_FILE_SLUG = {
     dogeminer2: "doge-miner-2",
     dunkshot: "dunk-shot",
     extremerun3d: "extreme-run-3d",
-    goingballs: "going-balls",
-    deathrun3d: "deathrun"
+    deathrun3d: "deathrun",
+    timewarriors: "cltimewarriors",
+    tubejumpers: "cltubejumpers",
+    topspeed3d: "cltopspeedracing3d",
+    toasterball: "cltoasterball",
+    "surviv.io": "survevio"
 };
 
 function fileSlugFromGameName(name) {
@@ -1236,8 +1338,8 @@ const GAME_IMAGE_SLUG = {
     dogeminer2: "doge-miner-2",
     dunkshot: "dunk-shot",
     extremerun3d: "extreme-run-3d",
-    goingballs: "going-balls",
-    deathrun3d: "deathrun"
+    deathrun3d: "deathrun",
+    "surviv.io": "survevio"
 };
 
 function imageSlugFromGameName(name) {
@@ -1267,7 +1369,11 @@ const GAME_HTML_STEM_TO_IMAGE_STEM = {
     "doodle-jump": "doodlejump",
     "vex-x3m": "vexx3m",
     "real-flight-simulator": "realflightsimulator",
-    "tall-man-run": "tallmanrun"
+    "tall-man-run": "tallmanrun",
+    cltimewarriors: "timewarriors",
+    cltubejumpers: "tubejumpers",
+    cltopspeedracing3d: "topspeed3d",
+    cltoasterball: "toasterball"
 };
 
 /* Same popularity order as index when a layout is published (tubzi-layout-store). */
@@ -1278,7 +1384,7 @@ let PLAY_GAME_NAMES = [
     "get away shoot out", "funny shooter", "time shooter", "house of hazards", "rag doll archers", "level devil", "jetpackjoyride", "block blast",
     "attack hole", "bowmasters", "bank robbery", "bank robbery 2", "bank robbery 3", "bacon may die", "bob the robber 2", "basket battle", "Race Survival: Arena King", "gobble", "tung tung obby", "vex", "Basketball Superstars", "Speed Stars", "Deltarune", "Parking Fury", "Parking Fury 2", "Parking Fury 3", "Rise Higher", "Recoil", "escape road 2", "Death Run 3D", "Driven Wild", "Dune Dash", "Find the Alien", "Fort Zone", "Snowball io", "crazy cars", "2048", "adventurecapitalist", "ahoysurvival",
     "asmallworldcup", "backrooms", "baldisbasics", "basketballbros", "basketrandom", "boxingrandom", "btd 1", "btd 2", "btd 3", "btd 4", "btd 5",
-    "crazycattle 3 d", "ducklife 1", "dumbwaystodie", "fallguys", "fisquarium", "fivenightsatepsteins", "fnaf 1", "fnaf 2", "fnaf 3", "fnaf 4",
+    "crazycattle 3 d", "ducklife 1", "dumbwaystodie", "fallguys", "fisquarium", "fnaf 1", "fnaf 2", "fnaf 3", "fnaf 4",
     "geometry dash meltdown", "geometry dash subzero", "geometry dash world", "granny", "happywheels", "helixjump", "hole io", "idlebreakout",
     "little alchemy 2", "melonsandbox", "moneyrush", "moto x3m pool party", "moto x3m spooky land", "moto x3m winter", "redball 4", "run 1", "run 2", "run 3",
     "tombofthemask", "papas donuteria", "papas freezeria", "papas hotdoggeria", "papas pastaria", "papas pizzeria", "plantsvszombies", "polytrack",
@@ -1287,8 +1393,9 @@ let PLAY_GAME_NAMES = [
     "five nights at freddys",
     "drift hunters", "bad parenting", "247 blackjack",
     "adventure drivers", "bouncy basketball", "clash of vikings", "crazy motorcycle", "crazy plane landing",
-    "doge miner", "doge miner 2", "dunk shot", "extreme run 3d", "going balls",
-    "Bad Monday Simulator", "Anton Blast", "FIFA 11", "Gorilla Tag", "Raft", "Getting Over It", "repo", "Super Monkey Ball", "not my neighbor", "Brotato", "i have no mouth", "Apes vs Helium", "Shift at Midnight", "Scary Shawarma", "Scary Teacher 3D", "Tung Tung Horror", "Tralale Escape Tung", "We Become What We Behold", "Web Fishing", "DTA 6", "GTA Vice City", "Zombie Road", "OpenGuessr", "Harvest io", "Haunted School", "Indian Truck Simulator", "Undertale Last Breath", "Tower Crash 3D", "Plinko"
+    "doge miner", "doge miner 2", "dunk shot", "extreme run 3d",
+    "Bad Monday Simulator", "Anton Blast", "FIFA 11", "Gorilla Tag", "Raft", "Getting Over It", "repo", "Super Monkey Ball", "not my neighbor", "Brotato", "i have no mouth", "Apes vs Helium", "Shift at Midnight", "Scary Shawarma", "Scary Teacher 3D", "Tung Tung Horror", "Tralale Escape Tung", "We Become What We Behold", "Web Fishing", "DTA 6", "GTA Vice City", "Zombie Road", "OpenGuessr", "Haunted School",     "Indian Truck Simulator",     "Undertale Last Breath", "Tower Crash 3D", "Time Warriors", "Tube Jumpers", "Top Speed 3D", "Toasterball", "Plinko",
+    "Snow Road", "Soccer Bros", "Soda Simulator", "Super Oliver World", "Surviv.io", "Tag", "Tank Pixel", "Tap Road", "Trivia Crack", "Thief Puzzle"
 ];
 
 if (typeof TUBZI_LAYOUT !== "undefined") {
@@ -1403,11 +1510,103 @@ function hardenGameWindow(frameWindow) {
     }
 }
 
+/** Same-origin games: stretch Unity/WebGL shells to the iframe (avoids 960×540 / 100vw quirks). Phaser Parking Fury skips canvas overrides. */
+function injectTubziFrameFit(doc) {
+    if (!doc || doc.getElementById("tubzi-frame-fit")) {
+        return;
+    }
+    const path = String(gameFile || "").toLowerCase();
+    const isParkingFuryPhaser = /\/parkingfury\d*\.html$/i.test(path);
+
+    let rules = `
+html, body {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+html:-webkit-full-screen,
+html:fullscreen,
+body:-webkit-full-screen,
+body:fullscreen {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: none !important;
+}
+#gameContainer,
+#unity-container,
+#unityContainer,
+.webgl-content {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+`;
+    if (!isParkingFuryPhaser) {
+        /* Do not stomp canvases while in Element.requestFullscreen (Unity relies on sizing there). */
+        rules += `
+#unity-container > canvas:not(:fullscreen):not(:-webkit-full-screen),
+#unity-canvas:not(:fullscreen):not(:-webkit-full-screen),
+canvas.emscripten:not(:fullscreen):not(:-webkit-full-screen),
+#gameContainer > canvas:not(:fullscreen):not(:-webkit-full-screen) {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  display: block !important;
+  box-sizing: border-box !important;
+}
+#unity-container > canvas:fullscreen,
+#unity-container > canvas:-webkit-full-screen,
+#unity-canvas:fullscreen,
+#unity-canvas:-webkit-full-screen,
+canvas.emscripten:fullscreen,
+canvas.emscripten:-webkit-full-screen,
+#gameContainer > canvas:fullscreen,
+#gameContainer > canvas:-webkit-full-screen {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: block !important;
+  box-sizing: border-box !important;
+}
+`;
+    }
+    const style = doc.createElement("style");
+    style.id = "tubzi-frame-fit";
+    style.textContent = rules;
+    const head = doc.head || doc.documentElement;
+    head.appendChild(style);
+
+    try {
+        doc.querySelectorAll('canvas[id^="#"]').forEach(c => {
+            const bad = c.id;
+            if (bad && bad.charAt(0) === "#") {
+                c.id = bad.slice(1);
+            }
+        });
+    } catch (_e) {
+        /* ignore */
+    }
+}
+
 iframe.addEventListener("load", () => {
     try {
         hardenGameWindow(iframe.contentWindow);
         scrubGameAds(iframe.contentWindow);
         const doc = iframe.contentDocument;
+        if (doc) {
+            injectTubziFrameFit(doc);
+        }
         if (doc && typeof MutationObserver !== "undefined") {
             const obs = new MutationObserver(() => scrubGameAds(iframe.contentWindow));
             obs.observe(doc.documentElement || doc.body, { childList: true, subtree: true });
@@ -1423,6 +1622,60 @@ if (/\/247blackjack\.html$/i.test(String(gameFile || ""))) {
 }
 
 document.getElementById("actionTitle").textContent = gameName;
+
+(function initCopyGameLink() {
+    const btn = document.getElementById("btnCopyGameLink");
+    if (!btn) {
+        return;
+    }
+    let resetTimer;
+
+    function buildShareUrl() {
+        const u = new URL("play.html", window.location.href);
+        if (gameFile) {
+            u.searchParams.set("game", gameFile);
+        }
+        u.searchParams.set("name", gameName || "Game");
+        return u.toString();
+    }
+
+    function setCopiedState(on) {
+        btn.classList.toggle("is-copied", !!on);
+        if (on) {
+            btn.setAttribute("aria-label", "Link copied");
+            btn.setAttribute("title", "Link copied");
+        } else {
+            btn.setAttribute("aria-label", "Copy link to this game");
+            btn.setAttribute("title", "Copy link to this game");
+        }
+    }
+
+    btn.addEventListener("click", async () => {
+        const url = buildShareUrl();
+        try {
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+                await navigator.clipboard.writeText(url);
+            } else {
+                const ta = document.createElement("textarea");
+                ta.value = url;
+                ta.setAttribute("readonly", "");
+                ta.style.position = "fixed";
+                ta.style.left = "-9999px";
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand("copy");
+                document.body.removeChild(ta);
+            }
+        } catch (_err) {
+            return;
+        }
+        clearTimeout(resetTimer);
+        setCopiedState(true);
+        resetTimer = setTimeout(function () {
+            setCopiedState(false);
+        }, 2000);
+    });
+})();
 
 /* Local game stats tracker: +15 XP per launched game. */
 (function recordLocalPlayStats() {

@@ -23,15 +23,6 @@
 <meta name="twitter:description" content="Play 200+ free browser games instantly on Tubzi. Browse every title in one grid.">
 <meta name="twitter:image" content="https://tubzi.io/images/tubzi-logo.png">
 <meta name="twitter:image:alt" content="Tubzi logo">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MSRCFHRBDK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-MSRCFHRBDK');
-</script>
 <title>All games | Tubzi</title>
 <link rel="stylesheet" href="css/footer.css">
 <link rel="stylesheet" href="css/tubzi-shell.css">
@@ -228,7 +219,7 @@ body.light .card:hover {
         </div>
     </header>
 
-    <aside class="game-rail" aria-label="Navigation">
+    <aside class="game-rail" id="gameRail" aria-label="Navigation">
         <div class="game-rail-inner">
             <nav class="game-rail-scroll" id="gameRailNav"></nav>
         </div>
@@ -415,7 +406,11 @@ const GAME_FILE_SLUG = {
     dogeminer2: "doge-miner-2",
     dunkshot: "dunk-shot",
     extremerun3d: "extreme-run-3d",
-    goingballs: "going-balls"
+    timewarriors: "cltimewarriors",
+    tubejumpers: "cltubejumpers",
+    topspeed3d: "cltopspeedracing3d",
+    toasterball: "cltoasterball",
+    "surviv.io": "survevio"
 };
 
 function fileSlugFromGameName(name) {
@@ -435,7 +430,6 @@ const GAME_IMAGE_SLUG = {
     dogeminer2: "doge-miner-2",
     dunkshot: "dunk-shot",
     extremerun3d: "extreme-run-3d",
-    goingballs: "going-balls",
     fruitninja: "fruitninja",
     elytraflight: "elytraflight",
     eggycar: "eggycar",
@@ -444,7 +438,8 @@ const GAME_IMAGE_SLUG = {
     vexx3m: "vexx3m",
     realflightsimulator: "realflightsimulator",
     tallmanrun: "tallmanrun",
-    magetoweridledefense: "magetoweridle"
+    magetoweridledefense: "magetoweridle",
+    "surviv.io": "survevio"
 };
 
 function imageSlugFromGameName(name) {

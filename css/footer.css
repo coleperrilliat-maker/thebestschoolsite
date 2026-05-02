@@ -40,9 +40,10 @@
 }
 
 .site-footer__inner {
-    max-width: 1180px;
+    max-width: none;
+    width: 100%;
     margin: 0 auto;
-    padding: 36px 24px 28px;
+    padding: 36px clamp(16px, 3vw, 42px) 28px;
 }
 
 /* TikTok + Discord CTA rows */

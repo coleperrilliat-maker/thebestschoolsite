@@ -930,7 +930,7 @@ body.light .home-about-list {
 </div>
 
 <script src="js/tubzi-rail-data.js?v=9"></script>
-<script src="js/tubzi-game-entries.js?v=9"></script>
+<script src="js/tubzi-game-entries.js?v=17"></script>
 <script src="js/tubzi-layout-store.js"></script>
 <script src="js/tubzi-hover-preview.js"></script>
 <script src="js/tubzi-tubchat-intro.js"></script>
@@ -972,6 +972,7 @@ function railItemById(id) {
 }
 
 const GAME_FILE_SLUG = {
+    "state.io": "stateio",
     eaglercraft: "minecraft",
     yohio: "yohoio",
     "0v0game": "OvOgame",
@@ -1007,6 +1008,7 @@ function fileSlugFromGameName(name) {
 }
 
 const GAME_IMAGE_SLUG = {
+    "state.io": "stateio",
     eaglercraft: "eaglercraft",
     "racesurvival:arenaking": "carparking",
     adventuredrivers: "adventure-drivers",
@@ -1161,6 +1163,7 @@ const CATEGORY_ROWS = [
 let sessionShuffleOrderMap = null;
 const CATEGORY_GAME_OVERRIDES = {
     "action-games": [
+        "Zombie Rush", "You vs 100 Skibidi", "War the Knights",
         "among us", "Angry Birds Online", "Anton Blast", "Apes vs Helium", "attack hole", "bacon may die",
         "Baseball Bros", "basket battle", "bob the robber 2", "bowmasters", "brawl simulator 3d", "Brotato",
         "crazycattle 3 d", "Find the Alien", "Fish Eat Getting Big", "fruit ninja", "get away shoot out",
@@ -1173,6 +1176,7 @@ const CATEGORY_GAME_OVERRIDES = {
         "Shift at Midnight", "Tralale Escape Tung"
     ],
     "racing-games": [
+        "Retro Highway",
         "adventure drivers", "aquapark io", "Brick Run", "Car Drawing", "Cluster Truck", "crazy cars",
         "crazy motorcycle", "crazy plane landing", "drift boss", "drift hunters", "Drive Russia", "drivemad",
         "Driven Wild", "Dune Dash", "Eagle Ride", "eggy car", "escape road 2", "Funny Mad Racing",
@@ -1182,6 +1186,7 @@ const CATEGORY_GAME_OVERRIDES = {
         "snow rider 3d", "Snowball io", "Super Car Rush", "vex x3m"
     ],
     "sports-games": [
+        "Volleyball Challenge", "Shredsauce",
         "8 ball classic", "Archery World Tour", "asmallworldcup", "basket battle", "basketball random",
         "basketball stars", "basketballbros", "basketrandom", "bouncy basketball", "boxingrandom", "FIFA 11",
         "Golf Battle", "Rooftop Snipers", "retro bowl", "retro bowl college", "soccerrandom",
@@ -1192,6 +1197,7 @@ const CATEGORY_GAME_OVERRIDES = {
         "shell shockers", "smash karts", "Snowball io"
     ],
     "io-games": [
+        "State.io",
         "0v0game", "1v1 lol", "aquapark io", "fallguys", "Fort Zone", "hole io", "Mario vs Luigi",
         "shell shockers", "smash karts", "Snowball io"
     ],

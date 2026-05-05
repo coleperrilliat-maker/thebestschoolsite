@@ -1,4 +1,15 @@
 window.TUBZI_GAME_ENTRIES = [
+    ["Cannon Balls 3D", "casual"],
+    ["Retro Highway", "driving"],
+    ["Shredsauce", "sports"],
+    ["Count Masters", "casual"],
+    ["My Perfect Hotel", "casual"],
+    ["UNO", "casual"],
+    ["Zombie Rush", "action"],
+    ["You vs 100 Skibidi", "action"],
+    ["Volleyball Challenge", "sports"],
+    ["State.io", "io"],
+    ["War the Knights", "action"],
     ["Car Drawing", "casual"],
     ["Funny Mad Racing", "driving"],
     ["Golf Battle", "sports"],
@@ -463,6 +474,22 @@ window.TUBZI_GAME_ENTRIES = [
     var rank = {};
     for (var p = 0; p < PRIORITY.length; p++) {
         rank[normName(PRIORITY[p])] = p;
+    }
+    var HOME_GRID_BOTTOM_ROW = [
+        "Cannon Balls 3D",
+        "Retro Highway",
+        "Shredsauce",
+        "Count Masters",
+        "My Perfect Hotel",
+        "UNO",
+        "Zombie Rush",
+        "You vs 100 Skibidi",
+        "Volleyball Challenge",
+        "State.io",
+        "War the Knights"
+    ];
+    for (var hb = 0; hb < HOME_GRID_BOTTOM_ROW.length; hb++) {
+        rank[normName(HOME_GRID_BOTTOM_ROW[hb])] = 200000 + hb;
     }
     var FALLBACK = 100000;
     list.sort(function (a, b) {

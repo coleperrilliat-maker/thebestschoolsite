@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MSRCFHRBDK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-MSRCFHRBDK');
+</script>
+
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4769618736904438"
      crossorigin="anonymous"></script>
 <meta charset="UTF-8">
@@ -929,8 +938,9 @@ body.light .home-about-list {
     </div>
 </div>
 
-<script src="js/tubzi-rail-data.js?v=9"></script>
+<script src="js/tubzi-rail-data.js?v=16"></script>
 <script src="js/tubzi-game-entries.js?v=17"></script>
+<script src="js/tubzi-category-rail.js?v=1"></script>
 <script src="js/tubzi-layout-store.js"></script>
 <script src="js/tubzi-hover-preview.js"></script>
 <script src="js/tubzi-tubchat-intro.js"></script>
@@ -1143,22 +1153,29 @@ const TUBCHAT_EMBED_URL = "tubchat/index.html";
 const THEME_KEY = "tubzi-theme";
 const CATEGORY_ROWS = [
     { id: "recent", label: "Recently played" },
-    { id: "favorites", label: "Favorite games" },
+    { id: "favorites", label: "Favorites" },
+    { id: "new-games", label: "New" },
+    { id: "popular-games", label: "Popular" },
+    { id: "car-games", label: "Car games" },
+    { id: "two-player-games", label: "2 player" },
+    { id: "online-games", label: "Online" },
+    { id: "gun-games", label: "Gun" },
+    { id: "shooting-games", label: "Shooter" },
+    { id: "skill-parkour-games", label: "Parkour" },
+    { id: "horror-games", label: "Horror" },
+    { id: "puzzle-games", label: "Brain / puzzle" },
+    { id: "brainrot-games", label: "Brainrot" },
     { id: "action-games", label: "Action Games" },
     { id: "racing-games", label: "Racing Games" },
-    { id: "shooting-games", label: "Shooting Games" },
     { id: "sports-games", label: "Sports Games" },
     { id: "multiplayer-games", label: "Multiplayer Games" },
     { id: "io-games", label: "IO Games" },
-    { id: "puzzle-games", label: "Puzzle Games" },
     { id: "adventure-games", label: "Adventure Games" },
     { id: "arcade-games", label: "Arcade Games" },
     { id: "clicker-idle-games", label: "Clicker / Idle Games" },
-    { id: "horror-games", label: "Horror Games" },
     { id: "platformer-games", label: "Platformer Games" },
     { id: "strategy-games", label: "Strategy Games" },
-    { id: "simulation-games", label: "Simulation Games" },
-    { id: "skill-parkour-games", label: "Skill / Parkour Games" }
+    { id: "simulation-games", label: "Simulation Games" }
 ];
 let sessionShuffleOrderMap = null;
 const CATEGORY_GAME_OVERRIDES = {
@@ -1167,7 +1184,7 @@ const CATEGORY_GAME_OVERRIDES = {
         "among us", "Angry Birds Online", "Anton Blast", "Apes vs Helium", "attack hole", "bacon may die",
         "Baseball Bros", "basket battle", "bob the robber 2", "bowmasters", "brawl simulator 3d", "Brotato",
         "crazycattle 3 d", "Find the Alien", "Fish Eat Getting Big", "fruit ninja", "get away shoot out",
-        "gobble", "Gorilla Tag", "Gun Spin", "Iron Snout", "karlson", "Lock the Door", "rag doll archers",
+        "gobble", "Gorilla Tag", "Iron Snout", "karlson", "Lock the Door", "rag doll archers",
         "ragdolldrop", "steal a brainrot", "survivor io", "ultrakill", "Zombie Road"
     ],
     "adventure-games": [
@@ -1201,23 +1218,7 @@ const CATEGORY_GAME_OVERRIDES = {
         "0v0game", "1v1 lol", "aquapark io", "fallguys", "Fort Zone", "hole io", "Mario vs Luigi",
         "shell shockers", "smash karts", "Snowball io"
     ],
-    "shooting-games": [
-        "1v1 lol", "funny shooter", "Funny Shooter 2", "Fort Zone", "shell shockers", "time shooter"
-    ],
-    "puzzle-games": [
-        "2048", "block blast", "block post", "Cut the Rope", "doge miner 2", "Enchain", "Infinite Craft",
-        "little alchemy 2", "Mage Tower Idle Defense", "plantsvszombies", "Tower Blocks", "wordle", "worlds hardest game"
-    ],
     "platformer-games": [
-        "Bad Monday Simulator", "crossyroad", "Death Run 3D", "doodle jump", "Dreadhead Parkour",
-        "dumbwaystodie", "elytra flight", "extreme run 3d", "geometry dash", "geometry dash meltdown",
-        "geometry dash subzero", "geometry dash world", "Getting Over It", "happywheels", "helixjump",
-        "jetpackjoyride", "level devil", "Minecraft Parkour", "redball 4", "run 1", "run 2", "run 3",
-        "spacewaves", "stick man hook", "subway surfers", "tall man run", "temple run 2", "tombofthemask",
-        "Lucky Block Obby",
-        "tung tung obby", "vex"
-    ],
-    "skill-parkour-games": [
         "Bad Monday Simulator", "crossyroad", "Death Run 3D", "doodle jump", "Dreadhead Parkour",
         "dumbwaystodie", "elytra flight", "extreme run 3d", "geometry dash", "geometry dash meltdown",
         "geometry dash subzero", "geometry dash world", "Getting Over It", "happywheels", "helixjump",
@@ -1232,11 +1233,6 @@ const CATEGORY_GAME_OVERRIDES = {
     ],
     "clicker-idle-games": [
         "adventurecapitalist", "doge miner", "doge miner 2", "idlebreakout", "tiny fishing", "Mage Tower Idle Defense"
-    ],
-    "horror-games": [
-        "backrooms", "baldisbasics", "five nights at freddys", "Five Nights at Yoshis",
-        "fnaf 1", "fnaf 2", "fnaf 3", "fnaf 4", "granny", "not my neighbor", "repo", "Scary Teacher 3D",
-        "Shift at Midnight", "Tung Tung Horror"
     ],
     "arcade-games": [
         "247 blackjack", "block blast", "Cheese Chompers 3D", "clash of vikings", "Dance of Fire and Ice",
@@ -1301,7 +1297,7 @@ function hasAnyKeyword(name, list) {
 }
 
 function categoryMatches(game, categoryId, recentSet, favoriteSet) {
-    if (categoryId === "home") {
+    if (categoryId === "home" || categoryId === "new-games" || categoryId === "popular-games") {
         return true;
     }
     if (categoryId === "recent") {
@@ -1309,6 +1305,12 @@ function categoryMatches(game, categoryId, recentSet, favoriteSet) {
     }
     if (categoryId === "favorites") {
         return favoriteSet.has(gameKey(game.name));
+    }
+    const railMembers = typeof window.TUBZI_RAIL_CATEGORY_MEMBERS !== "undefined"
+        ? window.TUBZI_RAIL_CATEGORY_MEMBERS[categoryId]
+        : null;
+    if (railMembers) {
+        return railMembers.has(gameKey(game.name));
     }
     const overrideSet = CATEGORY_GAME_KEY_OVERRIDES[categoryId];
     if (overrideSet) {
@@ -1319,23 +1321,6 @@ function categoryMatches(game, categoryId, recentSet, favoriteSet) {
     }
     if (categoryId === "racing-games") {
         return game.genre === "driving" || hasAnyKeyword(game.name, ["car", "moto", "bike", "race", "drift", "flight", "truck", "ride"]);
-    }
-    if (categoryId === "shooting-games") {
-        return hasAnyKeyword(game.name, [
-            "shooter",
-            "gun",
-            "sniper",
-            "shell shockers",
-            "ultrakill",
-            "half life",
-            "bank robbery",
-            "1v1",
-            "brotato",
-            "repo",
-            "rooftop snipers",
-            "gun spin",
-            "funny shooter"
-        ]);
     }
     if (categoryId === "sports-games") {
         return game.genre === "sports";
@@ -1349,9 +1334,6 @@ function categoryMatches(game, categoryId, recentSet, favoriteSet) {
     if (categoryId === "io-games") {
         return game.genre === "io";
     }
-    if (categoryId === "puzzle-games") {
-        return game.genre === "puzzle" || hasAnyKeyword(game.name, ["wordle", "2048", "alchemy", "block", "sudoku"]);
-    }
     if (categoryId === "adventure-games") {
         return hasAnyKeyword(game.name, ["adventure", "terraria", "minecraft", "eaglercraft", "raft", "temple run", "parkour", "escape", "quest", "open world", "survival"]);
     }
@@ -1360,9 +1342,6 @@ function categoryMatches(game, categoryId, recentSet, favoriteSet) {
     }
     if (categoryId === "clicker-idle-games") {
         return hasAnyKeyword(game.name, ["clicker", "idle", "capitalist", "miner", "mart", "simulator", "incremental"]);
-    }
-    if (categoryId === "horror-games") {
-        return game.genre === "horror" || hasAnyKeyword(game.name, ["fnaf", "granny", "horror", "scary", "neighbor", "backrooms"]);
     }
     if (categoryId === "platformer-games") {
         return game.genre === "platformer" || hasAnyKeyword(game.name, ["mario", "vex", "run ", "geometry"]);
@@ -1373,9 +1352,6 @@ function categoryMatches(game, categoryId, recentSet, favoriteSet) {
     if (categoryId === "simulation-games") {
         return hasAnyKeyword(game.name, ["simulator", "bitlife", "capitalist", "mart", "fishing", "tycoon", "raft", "farming"]);
     }
-    if (categoryId === "skill-parkour-games") {
-        return hasAnyKeyword(game.name, ["parkour", "vex", "run ", "x3m", "slope", "hook", "dreadhead", "geometry"]);
-    }
     return true;
 }
 
@@ -1383,9 +1359,30 @@ function scrollGamesPanelToTop(behavior = "smooth") {
     document.querySelector(".app-scroll")?.scrollTo({ top: 0, behavior });
 }
 
+function syncSortForCategory(categoryId) {
+    if (categoryId === "new-games") {
+        activeSort = "newly-added";
+    } else if (categoryId === "popular-games") {
+        activeSort = "popular";
+    } else if (categoryId === "home") {
+        activeSort = "popular";
+    }
+    if (ALLOWED_SORTS.has(activeSort)) {
+        try {
+            localStorage.setItem(SORT_MODE_KEY, activeSort);
+        } catch (err) {
+            /* ignore */
+        }
+    }
+    if (gamesSort) {
+        gamesSort.value = activeSort;
+    }
+}
+
 function setActiveCategory(categoryId) {
     activeCategory = categoryId;
     activeGenre = "all";
+    syncSortForCategory(categoryId);
     render(search.value);
     scrollGamesPanelToTop("smooth");
 }
@@ -1545,6 +1542,13 @@ function buildRailNav() {
             nav.appendChild(d);
             return;
         }
+        if (row.kind === "divider") {
+            const d = document.createElement("div");
+            d.className = "rail-divider";
+            d.setAttribute("role", "presentation");
+            nav.appendChild(d);
+            return;
+        }
 
         const item = row;
         const iconSvg =
@@ -1555,11 +1559,12 @@ function buildRailNav() {
         const navItemMods =
             (item.compact ? " rail-nav-item--compact" : "") +
             (!iconSvg ? " rail-nav-item--no-icon" : "");
+        const groupCls = item.groupStart ? " rail-nav-item--group-start" : "";
 
         if (item.href) {
             const a = document.createElement("a");
             a.href = item.href;
-            a.className = "rail-nav-item" + navItemMods;
+            a.className = "rail-nav-item" + navItemMods + groupCls;
             a.dataset.navId = item.id;
             if (item.external) {
                 a.target = "_blank";
@@ -1572,7 +1577,7 @@ function buildRailNav() {
 
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "rail-nav-item" + navItemMods;
+        btn.className = "rail-nav-item" + navItemMods + groupCls;
         btn.dataset.navId = item.id;
         btn.innerHTML = inner;
 
@@ -1580,6 +1585,8 @@ function buildRailNav() {
             if (item.id === "home") {
                 activeGenre = "all";
                 activeCategory = "home";
+                sessionShuffleOrderMap = null;
+                syncSortForCategory("home");
                 search.value = "";
                 render("");
                 window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1587,6 +1594,7 @@ function buildRailNav() {
             } else if (item.action === "tubchat") {
                 toggleTubchatDock();
             } else if (item.categoryId) {
+                sessionShuffleOrderMap = null;
                 setActiveCategory(item.categoryId);
             } else if (item.genre) {
                 activeGenre = item.genre;
@@ -1665,6 +1673,12 @@ function updateGamesSectionHeading(rawFilter) {
     let heading;
     if (activeCategory === "recent") {
         heading = hasSearch ? "Recently played · search" : "Recently played";
+    } else if (activeCategory === "favorites") {
+        heading = hasSearch ? "Favorites · search" : "Favorites";
+    } else if (activeCategory === "new-games") {
+        heading = hasSearch ? "New · search" : "New";
+    } else if (activeCategory === "popular-games") {
+        heading = hasSearch ? "Popular · search" : "Popular";
     } else if (activeCategory === "home") {
         if (hasSearch) {
             const display = trimmed.length > 48 ? `${trimmed.slice(0, 45)}…` : trimmed;
@@ -1684,6 +1698,7 @@ function updateGamesSectionHeading(rawFilter) {
         document.title = `${heading} | TubZi`;
     }
 }
+
 
 /**
  * After layout, shrink multi-cell featured tiles that sit on the bottom visual row so the
@@ -1771,7 +1786,12 @@ function render(filter = "") {
     const matched = isOrderedCategory ? orderedBase : sortGameList(orderedBase, useVisualLayout);
 
     let toShow = matched;
-    if (sessionShuffleOrderMap && activeCategory !== "recent") {
+    if (
+        sessionShuffleOrderMap &&
+        activeCategory !== "recent" &&
+        activeCategory !== "new-games" &&
+        activeCategory !== "popular-games"
+    ) {
         toShow = applySessionShuffle(toShow);
     }
 
@@ -1783,7 +1803,7 @@ function render(filter = "") {
     const useFeaturedPopularOnly =
         !useVisualLayout &&
         activeSort === "popular" &&
-        activeCategory === "home" &&
+        (activeCategory === "home" || activeCategory === "popular-games") &&
         !q &&
         typeof TUBZI_LAYOUT !== "undefined" &&
         TUBZI_LAYOUT.applyTileLevelToCard;
@@ -1903,7 +1923,11 @@ function render(filter = "") {
                 }
             } else {
                 const allowCustomSizes =
-                    !(activeSort === "popular" && activeCategory === "home" && !q);
+                    !(
+                        activeSort === "popular" &&
+                        (activeCategory === "home" || activeCategory === "popular-games") &&
+                        !q
+                    );
                 const rawLevel = allowCustomSizes ? LAYOUT_SIZES[layoutKey] : null;
                 let level =
                     rawLevel != null && rawLevel !== ""
@@ -1982,6 +2006,8 @@ window.addEventListener("resize", () => {
         const needsGridReflow =
             !String(q).trim() &&
             (activeCategory === "home" ||
+                activeCategory === "popular-games" ||
+                activeCategory === "new-games" ||
                 CATEGORY_ROWS.some(r => r.id === activeCategory));
         if (needsGridReflow) {
             render(q);
@@ -2013,6 +2039,7 @@ search.addEventListener("input", e => {
     if (cat && validCategory.has(cat)) {
         activeCategory = cat;
         activeGenre = "all";
+        syncSortForCategory(cat);
         applied = true;
     } else if (genreParam && allowedGenres.includes(genreParam)) {
         activeGenre = genreParam;

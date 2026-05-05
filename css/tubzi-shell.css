@@ -17,7 +17,8 @@
     --accent-green: #22c55e;
     --accent-green-hover: #16a34a;
     --card-radius: 18px;
-    --rail-width: 276px;
+    --rail-collapsed: 54px;
+    --rail-expanded: 260px;
     --tubchat-dock-width: clamp(320px, 26vw, 430px);
     /* Must clear absolute header: padding + inner row (search / buttons). */
     --site-header-height: 72px;
@@ -28,14 +29,16 @@
     --clip-ink: rgba(8, 6, 12, 0.88);
     --clip-ink-soft: rgba(8, 6, 12, 0.55);
     --clip-ledge: 0 4px 0 rgba(0, 0, 0, 0.42);
+    /* Rail active row marker (left bar); per-icon hues use [data-nav-id] below */
+    --rail-active-bar: #a855f7;
 }
 
 body.light {
     --bg: #eef1f8;
     --header-bg: #ffffff;
     --header-border: #dde1ed;
-    --text: #1a1c2c;
-    --text-muted: #5c6070;
+    --text: #0a0a0a;
+    --text-muted: #3f3f46;
     --btn-bg: #eef0f4;
     --btn-bg-hover: #e2e6ee;
     --btn-border: #c8cedd;
@@ -72,18 +75,12 @@ body.tubchat-dock-open .app-shell {
     margin-left: var(--tubchat-dock-width);
 }
 
-body[data-tubzi-page="home"].tubchat-dock-open .app-shell {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: var(--site-header-height) minmax(0, 1fr);
-}
-
 body[data-tubzi-page="home"].tubchat-dock-open .game-rail {
     display: none;
 }
 
 body[data-tubzi-page="home"].tubchat-dock-open .app-content {
-    grid-column: 1 / -1;
-    grid-row: 2 / -1;
+    margin-left: 0;
 }
 
 .tubchat-dock {
@@ -150,12 +147,11 @@ body.tubchat-dock-open .tubchat-dock {
     background: #000;
 }
 
-/* Sidebar + main column; header fixed across full width.
-   Row 1 = full-width header slot; row 2 = rail | main so the main column (footer) never shares column 1 with the rail. */
+/* Sidebar + main column; header fixed full-bleed; rail is fixed so it stays visible while the main column scrolls. */
 .app-shell {
     flex: 1;
     display: grid;
-    grid-template-columns: var(--rail-width) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: var(--site-header-height) minmax(0, 1fr);
     min-height: 0;
     min-width: 0;
@@ -199,14 +195,14 @@ body.tubchat-dock-open .site-header {
 
 .game-rail {
     display: flex;
-    grid-column: 1 / 2;
+    grid-column: 1 / -1;
     grid-row: 2 / -1;
     flex-direction: column;
     align-self: start;
     min-height: calc(100dvh - var(--site-header-height));
     min-width: 0;
     height: auto;
-    width: var(--rail-width);
+    width: 100%;
     max-width: none;
     padding-top: 0;
     box-sizing: border-box;
@@ -214,10 +210,54 @@ body.tubchat-dock-open .site-header {
     border-right: 1px solid var(--header-border);
     border-radius: 0;
     box-shadow: none;
-    z-index: 1;
-    overflow: visible;
+    z-index: 50;
+    overflow: hidden;
     font-family: Arial, Helvetica, sans-serif;
     position: relative;
+}
+
+@media (min-width: 721px) {
+    .game-rail {
+        position: fixed;
+        left: 0;
+        top: var(--site-header-height);
+        bottom: env(safe-area-inset-bottom, 0);
+        width: var(--rail-collapsed);
+        height: auto;
+        min-height: 0;
+        max-height: none;
+        grid-column: unset;
+        grid-row: unset;
+        align-self: stretch;
+        box-shadow: 2px 0 14px rgba(0, 0, 0, 0.18);
+        transition: width 0.22s ease, left 0.22s ease, box-shadow 0.2s ease;
+    }
+
+    .game-rail:hover,
+    .game-rail:focus-within {
+        width: var(--rail-expanded);
+    }
+
+    body.tubchat-dock-open .game-rail {
+        left: var(--tubchat-dock-width);
+    }
+
+    .app-content {
+        margin-left: var(--rail-collapsed);
+        max-width: none;
+        transition: margin-left 0.22s ease;
+    }
+
+    .app-shell:has(.game-rail:hover) .app-content,
+    .app-shell:has(.game-rail:focus-within) .app-content {
+        margin-left: var(--rail-expanded);
+    }
+
+    body[data-tubzi-page="home"].tubchat-dock-open .app-content,
+    body[data-tubzi-page="home"].tubchat-dock-open .app-shell:has(.game-rail:hover) .app-content,
+    body[data-tubzi-page="home"].tubchat-dock-open .app-shell:has(.game-rail:focus-within) .app-content {
+        margin-left: 0;
+    }
 }
 
 body.light .game-rail {
@@ -231,11 +271,24 @@ body.tubchat-dock-open .game-rail {
 .game-rail-inner {
     display: flex;
     flex-direction: column;
-    flex: 0 0 auto;
+    flex: 1 1 auto;
     min-height: 0;
     position: relative;
     padding: 12px 0 14px;
     width: 100%;
+}
+
+@media (min-width: 721px) {
+    .game-rail-inner {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+@media (max-width: 720px) {
+    .game-rail-inner {
+        flex: 0 0 auto;
+    }
 }
 
 /* Sidebar stats: same vocabulary as Browse / rail-nav (flat, no promo card chrome). */
@@ -431,17 +484,29 @@ body.light .game-rail-stats__delta--down {
 }
 
 .rail-section-label {
-    padding: 14px 12px 6px;
+    padding: 16px 14px 8px;
     font-size: 10px;
     font-weight: 700;
     font-family: Arial, Helvetica, sans-serif;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(244, 244, 248, 0.9);
+    color: rgba(180, 184, 206, 0.85);
     display: block;
     opacity: 1;
     max-height: none;
     overflow: visible;
+}
+
+.rail-divider {
+    height: 1px;
+    margin: 10px 12px 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    flex-shrink: 0;
+}
+
+body.light .rail-divider {
+    background: rgba(26, 28, 44, 0.1);
 }
 
 .rail-section-label:first-child {
@@ -492,24 +557,24 @@ body.light .game-rail-stats__delta--down {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 10px;
-    width: calc(100% - 10px);
-    margin: 3px 5px;
-    padding: 9px 12px;
+    gap: 12px;
+    width: calc(100% - 16px);
+    margin: 2px 8px;
+    padding: 10px 12px;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     background: transparent;
     cursor: pointer;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    font-weight: 600;
+    letter-spacing: 0.01em;
     text-align: left;
-    color: rgba(244, 244, 248, 0.92);
+    color: rgba(235, 236, 245, 0.95);
+    position: relative;
     transition:
         background 0.18s ease,
-        color 0.18s ease,
-        box-shadow 0.18s ease;
+        color 0.18s ease;
 }
 
 .rail-nav-item.rail-nav-item--no-icon {
@@ -517,18 +582,35 @@ body.light .game-rail-stats__delta--down {
 }
 
 .rail-nav-item:hover {
-    background: var(--btn-bg-hover);
-    color: var(--text);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
 }
 
 .rail-nav-item.is-active {
-    background: var(--btn-bg-hover);
-    color: var(--text);
-    box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.55);
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Active section: thin accent on the left (no filled “pill” highlight). */
+.rail-nav-item.is-active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    border-radius: 0 2px 2px 0;
+    background: var(--rail-active-bar);
+}
+
+body.light .rail-nav-item:hover {
+    background: rgba(26, 28, 44, 0.06);
+    color: #0a0a0a;
 }
 
 body.light .rail-nav-item.is-active {
-    box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.4);
+    background: transparent;
+    box-shadow: none;
 }
 
 body.light .rail-section-label {
@@ -536,7 +618,34 @@ body.light .rail-section-label {
 }
 
 body.light .rail-nav-item {
-    color: #1a1c2c;
+    color: #0a0a0a;
+}
+
+/* play.html sets body.light-play (not .light) when using the light wallpaper theme. */
+body.light-play .rail-nav-item:hover {
+    background: rgba(26, 28, 44, 0.06);
+    color: #0a0a0a;
+}
+
+body.light-play .rail-nav-item.is-active {
+    background: transparent;
+    box-shadow: none;
+}
+
+body.light-play .rail-section-label {
+    color: rgba(10, 10, 10, 0.72);
+}
+
+body.light-play .rail-nav-item {
+    color: #0a0a0a;
+}
+
+body.light-play .rail-label {
+    text-shadow: none;
+}
+
+body.light-play .rail-nav-item--group-start {
+    border-top-color: rgba(26, 28, 44, 0.12);
 }
 
 body.light .rail-label {
@@ -544,20 +653,543 @@ body.light .rail-label {
 }
 
 .rail-icon {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
-    stroke: var(--brand);
+    stroke: currentColor;
     fill: none;
-    stroke-width: 2.65;
+    stroke-width: 2.5;
     stroke-linecap: round;
     stroke-linejoin: round;
-    transition: stroke 0.18s ease;
+    transition:
+        stroke 0.18s ease,
+        transform 0.15s ease;
 }
 
-.rail-nav-item:hover .rail-icon,
-.rail-nav-item.is-active .rail-icon {
-    stroke: var(--brand-hover);
+/* Child paths use the same weight (inline stroke-width on some icons would otherwise stay thin). */
+.game-rail .rail-icon :is(path, circle, line, polyline, polygon, rect, ellipse) {
+    stroke-width: inherit;
+}
+
+/* Merged rail: soft group breaks (replaces section labels on desktop + mobile). */
+.rail-nav-item--group-start {
+    margin-top: 6px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+body.light .rail-nav-item--group-start {
+    border-top-color: rgba(26, 28, 44, 0.12);
+}
+
+/* One distinct icon color per item (data-nav-id from tubzi-rail-data.js). */
+.game-rail .rail-nav-item[data-nav-id="home"] .rail-icon {
+    stroke: #a78bfa;
+    color: #a78bfa;
+}
+.game-rail .rail-nav-item[data-nav-id="favorites"] .rail-icon {
+    stroke: #f472b6;
+    color: #f472b6;
+}
+.game-rail .rail-nav-item[data-nav-id="recent"] .rail-icon {
+    stroke: #38bdf8;
+    color: #38bdf8;
+}
+.game-rail .rail-nav-item[data-nav-id="new-games"] .rail-icon {
+    stroke: #facc15;
+    color: #facc15;
+}
+.game-rail .rail-nav-item[data-nav-id="popular-games"] .rail-icon {
+    stroke: #fb923c;
+    color: #fb923c;
+}
+.game-rail .rail-nav-item[data-nav-id="tubchat-dock"] .rail-icon {
+    stroke: #22d3ee;
+    color: #22d3ee;
+}
+.game-rail .rail-nav-item[data-nav-id="allgames"] .rail-icon {
+    stroke: #94a3b8;
+    color: #94a3b8;
+}
+.game-rail .rail-nav-item[data-nav-id="car-games"] .rail-icon {
+    stroke: #4ade80;
+    color: #4ade80;
+}
+.game-rail .rail-nav-item[data-nav-id="two-player-games"] .rail-icon {
+    stroke: #fb7185;
+    color: #fb7185;
+}
+.game-rail .rail-nav-item[data-nav-id="online-games"] .rail-icon {
+    stroke: #818cf8;
+    color: #818cf8;
+}
+.game-rail .rail-nav-item[data-nav-id="gun-games"] .rail-icon {
+    stroke: #f87171;
+    color: #f87171;
+}
+.game-rail .rail-nav-item[data-nav-id="action-games"] .rail-icon {
+    stroke: #f59e0b;
+    color: #f59e0b;
+}
+.game-rail .rail-nav-item[data-nav-id="racing-games"] .rail-icon {
+    stroke: #2dd4bf;
+    color: #2dd4bf;
+}
+.game-rail .rail-nav-item[data-nav-id="shooting-games"] .rail-icon {
+    stroke: #ec4899;
+    color: #ec4899;
+}
+.game-rail .rail-nav-item[data-nav-id="sports-games"] .rail-icon {
+    stroke: #84cc16;
+    color: #84cc16;
+}
+.game-rail .rail-nav-item[data-nav-id="multiplayer-games"] .rail-icon {
+    stroke: #c084fc;
+    color: #c084fc;
+}
+.game-rail .rail-nav-item[data-nav-id="io-games"] .rail-icon {
+    stroke: #60a5fa;
+    color: #60a5fa;
+}
+.game-rail .rail-nav-item[data-nav-id="puzzle-games"] .rail-icon {
+    stroke: #c026d3;
+    color: #c026d3;
+}
+.game-rail .rail-nav-item[data-nav-id="adventure-games"] .rail-icon {
+    stroke: #ea580c;
+    color: #ea580c;
+}
+.game-rail .rail-nav-item[data-nav-id="arcade-games"] .rail-icon {
+    stroke: #e879f9;
+    color: #e879f9;
+}
+.game-rail .rail-nav-item[data-nav-id="clicker-idle-games"] .rail-icon {
+    stroke: #fde047;
+    color: #fde047;
+}
+.game-rail .rail-nav-item[data-nav-id="horror-games"] .rail-icon {
+    stroke: #a8a29e;
+    color: #a8a29e;
+}
+.game-rail .rail-nav-item[data-nav-id="platformer-games"] .rail-icon {
+    stroke: #06b6d4;
+    color: #06b6d4;
+}
+.game-rail .rail-nav-item[data-nav-id="strategy-games"] .rail-icon {
+    stroke: #34d399;
+    color: #34d399;
+}
+.game-rail .rail-nav-item[data-nav-id="simulation-games"] .rail-icon {
+    stroke: #0ea5e9;
+    color: #0ea5e9;
+}
+.game-rail .rail-nav-item[data-nav-id="skill-parkour-games"] .rail-icon {
+    stroke: #65a30d;
+    color: #65a30d;
+}
+.game-rail .rail-nav-item[data-nav-id="brainrot-games"] .rail-icon {
+    stroke: #d946ef;
+    color: #d946ef;
+}
+.game-rail .rail-nav-item[data-nav-id="tiktok"] .rail-icon {
+    stroke: #fe2c55;
+    color: #fe2c55;
+}
+.game-rail .rail-nav-item[data-nav-id="discord"] .rail-icon {
+    stroke: #5865f2;
+    color: #5865f2;
+}
+.game-rail .rail-nav-item[data-nav-id="contact"] .rail-icon {
+    stroke: #7dd3fc;
+    color: #7dd3fc;
+}
+.game-rail .rail-nav-item[data-nav-id="blog"] .rail-icon {
+    stroke: #f472b6;
+    color: #f472b6;
+}
+.game-rail .rail-nav-item[data-nav-id="advertise"] .rail-icon {
+    stroke: #fbbf24;
+    color: #fbbf24;
+}
+.game-rail .rail-nav-item[data-nav-id="about"] .rail-icon {
+    stroke: #93c5fd;
+    color: #93c5fd;
+}
+.game-rail .rail-nav-item[data-nav-id="terms"] .rail-icon {
+    stroke: #cbd5e1;
+    color: #cbd5e1;
+}
+.game-rail .rail-nav-item[data-nav-id="privacy"] .rail-icon {
+    stroke: #a3e635;
+    color: #a3e635;
+}
+.game-rail .rail-nav-item[data-nav-id="dmca"] .rail-icon {
+    stroke: #c4b5fd;
+    color: #c4b5fd;
+}
+
+body.light .game-rail .rail-nav-item[data-nav-id="home"] .rail-icon {
+    stroke: #7c3aed;
+    color: #7c3aed;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="favorites"] .rail-icon {
+    stroke: #db2777;
+    color: #db2777;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="recent"] .rail-icon {
+    stroke: #0284c7;
+    color: #0284c7;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="new-games"] .rail-icon {
+    stroke: #ca8a04;
+    color: #ca8a04;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="popular-games"] .rail-icon {
+    stroke: #ea580c;
+    color: #ea580c;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="tubchat-dock"] .rail-icon {
+    stroke: #0891b2;
+    color: #0891b2;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="allgames"] .rail-icon {
+    stroke: #64748b;
+    color: #64748b;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="car-games"] .rail-icon {
+    stroke: #16a34a;
+    color: #16a34a;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="two-player-games"] .rail-icon {
+    stroke: #e11d48;
+    color: #e11d48;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="online-games"] .rail-icon {
+    stroke: #4f46e5;
+    color: #4f46e5;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="gun-games"] .rail-icon {
+    stroke: #dc2626;
+    color: #dc2626;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="action-games"] .rail-icon {
+    stroke: #d97706;
+    color: #d97706;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="racing-games"] .rail-icon {
+    stroke: #0d9488;
+    color: #0d9488;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="shooting-games"] .rail-icon {
+    stroke: #db2777;
+    color: #db2777;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="sports-games"] .rail-icon {
+    stroke: #65a30d;
+    color: #65a30d;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="multiplayer-games"] .rail-icon {
+    stroke: #7c3aed;
+    color: #7c3aed;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="io-games"] .rail-icon {
+    stroke: #2563eb;
+    color: #2563eb;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="puzzle-games"] .rail-icon {
+    stroke: #a21caf;
+    color: #a21caf;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="adventure-games"] .rail-icon {
+    stroke: #c2410c;
+    color: #c2410c;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="arcade-games"] .rail-icon {
+    stroke: #c026d3;
+    color: #c026d3;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="clicker-idle-games"] .rail-icon {
+    stroke: #ca8a04;
+    color: #ca8a04;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="horror-games"] .rail-icon {
+    stroke: #57534e;
+    color: #57534e;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="platformer-games"] .rail-icon {
+    stroke: #0e7490;
+    color: #0e7490;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="strategy-games"] .rail-icon {
+    stroke: #059669;
+    color: #059669;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="simulation-games"] .rail-icon {
+    stroke: #0369a1;
+    color: #0369a1;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="skill-parkour-games"] .rail-icon {
+    stroke: #3f6212;
+    color: #3f6212;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="brainrot-games"] .rail-icon {
+    stroke: #a21caf;
+    color: #a21caf;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="tiktok"] .rail-icon {
+    stroke: #e11d48;
+    color: #e11d48;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="discord"] .rail-icon {
+    stroke: #4752c4;
+    color: #4752c4;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="contact"] .rail-icon {
+    stroke: #0284c7;
+    color: #0284c7;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="blog"] .rail-icon {
+    stroke: #be185d;
+    color: #be185d;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="advertise"] .rail-icon {
+    stroke: #b45309;
+    color: #b45309;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="about"] .rail-icon {
+    stroke: #2563eb;
+    color: #2563eb;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="terms"] .rail-icon {
+    stroke: #64748b;
+    color: #64748b;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="privacy"] .rail-icon {
+    stroke: #4d7c0f;
+    color: #4d7c0f;
+}
+body.light .game-rail .rail-nav-item[data-nav-id="dmca"] .rail-icon {
+    stroke: #7c3aed;
+    color: #7c3aed;
+}
+
+/* Active row: right-edge line uses the same hue as that row’s icon. */
+.game-rail .rail-nav-item.is-active[data-nav-id="home"]::after {
+    background: #a78bfa;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="favorites"]::after {
+    background: #f472b6;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="recent"]::after {
+    background: #38bdf8;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="new-games"]::after {
+    background: #facc15;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="popular-games"]::after {
+    background: #fb923c;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="tubchat-dock"]::after {
+    background: #22d3ee;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="allgames"]::after {
+    background: #94a3b8;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="car-games"]::after {
+    background: #4ade80;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="two-player-games"]::after {
+    background: #fb7185;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="online-games"]::after {
+    background: #818cf8;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="gun-games"]::after {
+    background: #f87171;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="action-games"]::after {
+    background: #f59e0b;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="racing-games"]::after {
+    background: #2dd4bf;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="shooting-games"]::after {
+    background: #ec4899;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="sports-games"]::after {
+    background: #84cc16;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="multiplayer-games"]::after {
+    background: #c084fc;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="io-games"]::after {
+    background: #60a5fa;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="puzzle-games"]::after {
+    background: #c026d3;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="adventure-games"]::after {
+    background: #ea580c;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="arcade-games"]::after {
+    background: #e879f9;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="clicker-idle-games"]::after {
+    background: #fde047;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="horror-games"]::after {
+    background: #a8a29e;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="platformer-games"]::after {
+    background: #06b6d4;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="strategy-games"]::after {
+    background: #34d399;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="simulation-games"]::after {
+    background: #0ea5e9;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="skill-parkour-games"]::after {
+    background: #65a30d;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="brainrot-games"]::after {
+    background: #d946ef;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="tiktok"]::after {
+    background: #fe2c55;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="discord"]::after {
+    background: #5865f2;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="contact"]::after {
+    background: #7dd3fc;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="blog"]::after {
+    background: #f472b6;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="advertise"]::after {
+    background: #fbbf24;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="about"]::after {
+    background: #93c5fd;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="terms"]::after {
+    background: #cbd5e1;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="privacy"]::after {
+    background: #a3e635;
+}
+.game-rail .rail-nav-item.is-active[data-nav-id="dmca"]::after {
+    background: #c4b5fd;
+}
+
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="home"]::after {
+    background: #7c3aed;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="favorites"]::after {
+    background: #db2777;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="recent"]::after {
+    background: #0284c7;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="new-games"]::after {
+    background: #ca8a04;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="popular-games"]::after {
+    background: #ea580c;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="tubchat-dock"]::after {
+    background: #0891b2;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="allgames"]::after {
+    background: #64748b;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="car-games"]::after {
+    background: #16a34a;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="two-player-games"]::after {
+    background: #e11d48;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="online-games"]::after {
+    background: #4f46e5;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="gun-games"]::after {
+    background: #dc2626;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="action-games"]::after {
+    background: #d97706;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="racing-games"]::after {
+    background: #0d9488;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="shooting-games"]::after {
+    background: #db2777;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="sports-games"]::after {
+    background: #65a30d;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="multiplayer-games"]::after {
+    background: #7c3aed;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="io-games"]::after {
+    background: #2563eb;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="puzzle-games"]::after {
+    background: #a21caf;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="adventure-games"]::after {
+    background: #c2410c;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="arcade-games"]::after {
+    background: #c026d3;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="clicker-idle-games"]::after {
+    background: #ca8a04;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="horror-games"]::after {
+    background: #57534e;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="platformer-games"]::after {
+    background: #0e7490;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="strategy-games"]::after {
+    background: #059669;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="simulation-games"]::after {
+    background: #0369a1;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="skill-parkour-games"]::after {
+    background: #3f6212;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="brainrot-games"]::after {
+    background: #a21caf;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="tiktok"]::after {
+    background: #e11d48;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="discord"]::after {
+    background: #4752c4;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="contact"]::after {
+    background: #0284c7;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="blog"]::after {
+    background: #be185d;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="advertise"]::after {
+    background: #b45309;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="about"]::after {
+    background: #2563eb;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="terms"]::after {
+    background: #64748b;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="privacy"]::after {
+    background: #4d7c0f;
+}
+body.light .game-rail .rail-nav-item.is-active[data-nav-id="dmca"]::after {
+    background: #7c3aed;
 }
 
 .rail-label {
@@ -576,7 +1208,7 @@ body.light .rail-label {
 }
 
 .app-content {
-    grid-column: 2 / -1;
+    grid-column: 1 / -1;
     grid-row: 2 / -1;
     min-width: 0;
     min-height: 0;
@@ -603,11 +1235,41 @@ body.light .rail-label {
 }
 
 @media (min-width: 721px) {
-    body:not(.tubchat-dock-open) .site-footer {
+    /* Footer stays in the main column with the rail beside it (no bleed under the fixed rail). */
+    .site-footer {
         position: relative;
-        z-index: 40;
-        width: calc(100% + var(--rail-width));
-        margin-left: calc(-1 * var(--rail-width));
+        z-index: 30;
+    }
+
+    .game-rail:not(:hover):not(:focus-within) .rail-label {
+        opacity: 0;
+        width: 0;
+        max-width: 0;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+
+    .game-rail:not(:hover):not(:focus-within) .rail-section-label {
+        display: none;
+    }
+
+    .game-rail:not(:hover):not(:focus-within) .rail-divider {
+        display: none;
+    }
+
+    .game-rail:not(:hover):not(:focus-within) .rail-nav-item {
+        justify-content: center;
+        gap: 0;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .game-rail:not(:hover):not(:focus-within) .game-rail-scroll {
+        padding-left: 4px;
+        padding-right: 4px;
     }
 }
 
@@ -1098,7 +1760,7 @@ body[data-tubzi-page="category"] .hdr-btn-random {
 
 @media (max-width: 900px) {
     :root {
-        --rail-width: 220px;
+        --rail-expanded: 240px;
     }
 }
 
@@ -1119,11 +1781,11 @@ body[data-tubzi-page="category"] .hdr-btn-random {
     }
 
     .site-header {
-        position: relative;
+        position: sticky;
+        top: 0;
         left: auto;
-        top: auto;
         right: auto;
-        z-index: 300;
+        z-index: 400;
         order: 1;
         grid-column: unset;
         grid-row: unset;
@@ -1137,14 +1799,26 @@ body[data-tubzi-page="category"] .hdr-btn-random {
         order: 2;
         grid-column: unset;
         grid-row: unset;
-        width: 100%;
+        position: sticky;
+        top: var(--site-header-height);
+        left: auto;
+        bottom: auto;
+        width: 100% !important;
         max-width: none;
         padding-top: 0;
         border-right: none;
         border-bottom: 1px solid var(--header-border);
-        max-height: none;
-        overflow: visible;
+        max-height: min(50dvh, 380px);
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
         box-shadow: none;
+        z-index: 300;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .app-content {
+        margin-left: 0 !important;
     }
 
     .rail-section-label {
@@ -1223,4 +1897,92 @@ body[data-tubzi-page="category"] .hdr-btn-random {
         font-size: 13px;
         padding: 7px 10px;
     }
+}
+
+/* play.html: keep the same sidebar as the homepage; rail is fixed on desktop, sticky on small screens. */
+body[data-tubzi-page="play"] .play-page-shell {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 0;
+    min-width: 0;
+    width: 100%;
+    position: relative;
+}
+
+@media (min-width: 721px) {
+    body[data-tubzi-page="play"] .game-rail {
+        top: 0;
+        height: 100dvh;
+        max-height: 100dvh;
+    }
+
+    body[data-tubzi-page="play"] .play-main {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: auto;
+        margin-left: var(--rail-collapsed);
+        transition: margin-left 0.22s ease;
+    }
+
+    body[data-tubzi-page="play"] .play-page-shell:has(.game-rail:hover) .play-main,
+    body[data-tubzi-page="play"] .play-page-shell:has(.game-rail:focus-within) .play-main {
+        margin-left: var(--rail-expanded);
+    }
+
+    body.tubchat-dock-open[data-tubzi-page="play"] .play-main {
+        margin-left: calc(var(--tubchat-dock-width) + var(--rail-collapsed));
+    }
+
+    body.tubchat-dock-open[data-tubzi-page="play"] .play-page-shell:has(.game-rail:hover) .play-main,
+    body.tubchat-dock-open[data-tubzi-page="play"] .play-page-shell:has(.game-rail:focus-within) .play-main {
+        margin-left: calc(var(--tubchat-dock-width) + var(--rail-expanded));
+    }
+}
+
+@media (max-width: 720px) {
+    body[data-tubzi-page="play"] .play-page-shell {
+        flex-direction: column;
+    }
+
+    body[data-tubzi-page="play"] .game-rail {
+        position: sticky;
+        top: 0;
+        left: auto;
+        bottom: auto;
+        width: 100% !important;
+        height: auto;
+        min-height: 0;
+        max-height: min(46dvh, 360px);
+        border-right: none;
+        border-bottom: 1px solid var(--header-border);
+        z-index: 300;
+    }
+
+    body[data-tubzi-page="play"] .play-main {
+        margin-left: 0 !important;
+    }
+}
+
+/* play.html: rail uses site --header-border; avoid orange focus rings from browser / accent */
+body[data-tubzi-page="play"] .game-rail {
+    accent-color: #a855f7;
+}
+
+body[data-tubzi-page="play"] .game-rail .rail-nav-item:focus {
+    outline: none;
+}
+
+body[data-tubzi-page="play"] .game-rail .rail-nav-item:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 2px rgba(167, 139, 250, 0.45);
+}
+
+body.is-fullscreen .game-rail {
+    display: none !important;
+}
+
+body.is-fullscreen[data-tubzi-page="play"] .play-main {
+    margin-left: 0 !important;
 }

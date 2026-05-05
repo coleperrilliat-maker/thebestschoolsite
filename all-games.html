@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MSRCFHRBDK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-MSRCFHRBDK');
+</script>
+
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4769618736904438" crossorigin="anonymous"></script>
 
 <meta charset="UTF-8">
@@ -369,7 +378,7 @@ body.light .card:hover {
     </div>
 </div>
 
-<script src="js/tubzi-rail-data.js?v=9"></script>
+<script src="js/tubzi-rail-data.js?v=16"></script>
 <script src="js/tubzi-game-entries.js?v=17"></script>
 <script src="js/tubzi-hover-preview.js"></script>
 <script src="js/tubzi-tubchat-intro.js"></script>
@@ -627,6 +636,13 @@ function buildRailNav() {
             nav.appendChild(d);
             return;
         }
+        if (row.kind === "divider") {
+            const d = document.createElement("div");
+            d.className = "rail-divider";
+            d.setAttribute("role", "presentation");
+            nav.appendChild(d);
+            return;
+        }
 
         const item = row;
         const iconSvg =
@@ -637,11 +653,12 @@ function buildRailNav() {
         const navItemMods =
             (item.compact ? " rail-nav-item--compact" : "") +
             (!iconSvg ? " rail-nav-item--no-icon" : "");
+        const groupCls = item.groupStart ? " rail-nav-item--group-start" : "";
 
         if (item.href) {
             const a = document.createElement("a");
             a.href = item.href;
-            a.className = "rail-nav-item" + navItemMods;
+            a.className = "rail-nav-item" + navItemMods + groupCls;
             a.dataset.navId = item.id;
             if (item.external) {
                 a.target = "_blank";
@@ -654,7 +671,7 @@ function buildRailNav() {
 
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "rail-nav-item" + navItemMods;
+        btn.className = "rail-nav-item" + navItemMods + groupCls;
         btn.dataset.navId = item.id;
         btn.innerHTML = inner;
 

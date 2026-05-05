@@ -1,45 +1,73 @@
 /**
- * Shared left-rail navigation for index.html and all-games.html.
+ * Shared left-rail navigation for index.html, all-games.html, and play.html.
+ * Icon colors: css/tubzi-shell.css targets [data-nav-id] on .rail-nav-item. Optional groupStart adds a soft separator.
  */
 window.TUBZI_RAIL = {
     icons: {
-        home: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+        home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+        heart:
+            '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2Z"/>',
+        clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+        sparkles:
+            '<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>',
+        flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.5-.5-3-1.5-4.5-2-4-4-6-4-6 0 3.5 1.5 5 3 7 1.5-2 3-3.5 3-7 0 0-2 2-3 4.5-1 2-1 4-1.5 4.5Z"/>',
         chat: '<path d="M4 5h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><circle cx="9" cy="11" r="1"/><circle cx="13" cy="11" r="1"/><circle cx="17" cy="11" r="1"/>',
-        grid: '<rect x="3" y="3" width="7" height="7" rx="1.5" fill="none" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="none" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="none" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="none" stroke-width="2"/>',
+        grid: '<rect x="3" y="3" width="7" height="7" rx="1.5" fill="none"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="none"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="none"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="none"/>',
         io: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
-        sports: '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
-        driving: '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-.4-2.2-.9c-.5-.2-1.1-.1-1.5.2L12 11"/><path d="M5 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C3.7 10.6 1 10 1 10s1.3-.4 2.2-.9c.5-.2 1.1-.1 1.5.2L8 11"/><path d="M5 18a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z"/><path d="M15 18a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z"/>',
+        sports:
+            '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
+        driving:
+            '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-.4-2.2-.9c-.5-.2-1.1-.1-1.5.2L12 11"/><path d="M5 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C3.7 10.6 1 10 1 10s1.3-.4 2.2-.9c.5-.2 1.1-.1 1.5.2L8 11"/><path d="M5 18a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z"/><path d="M15 18a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z"/>',
         action: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
-        puzzle: '<path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/><path d="M12 8h.01"/>',
-        casual: '<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>',
+        puzzle:
+            '<path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/><path d="M12 8h.01"/>',
+        casual:
+            '<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>',
         arcade: '<rect x="7" y="13" width="10" height="5" rx="1"/><path d="M10 13V9a2 2 0 0 1 4 0v4"/><circle cx="12" cy="6" r="2"/>',
-        racing: '<path d="M5 15l2-5h10l2 5"/><path d="M6 15v3h12v-3"/><circle cx="8" cy="19" r="1.5"/><circle cx="16" cy="19" r="1.5"/>',
-        multiplayer: '<circle cx="9" cy="7" r="2.5"/><circle cx="15" cy="7" r="2.5"/><path d="M4 20v-1a4 4 0 0 1 4-4h2"/><path d="M14 15h2a4 4 0 0 1 4 4v1"/>',
-        runners: '<circle cx="12" cy="5" r="2"/><path d="M12 9l-2 6 2 3 2-3-2-6"/><path d="M9 18h6"/>',
+        racing:
+            '<path d="M5 15l2-5h10l2 5"/><path d="M6 15v3h12v-3"/><circle cx="8" cy="19" r="1.5"/><circle cx="16" cy="19" r="1.5"/>',
+        multiplayer:
+            '<circle cx="9" cy="7" r="2.5"/><circle cx="15" cy="7" r="2.5"/><path d="M4 20v-1a4 4 0 0 1 4-4h2"/><path d="M14 15h2a4 4 0 0 1 4 4v1"/>',
+        runners:
+            '<circle cx="12" cy="5" r="2"/><path d="M12 9l-2 6 2 3 2-3-2-6"/><path d="M9 18h6"/>',
         spotlight: '<polygon points="12 2 14.5 9 22 10 16 14.5 17.5 22 12 18 6.5 22 8 14.5 2 10 9.5 9 12 2"/>',
         school: '<path d="M4 10l8-4 8 4-8 4-8-4z"/><path d="M4 10v8l8 4v-8"/><path d="M20 10v8l-8 4v-8"/>',
         sandbox: '<path d="M12 2l7 3.5v7L12 16l-7-3.5v-7L12 2z"/><path d="M12 16v6"/>',
         mail: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
         blog: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
-        megaphone: '<path d="M3 11v6a1 1 0 0 0 1 1h1l4-4V8L5 5H4a1 1 0 0 0-1 1z"/><path d="M18 8v8"/><path d="M22 12h-3"/>',
+        megaphone:
+            '<path d="M3 11v6a1 1 0 0 0 1 1h1l4-4V8L5 5H4a1 1 0 0 0-1 1z"/><path d="M18 8v8"/><path d="M22 12h-3"/>',
         info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
-        terms: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+        terms:
+            '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
         lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
         dmca: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
         tiktok: '<path d="M10 8v8a4 4 0 1 0 4-4"/><path d="M14 4v6.5a5.5 5.5 0 0 0 5.5 5.5"/>',
-        discord: '<path d="M7 10c2-1 4-1 6 0"/><path d="M6 8.5 7 18l2.5-2 2.5 2 2.5-2L18 8.5c-1.5-1-3.5-1.5-3.5-1.5S12 8 10 9"/><circle cx="10" cy="13" r="1"/><circle cx="14" cy="13" r="1"/>',
-        external: '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
+        discord:
+            '<path d="M7 10c2-1 4-1 6 0"/><path d="M6 8.5 7 18l2.5-2 2.5 2 2.5-2L18 8.5c-1.5-1-3.5-1.5-3.5-1.5S12 8 10 9"/><circle cx="10" cy="13" r="1"/><circle cx="14" cy="13" r="1"/>',
+        external:
+            '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
         recent: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
-        favorite: '<path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.52 4.674a1 1 0 0 0 .95.69h4.914c.969 0 1.371 1.24.588 1.81l-3.975 2.888a1 1 0 0 0-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.975-2.888a1 1 0 0 0-1.176 0l-3.975 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 0 0-.364-1.118L2.077 10.1c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 0 0 .95-.69l1.52-4.674z"/>'
+        favorite:
+            '<path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.52 4.674a1 1 0 0 0 .95.69h4.914c.969 0 1.371 1.24.588 1.81l-3.975 2.888a1 1 0 0 0-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.975-2.888a1 1 0 0 0-1.176 0l-3.975 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 0 0-.364-1.118L2.077 10.1c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 0 0 .95-.69l1.52-4.674z"/>',
+        twoplayer:
+            '<circle cx="9" cy="8" r="2.5"/><circle cx="15" cy="8" r="2.5"/><path d="M4 20v-1a4 4 0 0 1 4-4h2"/><path d="M14 15h2a4 4 0 0 1 4 4v1"/>',
+        online: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+        gun: '<circle cx="12" cy="12" r="3"/><line x1="12" y1="4" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="20"/><line x1="4" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="20" y2="12"/>',
+        brainrot: '<path d="M12 2l2.2 6.8h7l-5.6 4.2 2.2 6.8L12 15.8l-5.8 4.2 2.2-6.8L4.8 8.8h7L12 2z"/>'
     },
     structure: [
-        { kind: "label", text: "Browse" },
-        { kind: "item", id: "tubchat-dock", label: "Tubchat", icon: "chat", action: "tubchat" },
         { kind: "item", id: "home", label: "Home", icon: "home", home: true },
+        { kind: "item", id: "favorites", label: "Favorites", icon: "heart", categoryId: "favorites" },
+        { kind: "item", id: "recent", label: "Recently played", icon: "clock", categoryId: "recent" },
+        { kind: "item", id: "new-games", label: "New", icon: "sparkles", categoryId: "new-games" },
+        { kind: "item", id: "popular-games", label: "Popular", icon: "flame", categoryId: "popular-games" },
+        { kind: "item", id: "tubchat-dock", label: "Tubchat", icon: "chat", action: "tubchat", groupStart: true },
         { kind: "item", id: "allgames", label: "All games", icon: "grid", href: "all-games.html" },
-        { kind: "item", id: "recent", label: "Recently Played", icon: "recent", categoryId: "recent" },
-        { kind: "item", id: "favorites", label: "Favorite Games", icon: "favorite", categoryId: "favorites" },
-        { kind: "label", text: "Categories" },
+        { kind: "item", id: "car-games", label: "Car games", icon: "driving", categoryId: "car-games", genre: "driving", groupStart: true },
+        { kind: "item", id: "two-player-games", label: "2 player", icon: "twoplayer", categoryId: "two-player-games", genre: "io" },
+        { kind: "item", id: "online-games", label: "Online", icon: "online", categoryId: "online-games", genre: "io" },
+        { kind: "item", id: "gun-games", label: "Gun", icon: "gun", categoryId: "gun-games", genre: "action" },
         { kind: "item", id: "action-games", label: "Action Games", icon: "action", categoryId: "action-games", genre: "action" },
         { kind: "item", id: "racing-games", label: "Racing Games", icon: "racing", categoryId: "racing-games", genre: "driving" },
         { kind: "item", id: "shooting-games", label: "Shooting Games", icon: "spotlight", categoryId: "shooting-games", genre: "action" },
@@ -55,11 +83,27 @@ window.TUBZI_RAIL = {
         { kind: "item", id: "strategy-games", label: "Strategy Games", icon: "grid", categoryId: "strategy-games", genre: "puzzle" },
         { kind: "item", id: "simulation-games", label: "Simulation Games", icon: "driving", categoryId: "simulation-games", genre: "casual" },
         { kind: "item", id: "skill-parkour-games", label: "Skill / Parkour Games", icon: "runners", categoryId: "skill-parkour-games", genre: "action" },
-        { kind: "label", text: "Social", compact: true },
-        { kind: "item", id: "tiktok", label: "TikTok", icon: "tiktok", href: "https://www.tiktok.com/@tubzi.io", external: true, compact: true },
-        { kind: "item", id: "discord", label: "Discord", icon: "discord", href: "https://discord.gg/nj5YYgKBap", external: true, compact: true },
-        { kind: "label", text: "Site" },
-        { kind: "item", id: "contact", label: "Contact us", icon: "mail", href: "contact.html" },
+        { kind: "item", id: "brainrot-games", label: "Brainrot", icon: "brainrot", categoryId: "brainrot-games", genre: "casual" },
+        {
+            kind: "item",
+            id: "tiktok",
+            label: "TikTok",
+            icon: "tiktok",
+            href: "https://www.tiktok.com/@tubzi.io",
+            external: true,
+            compact: true,
+            groupStart: true
+        },
+        {
+            kind: "item",
+            id: "discord",
+            label: "Discord",
+            icon: "discord",
+            href: "https://discord.gg/nj5YYgKBap",
+            external: true,
+            compact: true
+        },
+        { kind: "item", id: "contact", label: "Contact us", icon: "mail", href: "contact.html", groupStart: true },
         { kind: "item", id: "blog", label: "Blog", icon: "blog", href: "blog.html" },
         { kind: "item", id: "advertise", label: "Advertise", icon: "megaphone", href: "advertise.html" },
         { kind: "item", id: "about", label: "About us", icon: "info", href: "about.html" },

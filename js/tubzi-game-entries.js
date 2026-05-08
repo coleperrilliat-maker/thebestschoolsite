@@ -243,6 +243,7 @@ window.TUBZI_GAME_ENTRIES = [
     ["Tap Road", "casual"],
     ["Trivia Crack", "puzzle"],
     ["Thief Puzzle", "puzzle"],
+    ["Nugget Royale", "casual"],
 ];
 
 /* First entry = most popular for default grid / admin. Order is applied at load. */

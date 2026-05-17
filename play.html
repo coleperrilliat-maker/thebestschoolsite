@@ -1603,6 +1603,16 @@ body > iframe,
   padding: 0 !important;
   box-sizing: border-box !important;
 }
+/* Legacy Unity TemplateData centers a fixed ~960×540 box — reset so it fills the TubZi iframe. */
+.webgl-content,
+#gameContainer {
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  transform: none !important;
+  -webkit-transform: none !important;
+}
 /* Unity TemplateData uses translate(-50%,-50%) centering; with host inset:0 that shifts the whole build off-view (thin strip bug). */
 #unity-container.unity-desktop,
 #unity-container.unity-mobile {
@@ -1688,6 +1698,99 @@ canvas.emscripten:-webkit-full-screen,
     }
 }
 
+/** Force inline layout on shells Unity sets to fixed px after load (Snow Rider 3D, Slope, etc.). */
+function applyTubziFrameFitDom(doc, frameWindow) {
+    if (!doc) {
+        return;
+    }
+    const path = String(gameFile || "").toLowerCase();
+    const isParkingFuryPhaser = /\/parkingfury\d*\.html$/i.test(path);
+
+    function fillShell(el) {
+        if (!el) {
+            return;
+        }
+        el.style.setProperty("position", "absolute", "important");
+        el.style.setProperty("inset", "0", "important");
+        el.style.setProperty("left", "0", "important");
+        el.style.setProperty("top", "0", "important");
+        el.style.setProperty("right", "0", "important");
+        el.style.setProperty("bottom", "0", "important");
+        el.style.setProperty("width", "100%", "important");
+        el.style.setProperty("height", "100%", "important");
+        el.style.setProperty("max-width", "none", "important");
+        el.style.setProperty("max-height", "none", "important");
+        el.style.setProperty("margin", "0", "important");
+        el.style.setProperty("padding", "0", "important");
+        el.style.setProperty("transform", "none", "important");
+        el.style.setProperty("-webkit-transform", "none", "important");
+    }
+
+    fillShell(doc.querySelector(".webgl-content"));
+    fillShell(doc.getElementById("gameContainer"));
+    fillShell(doc.getElementById("unity-container"));
+    fillShell(doc.getElementById("unityContainer"));
+
+    const vw = doc.documentElement.clientWidth || doc.body?.clientWidth || 0;
+    const vh = doc.documentElement.clientHeight || doc.body?.clientHeight || 0;
+
+    if (!isParkingFuryPhaser) {
+        doc.querySelectorAll(
+            "#gameContainer canvas, .webgl-content canvas, canvas.emscripten, #unity-canvas, #canvas"
+        ).forEach(canvas => {
+            if (canvas.matches?.(":fullscreen") || canvas.webkitMatchesSelector?.(":fullscreen")) {
+                return;
+            }
+            canvas.style.setProperty("display", "block", "important");
+            canvas.style.setProperty("position", "absolute", "important");
+            canvas.style.setProperty("inset", "0", "important");
+            canvas.style.setProperty("width", "100%", "important");
+            canvas.style.setProperty("height", "100%", "important");
+            canvas.style.setProperty("max-width", "none", "important");
+            canvas.style.setProperty("max-height", "none", "important");
+            canvas.style.setProperty("transform", "none", "important");
+            canvas.style.setProperty("-webkit-transform", "none", "important");
+        });
+    }
+
+    /* Cover-scale legacy Unity when the build keeps a small intrinsic box (Snow Rider 3D pattern). */
+    const legacyWrap = doc.querySelector(".webgl-content") || doc.getElementById("gameContainer");
+    const legacyCanvas = legacyWrap?.querySelector("canvas") || doc.querySelector("#gameContainer canvas");
+    if (legacyWrap && legacyCanvas && vw > 0 && vh > 0) {
+        const bw = legacyCanvas.clientWidth || legacyCanvas.width || 0;
+        const bh = legacyCanvas.clientHeight || legacyCanvas.height || 0;
+        if (bw > 0 && bh > 0 && (bw < vw * 0.92 || bh < vh * 0.92)) {
+            const scale = Math.max(vw / bw, vh / bh);
+            legacyWrap.style.setProperty("width", `${bw}px`, "important");
+            legacyWrap.style.setProperty("height", `${bh}px`, "important");
+            legacyWrap.style.setProperty("transform", `scale(${scale})`, "important");
+            legacyWrap.style.setProperty("transform-origin", "top left", "important");
+            legacyWrap.style.setProperty("left", "0", "important");
+            legacyWrap.style.setProperty("top", "0", "important");
+        }
+    }
+
+    try {
+        const win = frameWindow || doc.defaultView;
+        const gi = win?.gameInstance;
+        if (gi?.Module?.canvas) {
+            const c = gi.Module.canvas;
+            c.style.width = "100%";
+            c.style.height = "100%";
+            if (typeof gi.Module.onResize === "function") {
+                gi.Module.onResize();
+            }
+        }
+    } catch (_e) {
+        /* ignore */
+    }
+}
+
+function runTubziFrameFit(doc, frameWindow) {
+    injectTubziFrameFit(doc);
+    applyTubziFrameFitDom(doc, frameWindow);
+}
+
 function notifyGameFrameResize(frameWindow) {
     if (!frameWindow) {
         return;
@@ -1700,8 +1803,18 @@ function notifyGameFrameResize(frameWindow) {
 }
 
 function scheduleGameFrameResize(frameWindow) {
-    [0, 80, 250, 800, 2000].forEach(ms => {
-        setTimeout(() => notifyGameFrameResize(frameWindow), ms);
+    [0, 80, 250, 800, 2000, 4000].forEach(ms => {
+        setTimeout(() => {
+            try {
+                const doc = iframe.contentDocument;
+                if (doc) {
+                    applyTubziFrameFitDom(doc, frameWindow);
+                }
+            } catch (_e) {
+                /* ignore */
+            }
+            notifyGameFrameResize(frameWindow);
+        }, ms);
     });
 }
 
@@ -1710,7 +1823,19 @@ function scheduleGameFrameResize(frameWindow) {
     if (!shell || typeof ResizeObserver === "undefined") {
         return;
     }
-    const ro = new ResizeObserver(() => notifyGameFrameResize(iframe.contentWindow));
+    let fitTimer;
+    const refit = () => {
+        clearTimeout(fitTimer);
+        fitTimer = setTimeout(() => {
+            try {
+                runTubziFrameFit(iframe.contentDocument, iframe.contentWindow);
+            } catch (_e) {
+                /* ignore */
+            }
+            notifyGameFrameResize(iframe.contentWindow);
+        }, 60);
+    };
+    const ro = new ResizeObserver(refit);
     ro.observe(shell);
 })();
 
@@ -1720,13 +1845,22 @@ iframe.addEventListener("load", () => {
         scrubGameAds(iframe.contentWindow);
         const doc = iframe.contentDocument;
         if (doc) {
-            injectTubziFrameFit(doc);
+            runTubziFrameFit(doc, iframe.contentWindow);
             scheduleGameFrameResize(iframe.contentWindow);
         }
         if (doc && typeof MutationObserver !== "undefined") {
+            let domFitTimer;
             const obs = new MutationObserver(() => {
                 scrubGameAds(iframe.contentWindow);
-                notifyGameFrameResize(iframe.contentWindow);
+                clearTimeout(domFitTimer);
+                domFitTimer = setTimeout(() => {
+                    try {
+                        runTubziFrameFit(iframe.contentDocument, iframe.contentWindow);
+                    } catch (_e) {
+                        /* ignore */
+                    }
+                    notifyGameFrameResize(iframe.contentWindow);
+                }, 80);
             });
             obs.observe(doc.documentElement || doc.body, { childList: true, subtree: true });
         }

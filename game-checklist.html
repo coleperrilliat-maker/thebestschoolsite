@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TubZi Game Testing Checklist</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --panel: #171a23;
+      --panel-2: #202431;
+      --text: #f4f6fb;
+      --muted: #a8b0c2;
+      --brand: #ff6a00;
+      --ok: #39d98a;
+      --border: rgba(255,255,255,.1);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: radial-gradient(circle at top, rgba(255,106,0,.18), transparent 34%), var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(15,17,23,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    .top {
+      display: flex;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 0;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 40px);
+      letter-spacing: -.03em;
+    }
+
+    .stats {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .pill {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      padding: 10px 12px;
+      border-radius: 999px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      gap: 10px;
+      padding: 0 0 16px;
+    }
+
+    input[type="search"], select, button {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    button {
+      cursor: pointer;
+      background: linear-gradient(180deg, #ff7a1a, #e55f00);
+      border: none;
+      white-space: nowrap;
+    }
+
+    button.secondary {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+    }
+
+    main {
+      padding: 22px 0 44px;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      align-items: center;
+      gap: 12px;
+      background: rgba(23,26,35,.9);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .row.done {
+      border-color: rgba(57,217,138,.38);
+      background: rgba(57,217,138,.08);
+    }
+
+    .row input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      accent-color: var(--ok);
+      cursor: pointer;
+    }
+
+    .name {
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+      border-radius: 999px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      white-space: nowrap;
+    }
+
+    a.primary {
+      background: var(--brand);
+      border-color: transparent;
+      color: white;
+    }
+
+    .empty {
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+    }
+
+    @media (max-width: 760px) {
+      .controls { grid-template-columns: 1fr; }
+      .row { grid-template-columns: auto 1fr; }
+      .row a { grid-column: 2; width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="top">
+        <div>
+          <h1>TubZi game checklist</h1>
+          <div class="stats">
+            <span class="pill" id="totalCount">0 games</span>
+            <span class="pill" id="doneCount">0 checked</span>
+            <span class="pill" id="leftCount">0 left</span>
+          </div>
+        </div>
+      </div>
+      <div class="controls">
+        <input id="search" type="search" placeholder="Search games...">
+        <select id="genreFilter" aria-label="Filter by genre">
+          <option value="all">All genres</option>
+        </select>
+        <button id="checkVisible" type="button">Check visible</button>
+        <button id="clearVisible" class="secondary" type="button">Clear visible</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="list" id="list"></div>
+  </main>
+
+  <script src="js/tubzi-game-entries.js?v=17"></script>
+  <script>
+    const CHECK_KEY = "tubzi-game-test-checklist-v1";
+
+    const GAME_FILE_SLUG = {
+      "state.io": "stateio",
+      eaglercraft: "minecraft",
+      yohio: "yohoio",
+      "0v0game": "OvOgame",
+      fruitninja: "clfruitninja",
+      elytraflight: "clelytraflight",
+      eggycar: "cleggycar",
+      smashkarts: "smash-karts",
+      doodlejump: "doodle-jump",
+      vexx3m: "vex-x3m",
+      realflightsimulator: "real-flight-simulator",
+      tallmanrun: "tall-man-run",
+      "racesurvival:arenaking": "carparking",
+      adventuredrivers: "adventure-drivers",
+      bouncybasketball: "bouncy-basketball",
+      clashofvikings: "clash-of-vikings",
+      crazymotorcycle: "crazy-motorcycle",
+      crazyplanelanding: "crazy-plane-landing",
+      dogeminer: "doge-miner",
+      dogeminer2: "doge-miner-2",
+      dunkshot: "dunk-shot",
+      extremerun3d: "extreme-run-3d",
+      timewarriors: "cltimewarriors",
+      tubejumpers: "cltubejumpers",
+      topspeed3d: "cltopspeedracing3d",
+      toasterball: "cltoasterball",
+      "surviv.io": "survevio"
+    };
+
+    const listEl = document.getElementById("list");
+    const searchEl = document.getElementById("search");
+    const genreEl = document.getElementById("genreFilter");
+    const totalEl = document.getElementById("totalCount");
+    const doneEl = document.getElementById("doneCount");
+    const leftEl = document.getElementById("leftCount");
+
+    const state = loadState();
+
+    function loadState() {
+      try {
+        return JSON.parse(localStorage.getItem(CHECK_KEY) || "{}");
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(CHECK_KEY, JSON.stringify(state));
+    }
+
+    function fileSlugFromGameName(name) {
+      const base = String(name || "").replace(/ /g, "").toLowerCase();
+      return GAME_FILE_SLUG[base] || base;
+    }
+
+    function safeId(name, file) {
+      return `${name}__${file}`.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    }
+
+    const games = (window.TUBZI_GAME_ENTRIES || []).map(([name, genre]) => {
+      const slug = fileSlugFromGameName(name);
+      const gameFile = `games/${slug}.html`;
+      return {
+        name,
+        genre,
+        file: gameFile,
+        id: safeId(name, gameFile),
+        playUrl: `play.html?game=${encodeURIComponent(gameFile)}&name=${encodeURIComponent(name)}`
+      };
+    });
+
+    function setupGenres() {
+      const genres = [...new Set(games.map(g => g.genre).filter(Boolean))].sort();
+      genres.forEach(genre => {
+        const opt = document.createElement("option");
+        opt.value = genre;
+        opt.textContent = genre;
+        genreEl.appendChild(opt);
+      });
+    }
+
+    function getVisibleGames() {
+      const q = searchEl.value.trim().toLowerCase();
+      const genre = genreEl.value;
+      return games.filter(game => {
+        const matchesSearch = !q || game.name.toLowerCase().includes(q) || game.file.toLowerCase().includes(q);
+        const matchesGenre = genre === "all" || game.genre === genre;
+        return matchesSearch && matchesGenre;
+      });
+    }
+
+    function updateStats() {
+      const checked = games.filter(g => state[g.id]).length;
+      totalEl.textContent = `${games.length} games`;
+      doneEl.textContent = `${checked} checked`;
+      leftEl.textContent = `${games.length - checked} left`;
+    }
+
+    function render() {
+      const visible = getVisibleGames();
+      listEl.innerHTML = "";
+
+      if (!visible.length) {
+        listEl.innerHTML = '<div class="empty">No games match that search.</div>';
+        updateStats();
+        return;
+      }
+
+      visible.forEach((game, index) => {
+        const row = document.createElement("div");
+        row.className = "row" + (state[game.id] ? " done" : "");
+
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = !!state[game.id];
+        cb.setAttribute("aria-label", `Mark ${game.name} as working`);
+        cb.addEventListener("change", () => {
+          state[game.id] = cb.checked;
+          if (!cb.checked) delete state[game.id];
+          saveState();
+          row.classList.toggle("done", cb.checked);
+          updateStats();
+        });
+
+        const info = document.createElement("div");
+        info.innerHTML = `
+          <div class="name">${index + 1}. ${escapeHtml(game.name)}</div>
+          <div class="meta">${escapeHtml(game.genre)} · ${escapeHtml(game.file)}</div>
+        `;
+
+        const playLink = document.createElement("a");
+        playLink.className = "primary";
+        playLink.href = game.playUrl;
+        playLink.target = "_blank";
+        playLink.rel = "noopener noreferrer";
+        playLink.textContent = "Open play page";
+
+        const directLink = document.createElement("a");
+        directLink.href = game.file;
+        directLink.target = "_blank";
+        directLink.rel = "noopener noreferrer";
+        directLink.textContent = "Direct file";
+
+        row.append(cb, info, playLink, directLink);
+        listEl.appendChild(row);
+      });
+
+      updateStats();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    document.getElementById("checkVisible").addEventListener("click", () => {
+      getVisibleGames().forEach(game => state[game.id] = true);
+      saveState();
+      render();
+    });
+
+    document.getElementById("clearVisible").addEventListener("click", () => {
+      getVisibleGames().forEach(game => delete state[game.id]);
+      saveState();
+      render();
+    });
+
+    searchEl.addEventListener("input", render);
+    genreEl.addEventListener("change", render);
+
+    setupGenres();
+    render();
+  </script>
+</body>
+</html>
